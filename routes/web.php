@@ -99,3 +99,8 @@ Route::get('/loginmail', function(){
         }
         return redirect('/authenticate')->with('email', 'User updated successfully');
 });
+Route::get('/session',function(){
+    $sessionData = Session::all();
+
+    dd($sessionData);
+});

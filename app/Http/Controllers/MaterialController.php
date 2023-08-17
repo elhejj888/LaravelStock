@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\material;
-use App\Models\User;
-
 
 class MaterialController extends Controller
 {
     function RetrieveMaterials(){
-        $materials=material::orderBy('TypeProduit')->orderBy('etat')->simplePaginate(20);
+        $materials=material::orderBy('TypeProduit')->simplePaginate(20);
         return view('Material/materials', ['materials'=>$materials]);
     }
 
@@ -65,48 +63,14 @@ class MaterialController extends Controller
         }
 
         public function deletedvalues(){
-            $materials = material::where('etat','rupture')->orderBy('TypeProduit')->orderBy('Site')->simplePaginate(20);
+            $materials = material::where('etat','rupture')->get();
             return view('Material/deleted',['materials'=>$materials]);
         }
 
         public function deleteMaterial($id){
             $material = material::findOrFail($id);
-            $material->etat="rupture";
-            $material->save();
-
+            $material->delete();
             return redirect('/materials');
+
         }
-        public function home(){
-        $materialCounts = [];
-
-        $types = ['Ordinateur', 'Casque', 'Materiel reseau', 'Telephone', 'Ecran'];
-
-        foreach ($types as $type) {
-            $typeCounts = [];
-
-            $statuses = ['Disponible', 'Assigne', 'maintenance', 'rupture'];
-
-            foreach ($statuses as $status) {
-                $count = material::where('TypeProduit', $type)
-                    ->where('etat', $status)
-                    ->count();
-
-                $typeCounts[$status] = $count;
-            }
-
-            $materialCounts[$type] = $typeCounts;
-        }
-        $ruptureCount = material::where('etat', 'rupture')->count();
-        $maintenanceCount = material::where('etat', 'maintenance')->count();
-
-        $userCounts = [
-            'autorisé' => User::where('Role', 'Autorisé')->count(),
-            'Restreint' => User::where('Role', 'Restreint')->count(),
-            'Exclu' => User::where('Role', 'Exclu')->count(),
-        ];
-
-        return view('home', compact('materialCounts', 'userCounts','maintenanceCount','ruptureCount','maintenanceCount'));
-}
-
-
 }

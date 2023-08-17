@@ -90,10 +90,13 @@
                       <div>
                         <label for="site" class="formbold-form-label"> Role </label>
                         <select id="Produit" class="formbold-form-input" name="Role" height="80px">
-                                <option value="{{$user->Role}}" selected style="display: none">{{$user->Role}}</option>
-                                <option value="Autorisé" >Autorisé</option>
+                            @if ($user->Role == 'Autorisé')
+                                <option value="Autorisé" selected>Autorisé</option>
                                 <option value="Restreint">Restreint</option>
-                            
+                            @elseif ($user->Role == 'Restreint')
+                                <option value="Autorisé">Autorisé</option>
+                                <option value="Restreint" selected>Restreint</option>
+                            @endif
                         </select>                        
                       </div>
                       <div>
@@ -110,12 +113,13 @@
                     <div class="formbold-input-flex">
                       <div>
                         <label for="site" class="formbold-form-label"> Site </label>
-                        <select id="Produit" class="formbold-form-input" name="Site" height="80px">
-                          <option value="{{$user->Ville}}" selected style="display: none;">{{$user->Ville}}</option>
-                          <option value="Casablanca">Casablanca</option>
-                          <option value="Oujda">Oujda</option>
-                          
-                  </select>
+                        <input
+                          type="text"
+                          name="Site"
+                          id="Site"
+                          class="formbold-form-input"
+                          value="{{$user->Ville}}"
+                        />
                       </div>
                       <div>
                         <label for="date" class="formbold-form-label" > Date d'embauche </label>

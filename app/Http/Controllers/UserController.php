@@ -3,21 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Models\User;
-use Mail;
 
 class UserController extends Controller
 {
     function RetrieveUsers(){
-        $users = User::orderBy('Ville')->orderBy('Service')->simplePaginate(20);
+        $users = User::orderBy('Ville')->simplePaginate(20);
         return view('User/users',['users'=>$users]);
-
     }
     public function show($id)
     {
     $user = User::findOrFail($id);
-    Mail::to($user->Email)->send(new Login());
     return view('User/showUser', ['user' => $user]);
     }
 
@@ -25,13 +21,13 @@ class UserController extends Controller
         
     $user = User::create(['Nom' => $request->input('Nom'),
         'Prenom'=>$request->input('Prenom'),
-        'Email' => Str::lower($request->input('Email')),
+        'Email'=>$request->input('Email'),
+        'Password'=>"test", 
         'extension'=>$request->input('Extension'),
         'Matricule'=>$request->input('Matricule'),
         'Role'=>$request->input('Role'),
         'Service'=>$request->input('Service'),
         'Ville'=>$request->input('Site'),
-        'Password'=>"",
         'Date_Embauche'=>$request->input('DateEmbauche')
         ]);
         
@@ -69,14 +65,13 @@ class UserController extends Controller
 
         public function deleteUser($id){
             $user = User::findOrFail($id);
-            $user->Role = "Exclu";
-            $user->save();
+            $user->delete();
             return redirect('/users');
 
         }
 
         public function deletedvalues(){
-            $users = User::where('Role','Exclu')->orderBy('Ville')->orderBy('Service')->simplePaginate(20);
+            $users = User::where('Role','Exclu')->simplePaginate(20);
             return view('User/deleted',['users'=>$users]);
         }
         

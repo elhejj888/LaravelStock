@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('Emplacement');
             $table->string('Site');
             $table->string('etat');
+            $table->string('Matricule')->nullable();
             $table->timestamps();
         });
     }

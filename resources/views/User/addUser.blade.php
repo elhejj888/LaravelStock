@@ -96,12 +96,11 @@
                     <div class="formbold-input-flex">
                       <div>
                         <label for="site" class="formbold-form-label"> Site </label>
-                        <input
-                          type="text"
-                          name="Site"
-                          id="Site"
-                          class="formbold-form-input"
-                        />
+                        <select id="Produit" class="formbold-form-input" name="Ville" height="80px">
+                          <option value="Casablanca">Casablanca</option>
+                          <option value="Oujda">Oujda</option>
+                          
+                        </select>
                       </div>
                       <div>
                         <label for="date" class="formbold-form-label" > Date d'embauche </label>

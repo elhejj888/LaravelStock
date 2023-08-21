@@ -17,9 +17,9 @@ class UserFactory extends Factory
         $faker = \Faker\Factory::create();
 
         return [
-            'Email' => $faker->unique()->safeEmail,
-            'Email_verified_at' => $faker->randomElement([null, now()]),
-            'Password' => $faker->password, // Assuming you want to hash the password
+            'email' =>Str::lower( $faker->unique()->safeEmail),
+            'email_verified_at' => $faker->randomElement([null, now()]),
+            'password' => $faker->password, // Assuming you want to hash the password
             'Matricule' => $faker->bothify('MTR#####'),
             'Nom' => $faker->lastName,
             'Prenom' => $faker->firstName,

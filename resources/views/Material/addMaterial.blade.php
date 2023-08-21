@@ -21,29 +21,21 @@
                           <h2 class="">Ajouter Materiel</h2>
                         </div>
                   
-                        <div class="formbold-input-flex">
+                        <div class="formbold-mb-3">
                           <div>
                             <label for="firstname" class="formbold-form-label">
                               Type de Produit
                             </label>
                             <select id="Produit" class="formbold-form-input" height="80px" name="type">
-                                    <option value="Pc">Unite Centrale</option>
-                                    <option value="ecan">Ecran</option>
+                                    <option value="Ordinateur">Unite Centrale</option>
+                                    <option value="Ecran">Ecran</option>
                                     <option value="Casque">Casque</option>
-                                    <option value="routeur">Routeur</option>
-                                    <option value="Telephone">Telephone</option>
+                                    <option value="Reseau">Materiel Reseau</option>
+                                    <option value="Telephone">Téléphone</option>
                             </select>
                               
                           </div>
-                          <div>
-                            <label for="lastname" class="formbold-form-label"> Numéro de série </label>
-                            <input
-                              type="text"
-                              name="serie"
-                              id="serie"
-                              class="formbold-form-input"
-                            />
-                          </div>
+        
                         </div>
                   
                         <div class="formbold-input-flex">
@@ -114,21 +106,19 @@
                         <div class="formbold-input-flex">
                           <div>
                             <label for="post" class="formbold-form-label"> Emplacement </label>
-                            <input
-                              type="text"
-                              name="emplacement"
-                              id="emplacement"
-                              class="formbold-form-input"
-                            />
+                            <select id="Produit" class="formbold-form-input" height="80px" name="emplacement">
+                              <option value="3eme étage">3eme étage</option>
+                              <option value="2eme étage">2eme étage</option>
+                              <option value="1re étage">1re étage</option>
+                              
+                      </select>
                           </div>
                           <div>
                             <label for="area" class="formbold-form-label"> Site D'emplacement </label>
-                            <input
-                              type="text"
-                              name="site"
-                              id="site"
-                              class="formbold-form-input"
-                            />
+                            <select id="Produit" class="formbold-form-input" height="80px" name="site">
+                              <option value="Casablanca">Casablanca</option>
+                              <option value="Oujda">Oujda</option>                              
+                      </select>
                           </div>
                       </div>
                   
@@ -296,9 +286,8 @@
                   </style>
             </div>
         </section>
+        @endsection
         
-        
-        <script src="{{asset('../../js/script.js')}}"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       // When hovering over .box, also apply the hover effect to .box and .lab in the same table cell
@@ -327,5 +316,4 @@
     
     
     
-    </body>
-    </html>
+   

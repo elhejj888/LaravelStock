@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('_historiques', function (Blueprint $table) {
             $table->id();
-            $table->string('OldStatut');
+            $table->string('id');
             $table->string('NewStatut');
             $table->string('IdProduct');
             $table->string('IdUser');

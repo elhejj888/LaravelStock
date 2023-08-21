@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\AuthController;
@@ -50,6 +51,7 @@ Route::post('/users',[UserController::class , 'updateValues']);
 Route::get('users' , [UserController::class , 'RetrieveUsers']);
 Route::get('deletedmaterials',[MaterialController::class,'deletedvalues']);
 Route::get('deletedusers',[UserController::class,'deletedvalues']);
+Route::get('assignMaterial/{materialId}/{userId}', [MaterialController::class, 'assignMaterial'])->name('assignMaterial');
 
 
 Route::get('materials',[MaterialController::class,'RetrieveMaterials']);
@@ -59,10 +61,17 @@ Route::get('updatematerial/{id}', [MaterialController::class, 'updateMaterial'])
 Route::get('updateuser/{id}', [UserController::class, 'updateUser'])->name('updateUser');
 Route::get('deleteMaterial/{id}', [MaterialController::class, 'deleteMaterial'])->name('deleteMaterial');
 Route::get('deleteUser/{id}', [UserController::class, 'deleteUser'])->name('deleteUser');
+Route::get('affectmaterial/{id}', function($id){
+    return view('Material/affecting', ['id' => $id]);
+})->name('affectMaterial');
+
 
 Route::post('store-matricule', [UserController::class, 'storeMatricule'])->name('storeMatricule');
 
 Route::get('/home', [MaterialController::class, 'home'])->name('home');
+Route::get('/searchUser', [UserController::class, 'search'])->name('search');
+Route::get('/searchMaterial', [MaterialController::class, 'search'])->name('search');
+Route::get('/assign', [MaterialController::class, 'find'])->name('assign');
 
 
 Route::get('/mat/{name}-{id}', function (string $name , string $id) {
@@ -80,7 +89,7 @@ Route::get('/login', function () {
 });
 
 Route::post('/sendpassword', [AuthController::class, 'sendPassword'])->name('sendPassword');
-Route::post('/connection', [AuthController::class, 'authenticate'])->name('authenticate');
+Route::post('/connection', [AuthController::class, 'authenticate2'])->name('authenticate');
 Route::get('/error', function () {
     echo "something wrong";
 });
@@ -100,7 +109,8 @@ Route::get('/loginmail', function(){
         return redirect('/authenticate')->with('email', 'User updated successfully');
 });
 Route::get('/session',function(){
-    $sessionData = Session::all();
-
-    dd($sessionData);
+    $user = auth()->user();
+    dd($user);
 });
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

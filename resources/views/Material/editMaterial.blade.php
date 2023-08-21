@@ -18,7 +18,7 @@
                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0Zm-1 0a7 7 0 1 0-13.202 3.249l1.988-1.657a4.5 4.5 0 0 1 7.537-4.623L7.497 6.5l1 2.5 1.333 3.11c-.56.251-1.18.39-1.833.39a4.49 4.49 0 0 1-1.592-.29L4.747 14.2A7 7 0 0 0 15 8Zm-8.295.139a.25.25 0 0 0-.288-.376l-1.5.5.159.474.808-.27-.595.894a.25.25 0 0 0 .287.376l.808-.27-.595.894a.25.25 0 0 0 .287.376l1.5-.5-.159-.474-.808.27.596-.894a.25.25 0 0 0-.288-.376l-.808.27.596-.894Z"/>
                               </svg>
                           </p>
-                          <h2 class="">Ajouter Materiel</h2>
+                          <h2 class="">Modifier Materiel</h2>
                         </div>
                   
                         <div class="formbold-input-flex">
@@ -46,9 +46,9 @@
                           <div>
                             <label for="lastname" class="formbold-form-label"> Etat </label>
                             <select id="Produit" class="formbold-form-input" height="80px" name="etat" >
-                                <option value="{{$material->etat}}" selected>{{$material->etat}}</option>
-                                <option value="disponible">Disponible</option>
-                                <option value="assigné">Assigné</option>
+                                <option value="{{$material->etat}}" selected style="display: none;">{{$material->etat}}</option>
+                                <option value="Disponible">Disponible</option>
+                                <option value="Assigné">Assigné</option>
                                 <option value="rupture">Rupture de stock</option>
                                 <option value="maintenance">En maintenance</option>
                         </select>
@@ -313,9 +313,8 @@
                   </style>
             </div>
         </section>
+        @endsection
         
-        
-        <script src="{{asset('../../js/script.js')}}"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       // When hovering over .box, also apply the hover effect to .box and .lab in the same table cell
@@ -344,5 +343,4 @@
     
     
     
-    </body>
-    </html>
+  

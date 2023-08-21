@@ -19,7 +19,7 @@
         <header>
             <div class="image-text">
                 <span class="image">
-                   <a href="/"> <img src="{{asset('../../img/logo1.png')}}" alt=""></a>
+                   <a href="/home"> <img src="{{asset('../../img/logo1.png')}}" alt=""></a>
                 </span>
 
                 <div class="text logo-text">
@@ -34,7 +34,7 @@
         <div class="menu-bar">
             <div class="menu">
                 <li class="nav-link">
-                    <a href="/">
+                    <a href="/home">
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" id="icon2"  class="bi bi-house-door" viewBox="0 0 16 16">
                                 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146ZM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5Z"/>
@@ -81,7 +81,7 @@
                             <span class="text nav-text">&nbsp; Historique</span>
                         </a>
                     </li>
-
+                    @if(Auth::user()->Role === 'Admin')
                     <li class="nav-link">
                         <a href="#">
                             <div>
@@ -93,7 +93,6 @@
                             <span class="text nav-text">&nbsp; Reparation</span>
                         </a>
                     </li>
-
                     <li class="nav-link">
                         <a href="/trashCan">
                             <div>
@@ -104,16 +103,27 @@
                             <span class="text nav-text">&nbsp; Mise en rebut</span>
                         </a>
                     </li>
-
+                    @endif
                 </ul>
             </div>
 
             <div class="bottom-content">
                 <li class="">
-                    <a href="#">
+                    <a href="#" id="logout-link">
                         <i class='bx bx-log-out icon' ></i>
                         <span class="text nav-text">Logout</span>
                     </a>
+                
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                
+                    <script>
+                        document.getElementById('logout-link').addEventListener('click', function(event) {
+                            event.preventDefault();
+                            document.getElementById('logout-form').submit();
+                        });
+                    </script>
                 </li>
 
                 <li class="mode">

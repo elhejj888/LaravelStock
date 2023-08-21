@@ -22,6 +22,7 @@
                 <th>Nom</th>
                 <th>Prenom</th>
                 <th>Extension</th>
+                <th>Role</th>
                 <th>Service</th>
                 <th>Ville</th>
                 <th>Date d'embauche</th>
@@ -31,10 +32,11 @@
               <tr>
                 <td>{{$user->id}}</td>
                 <td>{{$user->Matricule}}</td>
-                <td>{{$user->Email}}</td>
+                <td>{{$user->email}}</td>
                 <td>{{$user->Nom}}</td>
                 <td>{{$user->Prenom}}</td>
                 <td>{{$user->extension}}</td>
+                <td>{{$user->Role}}</td>
                 <td>{{$user->Service}}</td>
                 <td>{{$user->Ville}}</td>
                 <td>{{$user->Date_Embauche}}</td>

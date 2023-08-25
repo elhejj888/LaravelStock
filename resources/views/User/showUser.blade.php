@@ -1,67 +1,198 @@
 @extends('sidebar')
 @section('content')
-<section class="home">
+<section >
 
-    <div class="container">
-        <div>
-          <a href="/adduser" class="add-user">
-           <div class="add-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="auto" fill="#019455" class="bi bi-person-add" viewBox="0 0 16 16">
-              <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
-              <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
-            </svg>
+
+        <div class="table-container">
+          <p class="details" style="text-align: center">Details</p>
+          <dl class="description-list">
+              <div class="description-pair">
+                  <dt class="t1">id :</dt>
+                  <dd>{{ $user->id }}</dd>
+              </div>
+              <div class="description-pair">
+                <dt class="t1">Nom :</dt>
+                <dd>{{ $user->Nom }}</dd>
             </div>
-          </a>
+            <div class="description-pair">
+              <dt class="t1">Prenom :</dt>
+              <dd>{{ $user->Prenom }}</dd>
+          </div>
+              <div class="description-pair">
+                <dt class="t1">Email :</dt>
+                <dd>{{ $user->email }}</dd>
+            </div>
+            <div class="description-pair">
+              <dt class="t1">Extennsion :</dt>
+              <dd>{{ $user->extension }}</dd>
+          </div>
+          <div class="description-pair">
+            <dt class="t1">Role :</dt>
+            <dd>{{ $user->Role }}</dd>
         </div>
-        <table class="table-auto" border="1px solid black" >
-            <thead>
-              <tr>
-                <th>id</th>
-                <th>Matricule</th>
-                <th>Adresse electronique</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Extension</th>
-                <th>Role</th>
-                <th>Service</th>
-                <th>Ville</th>
-                <th>Date d'embauche</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{$user->id}}</td>
-                <td>{{$user->Matricule}}</td>
-                <td>{{$user->email}}</td>
-                <td>{{$user->Nom}}</td>
-                <td>{{$user->Prenom}}</td>
-                <td>{{$user->extension}}</td>
-                <td>{{$user->Role}}</td>
-                <td>{{$user->Service}}</td>
-                <td>{{$user->Ville}}</td>
-                <td>{{$user->Date_Embauche}}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="description-pair">
+          <dt class="t1">Service :</dt>
+          <dd>{{ $user->Service }}</dd>
+      </div>
+      <div class="description-pair">
+        <dt class="t1">Site :</dt>
+        <dd>{{ $user->Site }}</dd>
+    </div>
+    <div class="description-pair">
+      <dt class="t1">Date d'embauche :</dt>
+      <dd>{{ $user->Date_Embauche }}</dd>
+  </div>
       
     </div>
-<style>
 
-.table-auto{
-  background-color: whitesmoke;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
-  display: block;
-  width: 100%;
-}
-    th{
-      background-color: rgb(184, 184, 184);
-        color:green;
+<div class="table-container">
+            <div>
+              @if ($historiques->isEmpty())
+        <p style="color: red; backgound-color:white; text-align:center; font-weight:300;font-size:25px" >Il n'y a aucune historisation pour ce matériel !!</p>
+              @else
+                <table class="table-auto2" style="border: 1px solid black">
+                    <thead>
+                        <tr>
+                            <th class="thh">Entite</th>
+                            <th class="thh">Type d'Opération</th>
+                            <th class="thh">Modifications</th>
+                            <th class="thh">Date de Modification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($historiques as $historisation)
+                            <tr>
+                                <td><a
+                                        href="{{ route('showMaterial', ['id' => $historisation->user_id]) }}">{{ $historisation->user_id }}</a>
+                                </td>
+                                <td>{{ $historisation->operation }}</td>
+                                <td>{{ $historisation->changes }}</td>
+                                <td>{{ $historisation->created_at }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                @endif
+
+            </div>
+            
+        </div>
+    </section>
+@endsection
+<style>
+    .description-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        justify-content: center;
     }
-    .add-button{
+
+    .description-pair {
+        display: flex;
+        align-items: center;
+    }
+
+    .t1 {
+        background-color: rgb(242, 242, 242);
+        color: green;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .description-pair dd {
+        margin: 0;
+        padding-left: 10px;
+    }
+
+    .expired {
+        color: red;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto;
+    }
+
+    .table-container {
+        background-color: whitesmoke;
+        width: 80%;
+        margin-left: 12%;
+        margin-top: 40px;
+    }
+
+    .table-auto2 {
+        border: 1px solid black;
+        background-color: whitesmoke;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+        display: block;
+        text-align: center;
+
+    }
+
+    th {
+        position: sticky;
+        top: 0;
+        background-color: #019455;
+        color: #fff;
+        font-weight: 500;
+        height: 50px;
+        padding: 5px;
+    }
+
+    .table-auto {
+        background-color: whitesmoke;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .t1 {
+        background-color: rgb(242, 242, 242);
+        color: green;
+        font-weight: bold;
+    }
+
+    .details {
+        background-color: #019455;
+        color: white;
+        font-weight: 400;
+        font-size: 18px;
+    }
+
+    .add-button {
         height: 10%;
         border-bottom: 2px double black
     }
-   
-</style>
 
-@endsection
+    .tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-content {
+    display: none;
+    position: absolute;
+    width: 180px;
+    top: calc(100% + 5px);
+    left: 0;
+    background-color: #564a4acb;
+    color: white;
+    border: 3px double #019455;
+    border-radius: 10px;
+    padding: 5px;
+    z-index: 1;
+}
+
+.tooltip-container:hover .tooltip-content {
+    display: block;
+}
+</style>

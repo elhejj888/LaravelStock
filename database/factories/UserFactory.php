@@ -20,13 +20,12 @@ class UserFactory extends Factory
             'email' =>Str::lower( $faker->unique()->safeEmail),
             'email_verified_at' => $faker->randomElement([null, now()]),
             'password' => $faker->password, // Assuming you want to hash the password
-            'Matricule' => $faker->bothify('MTR#####'),
             'Nom' => $faker->lastName,
             'Prenom' => $faker->firstName,
             'extension' => $faker->phoneNumber,
-            'Role' => $faker->randomElement(['Autorisé', 'Restreint', 'Exclu']),
+            'Role' => $faker->randomElement(['Autorisé', 'Restreint', 'Départ']),
             'Service' => $faker->randomElement(['Informatique', 'Ressources Humaines', 'Comptabilité et Finance','Service Marketing','Management','Clientele','Maintenance','Administration']),
-            'Ville' => $faker->randomElement(['Casablanca', 'Oujda', 'Paris']),
+            'Site' => $faker->randomElement(['Casablanca', 'Oujda', 'Paris']),
             'Date_Embauche' => $faker->dateTimeThisDecade,
         ];
     }

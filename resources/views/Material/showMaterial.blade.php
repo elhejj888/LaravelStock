@@ -2,7 +2,7 @@
 @section('content')
 <section class="home">
 
-    <div class="container">
+    <div class="container" >
         <div>
           <a href="/addmaterial" class="add-user">
            <div class="add-button">
@@ -12,6 +12,9 @@
               </svg>
             </div>
           </a>
+        </div>
+        <div>
+          <label for="type">Type :</label>
         </div>
         <table class="table-auto" border="1px solid black" >
             <thead>

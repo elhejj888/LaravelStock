@@ -15,9 +15,12 @@ class material extends Model
         'AdresseMac',
         'N_Facture',
         'DateAchat',
-        'fournisseur',
+        'Fournisseur',
         'Emplacement',
         'Site',
         'etat',
+        'userId',
+        'description',
+        'choix',
     ];
 }

@@ -17,13 +17,16 @@ return new class extends Migration
             $table->string('Marque');
             $table->string('Tag');
             $table->string('AdresseMac');
-            $table->string('N_Facture');
+            $table->string('N_Facture')->unique();
             $table->dateTime('DateAchat');
             $table->string('Fournisseur');
             $table->string('Emplacement');
             $table->string('Site');
             $table->string('etat');
-            $table->string('Matricule')->nullable();
+            $table->string('choix');
+            $table->string('userId')->nullable();            
+            $table->string('description')->nullable();
+
             $table->timestamps();
         });
     }

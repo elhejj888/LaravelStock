@@ -12,6 +12,16 @@
   <img class="main-logo" src="{{asset('../img/logo1.png')}}" alt="">
 </div>
 <!-- partial:index.partial.html -->
+<p style="text-align: center;color:lime;font-size:20px;font-weight:bold;">
+  @if (session('message'))
+      {{ session('message') }}
+  @elseif ($message)
+      {{ $message }}
+  @else
+      Veuillez se connecter ..!
+  @endif
+
+</p>
   <form class="login" action="/sendpassword" method="POST">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
   <input name="Email" type="email" placeholder="Adresse electronique" id="email" required>

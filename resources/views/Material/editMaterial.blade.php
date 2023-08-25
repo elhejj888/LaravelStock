@@ -24,15 +24,10 @@
                         <div class="formbold-input-flex">
                           <div>
                             <label for="firstname" class="formbold-form-label">
-                              Type de Produit
+                              Choix de Materiels
                             </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="type" >
+                            <select id="Produit" class="formbold-form-input" height="80px" name="type" disabled>
                                     <option value="{{$material->TypeProduit}}" selected>{{$material->TypeProduit}}</option>
-                                    <option value="Pc">Unite Centrale</option>
-                                    <option value="ecan">Ecran</option>
-                                    <option value="Casque">Casque</option>
-                                    <option value="routeur">Routeur</option>
-                                    <option value="Telephone">Telephone</option>
                             </select>
                               
                           </div>
@@ -44,40 +39,82 @@
                               value="{{$material->id}}"
                             />
                           <div>
-                            <label for="lastname" class="formbold-form-label"> Etat </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="etat" >
-                                <option value="{{$material->etat}}" selected style="display: none;">{{$material->etat}}</option>
-                                <option value="disponible">Disponible</option>
-                                <option value="assigné">Assigné</option>
-                                <option value="rupture">Rupture de stock</option>
-                                <option value="maintenance">En maintenance</option>
+                            <div>
+                              <label for="state" class="formbold-form-label" > Date d'achat </label>
+                              <input style="color: #019455;"
+                                type="date"
+                                name="achat"
+                                id="achat"
+                                class="formbold-form-input"
+                                value="{{ \Carbon\Carbon::parse($material->DateAchat)->format('Y-m-d') }}"
+                                 disabled />
+                            </div>
+                            
+                          </div>
+                        </div>
+                        @if ($material->TypeProduit == "Casque")
+                          
+                        <div class="formbold-input-flex">
+                          <div>
+                            <label for="firstname" class="formbold-form-label">
+                              Marque
+                            </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="marque" disabled>
+                                    <option value="plantronics">plantronics</option>
+                            </select>
+                              
+                          </div>
+                          <div>
+                            <label for="lastname" class="formbold-form-label"> Type </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" disabled>
+                              <option value="{{$material->choix}}" style="display: none">{{$material->choix}}</option>
+                               
                         </select>
                           </div>
                         </div>
-                  
+                        @elseif ($material->TypeProduit == "Materiel reseau")
+                          
                         <div class="formbold-input-flex">
                           <div>
-                            <label for="email" class="formbold-form-label"> Marque </label>
+                            <label for="Marque" class="formbold-form-label">
+                              Marque
+                            </label>
                             <input
-                              type="text"
-                              name="marque"
-                              id="marque"
-                              class="formbold-form-input"
-                              value="{{$material->Marque}}"
-                            />
+                            type="text"
+                            name="marque"
+                            id="marque"
+                            class="formbold-form-input"
+                            value="{{$material->Marque}}"
+                          />
+                              
                           </div>
                           <div>
-                            <label for="phone" class="formbold-form-label"> Tag de Produit </label>
-                            <input
-                              type="text"
-                              name="tag"
-                              id="tag"
-                              class="formbold-form-input"
-                              value="{{$material->Tag}}"
-                            />
+                            <label for="lastname" class="formbold-form-label"> Type </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" disabled>
+                              <option value="{{$material->choix}}" style="display: none">{{$material->choix}}</option>
+                        </select>
                           </div>
                         </div>
-                  
+                        @elseif ($material->TypeProduit == "Telephone")
+                        <div class="formbold-mb-3">
+                          <label for="address" class="formbold-form-label">
+                          Marque
+                          </label>
+                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" disabled>
+                            <option value="{{$material->Marque}}" style="display: none">{{$material->Marque}}</option>
+                        </select>
+                        </div>
+                        @else
+                        <div class="formbold-mb-3">
+                          <label for="address" class="formbold-form-label">
+                          Marque
+                          </label>
+                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" disabled>
+                            <option value="Dell">Dell</option>
+                            
+                        </select>
+                        </div>
+                        @endif
                         <div class="formbold-mb-3">
                           <label for="address" class="formbold-form-label">
                           Adresse Mac
@@ -87,65 +124,71 @@
                             name="mac"
                             id="mac"
                             class="formbold-form-input"
-                            value="{{$material->AdresseMac}}"
+                            value="{{$material->AdresseMac}}" disabled
                           />
                         </div>
-                  
-                        <div class="formbold-mb-3">
-                          <label for="address2" class="formbold-form-label">
-                            Numéro de facture
+                        <div class="formbold-input-flex">
+                          <div>
+                          <label for="address" class="formbold-form-label">
+                          Tag
                           </label>
                           <input
                             type="text"
-                            name="facture"
-                            id="facture"
+                            name="tag"
+                            id="tag"
                             class="formbold-form-input"
-                            value="{{$material->N_Facture}}"
+                            value="{{$material->Tag}}" disabled
                           />
                         </div>
-                  
-                        <div class="formbold-input-flex">
-                          <div>
-                            <label for="state" class="formbold-form-label" > Date d'achat </label>
-                            <input style="color: #019455;"
-                              type="date"
-                              name="achat"
-                              id="achat"
-                              class="formbold-form-input"
-                              value="{{ \Carbon\Carbon::parse($material->DateAchat)->format('Y-m-d') }}"
-                              />
-                          </div>
-                          <div>
-                            <label for="country" class="formbold-form-label"> fournisseur </label>
+                        <div>
+                          <label for="address" class="formbold-form-label">
+                            Numero de Facture
+                            </label>
                             <input
                               type="text"
-                              name="fournisseur"
-                              id="fournisseur"
+                              name="facture"
+                              id="facture"
                               class="formbold-form-input"
-                              value="{{$material->Fournisseur}}"
+                              value="{{$material->N_Facture}}"
+                              disabled
                             />
+                        </div>
+                        </div>
+                        <div class="formbold-input-flex">
+                          <div>
+                            <label for="fournisseur" class="formbold-form-label"> fournisseur </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="fournisseur" disabled>
+                              <option value="{{$material->Fournisseur}}" style="display: none">{{$material->Fournisseur}}</option>
+                              
+                      </select>
+                          </div>
+                          <div>
+                            <label for="Etat" class="formbold-form-label"> Etat de Stock </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="etat" >
+                                <option value="{{$material->etat}}" selected style="display: none;" selected>{{$material->etat}}</option>
+                                <option value="Disponible">Disponible</option>
+                                <option value="maintenance">En maintenance</option>
+                        </select>
                           </div>
                         </div>
                         <div class="formbold-input-flex">
                           <div>
                             <label for="post" class="formbold-form-label"> Emplacement </label>
-                            <input
-                              type="text"
-                              name="emplacement"
-                              id="emplacement"
-                              class="formbold-form-input"
-                              value="{{$material->Emplacement}}"
-                            />
+                            <select id="Produit" class="formbold-form-input" height="80px" name="emplacement">
+                              <option value="{{ $material->Emplacement }}" style="display:none;">{{ $material->Emplacement }}</option>
+                              <option value="3eme étage">3eme étage</option>
+                              <option value="2eme étage">2eme étage</option>
+                              <option value="1re étage">1re étage</option>
+                              
+                      </select>
                           </div>
                           <div>
                             <label for="area" class="formbold-form-label"> Site D'emplacement </label>
-                            <input
-                              type="text"
-                              name="site"
-                              id="site"
-                              class="formbold-form-input"
-                              value="{{$material->Site}}"
-                            />
+                            <select id="Produit" class="formbold-form-input" height="80px" name="site">
+                              <option value="{{ $material->Site }}" style="display: none">{{ $material->Site }}</option>
+                              <option value="Casablanca">Casablanca</option>
+                              <option value="Oujda">Oujda</option>                              
+                      </select>
                           </div>
                       </div>
                   
@@ -160,7 +203,7 @@
                               
                             </div>
                           </label>
-                          <button type="submit" class="formbold-btn">Ajouter Produit</button>
+                          <button type="submit" class="formbold-btn">Modifier Produit</button>
                         </div>
                   
                       </form>

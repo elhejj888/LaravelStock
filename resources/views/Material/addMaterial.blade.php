@@ -27,10 +27,11 @@
                               Type de Produit
                             </label>
                             <select id="Produit" class="formbold-form-input" height="80px" name="type">
-                                    <option value="Ordinateur">Unite Centrale</option>
+                              <option value="" selected></option>
+                                    <option value="Ordinateur">Ordinateur</option>
                                     <option value="Ecran">Ecran</option>
                                     <option value="Casque">Casque</option>
-                                    <option value="Reseau">Materiel Reseau</option>
+                                    <option value="Materiel Reseau">Materiel Reseau</option>
                                     <option value="Telephone">Téléphone</option>
                             </select>
                               
@@ -38,15 +39,8 @@
         
                         </div>
                   
-                        <div class="formbold-input-flex">
-                          <div>
-                            <label for="email" class="formbold-form-label"> Marque </label>
-                            <input
-                              type="text"
-                              name="marque"
-                              id="marque"
-                              class="formbold-form-input"
-                            />
+                          <div id="dynamic-fields-container">
+                           
                           </div>
                           <div>
                             <label for="phone" class="formbold-form-label"> Tag de Produit </label>
@@ -55,9 +49,9 @@
                               name="tag"
                               id="tag"
                               class="formbold-form-input"
+                              required
                             />
                           </div>
-                        </div>
                   
                         <div class="formbold-mb-3">
                           <label for="address" class="formbold-form-label">
@@ -68,6 +62,7 @@
                             name="mac"
                             id="mac"
                             class="formbold-form-input"
+                            required
                           />
                         </div>
                   
@@ -80,6 +75,7 @@
                             name="facture"
                             id="facture"
                             class="formbold-form-input"
+                            required
                           />
                         </div>
                   
@@ -91,25 +87,28 @@
                               name="achat"
                               id="achat"
                               class="formbold-form-input"
+                              required
                             />
                           </div>
                           <div>
-                            <label for="country" class="formbold-form-label"> fournisseur </label>
-                            <input
-                              type="text"
-                              name="fournisseur"
-                              id="fournisseur"
-                              class="formbold-form-input"
-                            />
+                            <label for="fournisseur" class="formbold-form-label"> fournisseur </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="fournisseur">
+                              <option value="Wicoutil">Wicoutil</option>
+                              <option value="Pel Mel Tech">Pel Mel Tech</option>
+                              <option value="MIT">MIT</option>
+                              <option value="ADINGSS">ADINGSS</option>
+                              <option value="Free Zone">Free Zone</option>
+                              <option value="COSMOS">COSMOS</option>
+                      </select>
                           </div>
                         </div>
                         <div class="formbold-input-flex">
                           <div>
                             <label for="post" class="formbold-form-label"> Emplacement </label>
                             <select id="Produit" class="formbold-form-input" height="80px" name="emplacement">
-                              <option value="3eme étage">3eme étage</option>
-                              <option value="2eme étage">2eme étage</option>
-                              <option value="1re étage">1re étage</option>
+                              <option value="3eme etage">3eme étage</option>
+                              <option value="2eme etage">2eme étage</option>
+                              <option value="1re etage">1re étage</option>
                               
                       </select>
                           </div>
@@ -304,7 +303,97 @@
         $(this).parent().find(".box, .lab").removeClass("hovered");
       });
     </script>
-    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const dropdown = document.getElementById("Produit");
+          const dynamicFieldsContainer = document.getElementById("dynamic-fields-container");
+          
+          dropdown.addEventListener("change", function () {
+              const selectedValue = dropdown.value;
+              
+              // Clear the container first
+              dynamicFieldsContainer.innerHTML = "";
+              
+              if (selectedValue === "Casque") {
+                  dynamicFieldsContainer.innerHTML = `
+                  <div class="formbold-input-flex">
+                          <div>
+                            <label for="firstname" class="formbold-form-label">
+                              Marque
+                            </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
+                                    <option value="plantronics">plantronics</option>
+                            </select>
+                              
+                          </div>
+                          <div>
+                            <label for="lastname" class="formbold-form-label"> Type </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" >
+                                <option value="USB">USB</option>
+                                <option value="Prise Jack">Prise Jack</option>
+                        </select>
+                          </div>
+                        </div>
+                  `;
+              } else if (selectedValue === "Materiel Reseau") {
+                  dynamicFieldsContainer.innerHTML = `
+                  <div class="formbold-input-flex">
+                          <div>
+                            <label for="marque" class="formbold-form-label">
+                              Marque
+                            </label>
+                            <input
+                            type="text"
+                            name="marque"
+                            id="marque"
+                            class="formbold-form-input"
+                          />
+                              
+                          </div>
+                          <div>
+                            <label for="choix" class="formbold-form-label"> Type </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="type" >
+                                <option value="Switch">Switch</option>
+                                <option value="Routeur">Routeur</option>
+                                <option value="Point d'acces">Point d'acces</option>
+                                <option value="TV">TV</option>
+                        </select>
+                          </div>
+                        </div>
+                  `;
+              }
+              
+              else if (selectedValue === "Telephone") {
+                  dynamicFieldsContainer.innerHTML = `
+                  <div class="formbold-mb-3">
+                          <label for="marque" class="formbold-form-label">
+                          Marque
+                          </label>
+                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
+                            <option value="Snome710">Snom710</option>
+                            <option value="SnomeD712">SnomeD712</option>
+                            
+                        </select>
+                        </div>
+                  `;
+              }
+              else {
+                dynamicFieldsContainer.innerHTML = `
+                <div class="formbold-mb-3">
+                          <label for="marque" class="formbold-form-label">
+                          Marque
+                          </label>
+                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
+                            <option value="Dell">Dell</option>
+                            
+                        </select>
+                        </div>
+                  `;
+              }
+          });
+      });
+  </script>
+  
     <style>
       /* Apply a transition to the scale and opacity properties of .box and .lab when hovered */
       .hovered {

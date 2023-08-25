@@ -9,16 +9,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Mail\Login;
-
-
+use Illuminate\Contracts\Session\Session;
 
 class AuthController extends Controller
 {
     public function sendPassword(Request $request)
     {
+        if (!auth()->check()) {
         $email = Str::lower($request->input('Email'));
         $user = User::where('email', $email)->first();
-
+        session(['temporary_email' => $email]);
+        if($user){
         if ($user->Role == "Autorisé" || $user->Role == "Admin") {
             // Generate a temporary password and send it to the user's email
             $temporaryPassword = Str::random(12);
@@ -28,75 +29,63 @@ class AuthController extends Controller
             $user->update(['password' => Hash::make($temporaryPassword)]);
             $currentDateTime = Carbon::now();
             $futureDateTime = $currentDateTime->addMinutes(5);
-            return view('Login/password', ['user' => $user , 'Ftime'=> $futureDateTime]);
+            return view('Login/password', ['user' => $user , 'Ftime'=> $futureDateTime , 'message'=>'']);
         }
         else {
-            return redirect('login')->with("alert","Input failed , Adresse n'exsite pas");
+            return redirect('login')->with("message","Vous n'avez pas le droit d'acces , Veuillez verifier avec votre Responsable");
         }
+    }
+        else {
+            return redirect('login')->with("message","Vous n'avez pas le droit d'acces , Veuillez verifier avec votre Responsable");
+        }
+    }
+ else {
+    return redirect('home')->with('message', 'Veuiller vous Deconnecter pour changer le compte.');
+}
 
     }
 
     public function authenticate(Request $request)
     {
-        //$credentials = $request->only('Email', 'password');
-        $email = Str::lower($request->input('Email'));
-        $password = $request->input('password');
-        $Ftime = $request->input('Ftime');
-        $currentDateTime = Carbon::now();
-        $user = User::where('email', $email)->first();
-        
-        if ($currentDateTime->isAfter($Ftime)) {
-            $user->update(['password' => Str::random(60)]);
-            return redirect('login');
-        }
-        if ($user) {
-            echo "that's it 1";
-            if($user->Password == $password){
-            // Authentication successful
-            $request->session->put(['Cuser'=>$user]);
-            return redirect('/home')->withwith('user',$user);
-        }
-            else{
-                echo "that's it 3";
-
-                return view('errors/pass',['pass'=>$password]);
+        $request->session()->flush();
+        if (!auth()->check()) {
+            $request->validate([
+                'Email' => 'required',
+                'password' => 'required',
+            ]);
+    
+            $credentials = $request->only('Email', 'password');
+            $currentDateTime = Carbon::now();
+            $email = $request->input('Email');
+            $Ftime = $request->input('Ftime');
+    
+            if ($currentDateTime->isAfter($Ftime)) {
+                $user = User::where('email', $email)->first();
+                $user->update(['Password' => Str::random(60)]);
+                return redirect('login')->with('message', 'Vous avez Dépassé 5 minutes, Veuillez Demander un Nouveau Code ..!');
+            } else if (Auth::attempt($credentials)) {
+                return redirect('/home')->with('message', '');
+            } else {
+                session(['temporary_email' => $email]);
+                session(['Ftime' => $Ftime]);
+    
+                return redirect('/sendpassword')->with('message', 'Erreur de Connexion, Vérifiez votre Mot de passe !!');
             }
         } else {
-            // Authentication failed
-            echo "that's it 4";
-            return view('errors/email', ['error' => $email]);        
+            return redirect('home')->with('message', 'Veuillez vous Déconnecter pour changer le compte.');
         }
     }
+    
 
-    public function authenticate2(Request $request)
-{
-    $request->validate([
-        'Email' => 'required',
-        'password' => 'required',
-    ]);
-    
-    $credentials = $request->only('Email', 'password');
-    $Ftime = $request->input('Ftime');
-    $currentDateTime = Carbon::now();
-    
-    /* if ($currentDateTime->isAfter($Ftime)) {
-        $user->update(['Password' => Str::random(60)]);
-        return redirect('login')->with('error', 'Password reset due to expiration. Please log in again.');
-    } */
-    if (Auth::attempt($credentials)) {
-        return redirect('/home')->with('success', 'Authenticated successfully.');
-    }
-    else {
-        dd('Authentication failed', $credentials);
-        return redirect('login')->with('error', 'Authentication failed.');
-    }
+public function checkPassword(){
+    if(session('temporary_email'))
+    return view('Login/password', ['email' => session('temporary_email') , 'message'=>'Erreur de Connexion , Verifier votre Mot de passe !!']);
+    else return redirect('/login')->with('message', 'Erreur de Connexion , Entrer votre email !!');
 }
-
-
-public function logout()
+public function logout(Request $request)
 {
+    $request->session()->flush();
     Auth::logout(); // Logout the currently authenticated user
-    
-    return redirect('/login'); // Redirect to the login page or any other desired page
+    return redirect('/login')->with('message','Veuiller se connecter'); // Redirect to the login page or any other desired page
 }
 }

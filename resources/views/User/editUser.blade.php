@@ -27,18 +27,6 @@
                           value="{{$user->id}}"
                         />
               
-                    <div class="formbold-mb-3">
-                        <label for="firstname" class="formbold-form-label">
-                          Matricule
-                        </label>
-                        <input
-                          type="text"
-                          name="Matricule"
-                          id="Matricule"
-                          class="formbold-form-input"
-                          value="{{$user->Matricule}}"
-                        />
-                      </div>
                       
               
                     <div class="formbold-input-flex">
@@ -69,14 +57,14 @@
                         <label for="post" class="formbold-form-label"> Adresse electronique </label>
                         <input
                           type="email"
-                          name="Email"
+                          name="email"
                           id="email"
                           class="formbold-form-input"
                           value="{{$user->email}}"
                         />
                       </div>
                       <div>
-                        <label for="ville" class="formbold-form-label"> Extension </label>
+                        <label for="Site" class="formbold-form-label"> Extension </label>
                         <input
                           type="text"
                           name="Extension"
@@ -97,21 +85,33 @@
                         </select>                        
                       </div>
                       <div>
-                        <label for="site" class="formbold-form-label"> Service </label>
-                        <input
-                          type="text"
-                          name="Service"
-                          id="Service"
-                          class="formbold-form-input"
-                          value="{{$user->Service}}"
-                        />
-                      </div>
+                      <label for="site" class="formbold-form-label"> Service </label>
+                      <select id="Produit" class="formbold-form-input" name="Service" height="80px">
+                        <option value="{{$user->Service}}" selected style="display: none">{{$user->Service}}</option>
+                        <option value="Adict" >Adict</option>
+                        <option value="Auto">Auto</option>
+                        <option value="Cergap" >Cergap</option>
+                        <option value="Fidelisation">Fidelisation</option>
+                        <option value="Gestion" >Gestion</option>
+                        <option value="Informatique">Informatique</option>
+                        <option value="Marketing" >Marketing</option>
+                        <option value="MRH">MRH</option>
+                        <option value="Calinia">Calinia</option>
+                        <option value="Qualite" >Qualite</option>
+                        <option value="RH">RH</option>
+                        <option value="Sante" >Sante</option>
+                        <option value="TMK">TMK </option>
+                        <option value="VDI" >VDI</option>
+                        <option value="Weedoit">Weedoit</option>
+                    
+                </select>  
                     </div>
+                    </div>  
                     <div class="formbold-input-flex">
                       <div>
                         <label for="site" class="formbold-form-label"> Site </label>
                         <select id="Produit" class="formbold-form-input" name="Site" height="80px">
-                          <option value="{{$user->Ville}}" selected style="display: none;">{{$user->Ville}}</option>
+                          <option value="{{$user->Site}}" selected style="display: none;">{{$user->Site}}</option>
                           <option value="Casablanca">Casablanca</option>
                           <option value="Oujda">Oujda</option>
                           

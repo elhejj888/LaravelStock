@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HistoriqueController;
 use App\Models\User;
 use App\Mail\Login;
 
@@ -47,10 +48,13 @@ Route::post('/users',[UserController::class , 'updateValues']);
 
 
 
+Route::get('historisation',[HistoriqueController::class,'retrieveMaterialHistorisation']);
+Route::get('historisation',[HistoriqueController::class,'retrieveUserHistorisation']);
 
 Route::get('users' , [UserController::class , 'RetrieveUsers']);
 Route::get('deletedmaterials',[MaterialController::class,'deletedvalues']);
 Route::get('deletedusers',[UserController::class,'deletedvalues']);
+Route::get('assignMaterial/{materialId}/{userId}', [MaterialController::class, 'assignMaterial'])->name('assignMaterial');
 
 
 Route::get('materials',[MaterialController::class,'RetrieveMaterials']);
@@ -60,10 +64,21 @@ Route::get('updatematerial/{id}', [MaterialController::class, 'updateMaterial'])
 Route::get('updateuser/{id}', [UserController::class, 'updateUser'])->name('updateUser');
 Route::get('deleteMaterial/{id}', [MaterialController::class, 'deleteMaterial'])->name('deleteMaterial');
 Route::get('deleteUser/{id}', [UserController::class, 'deleteUser'])->name('deleteUser');
+Route::get('affectmaterial/{id}', function($id){
+    return view('Material/affecting', ['id' => $id]);
+})->name('affectMaterial');
+
 
 Route::post('store-matricule', [UserController::class, 'storeMatricule'])->name('storeMatricule');
 
 Route::get('/home', [MaterialController::class, 'home'])->name('home');
+Route::get('/searchUser', [UserController::class, 'searchUser'])->name('searchUser');
+Route::get('/searchMaterial', [MaterialController::class, 'searchMaterial'])->name('searchMaterial');
+Route::get('/assign', [MaterialController::class, 'find'])->name('assign');
+Route::get('/searchHistoriqueMaterial', [HistoriqueController::class, 'find'])->name('findHistorique');
+Route::get('/sendpassword', [AuthController::class, 'checkPassword'])->name('sendpass');
+Route::get('/searchDeletedMaterial', [MaterialController::class, 'searchDeletedMaterial'])->name('searchDeletedMaterial');
+
 
 
 Route::get('/mat/{name}-{id}', function (string $name , string $id) {
@@ -77,29 +92,16 @@ Route::get('/mat/{name}-{id}', function (string $name , string $id) {
 ]);
 
 Route::get('/login', function () {
-    return view('Login/index');
+    return view('Login/index' , ['message'=>'Bonjour..']);
 });
 
 Route::post('/sendpassword', [AuthController::class, 'sendPassword'])->name('sendPassword');
-Route::post('/connection', [AuthController::class, 'authenticate2'])->name('authenticate');
+Route::post('/connection', [AuthController::class, 'authenticate'])->name('authenticate');
 Route::get('/error', function () {
     echo "something wrong";
 });
 
-Route::get('/loginmail', function(){
-        $temporaryPassword = Str::random(12);
-        // Send the password to the user's email using your email service
-        Mail::to('eustacebagge69@gmail.com')->send(new Login($temporaryPassword));
-        $user = User::where('Email','eustacebagge69@gmail.com')->first();
-        if($user){
-        $user->password = $temporaryPassword;
-        $user->save();
-        }
-        else{
-            echo "not found";
-        }
-        return redirect('/authenticate')->with('email', 'User updated successfully');
-});
+
 Route::get('/session',function(){
     $user = auth()->user();
     dd($user);

@@ -24,14 +24,15 @@ class materialFactory extends Factory
         return [
                 'TypeProduit' => $faker->randomElement(['Ordinateur','Ecran','Telephone','Casque','Materiel reseau']),
                 'Marque' => $faker->word,
+                'choix' => $faker->word,
                 'Tag' => $faker->numberBetween(1000, 9999) . '-' . $faker->randomLetter . $faker->randomLetter . $faker->randomLetter . $faker->randomLetter,
                 'AdresseMac' => $faker->macAddress,
                 'N_Facture' => $faker->unique()->numerify('FA####'),
                 'DateAchat' => $faker->dateTimeThisDecade,
                 'Fournisseur' => $faker->name,
-                'Emplacement' => $faker->randomElement(['Stock A', 'Stock B', 'Stock C', 'Stock D']),
+                'Emplacement' => $faker->randomElement(['1re étage ', '2eme étage', '3eme étage']),
                 'Site' => $faker->randomElement(['Casablanca', 'Oujda', 'Paris']),
-                'etat' => $faker->randomElement(['Disponible', 'Assigne', 'maintenance','rupture']),
+                'etat' => $faker->randomElement(['Disponible', 'Assigne', 'maintenance','rupture']),                
                 'created_at' => now(),
                 'updated_at' => now(),
         ];

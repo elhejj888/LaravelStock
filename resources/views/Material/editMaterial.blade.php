@@ -47,8 +47,8 @@
                             <label for="lastname" class="formbold-form-label"> Etat </label>
                             <select id="Produit" class="formbold-form-input" height="80px" name="etat" >
                                 <option value="{{$material->etat}}" selected style="display: none;">{{$material->etat}}</option>
-                                <option value="Disponible">Disponible</option>
-                                <option value="Assigné">Assigné</option>
+                                <option value="disponible">Disponible</option>
+                                <option value="assigné">Assigné</option>
                                 <option value="rupture">Rupture de stock</option>
                                 <option value="maintenance">En maintenance</option>
                         </select>

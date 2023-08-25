@@ -36,8 +36,39 @@ class AuthController extends Controller
 
     }
 
-
     public function authenticate(Request $request)
+    {
+        //$credentials = $request->only('Email', 'password');
+        $email = Str::lower($request->input('Email'));
+        $password = $request->input('password');
+        $Ftime = $request->input('Ftime');
+        $currentDateTime = Carbon::now();
+        $user = User::where('email', $email)->first();
+        
+        if ($currentDateTime->isAfter($Ftime)) {
+            $user->update(['password' => Str::random(60)]);
+            return redirect('login');
+        }
+        if ($user) {
+            echo "that's it 1";
+            if($user->Password == $password){
+            // Authentication successful
+            $request->session->put(['Cuser'=>$user]);
+            return redirect('/home')->withwith('user',$user);
+        }
+            else{
+                echo "that's it 3";
+
+                return view('errors/pass',['pass'=>$password]);
+            }
+        } else {
+            // Authentication failed
+            echo "that's it 4";
+            return view('errors/email', ['error' => $email]);        
+        }
+    }
+
+    public function authenticate2(Request $request)
 {
     $request->validate([
         'Email' => 'required',
@@ -56,6 +87,7 @@ class AuthController extends Controller
         return redirect('/home')->with('success', 'Authenticated successfully.');
     }
     else {
+        dd('Authentication failed', $credentials);
         return redirect('login')->with('error', 'Authentication failed.');
     }
 }

@@ -53,8 +53,8 @@
                 <table class="table-auto2" style="border: 1px solid black">
                     <thead>
                         <tr>
-                            <th class="thh">Entite</th>
-                            <th class="thh">Type d'Opération</th>
+                            <th class="thh">Utilisateur</th>
+                            <th class="thh">Type d'opération</th>
                             <th class="thh">Modifications</th>
                             <th class="thh">Date de Modification</th>
                         </tr>
@@ -62,12 +62,20 @@
                     <tbody>
                         @foreach ($historiques as $historisation)
                             <tr>
-                                <td><a
-                                        href="{{ route('showMaterial', ['id' => $historisation->user_id]) }}">{{ $historisation->user_id }}</a>
-                                </td>
-                                <td>{{ $historisation->operation }}</td>
-                                <td>{{ $historisation->changes }}</td>
-                                <td>{{ $historisation->created_at }}</td>
+                            @if($historisation->FullName == "Systeme de Connexion" || $historisation->FullName == "Inconnu")
+                            <td>
+                                Connexion
+                            </td>
+                            @else
+                            <td>
+                                <a
+                                    href="{{ route('showUser', ['id' => $historisation->user_id]) }}">{{ $historisation->FullName }}
+                                </a>
+                            </td>                            
+                            @endif
+                            <td>{{ $historisation->operation }}</td>
+                            <td>{{ $historisation->changes }}</td>
+                            <td>{{ $historisation->created_at }}</td>
                             </tr>
                         @endforeach
                     </tbody>

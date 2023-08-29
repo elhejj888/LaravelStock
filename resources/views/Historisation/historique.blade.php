@@ -22,12 +22,12 @@
                 <tbody class="mainData">
                     @foreach ($historisations as $historisation)
                         <tr>
-                            @if($historisation->FullName != "Systeme de Connexion" || $historisation->FullName != "Iconnu")
+                            @if($historisation->FullName != "Systeme de Connexion" || $historisation->FullName != "Inconnu")
                             <td><a
                                     href="{{ route('showUser', ['id' => $historisation->user_id]) }}">{{ $historisation->FullName }}</a>
                             </td>
                             @else
-                            <td>Systeme de Connexion</td>
+                            <td>Connexion</td>
                             @endif
                             <td>
                               @if($historisation->type =="materiel")

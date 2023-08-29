@@ -131,7 +131,7 @@
                         
                     </div>
                       </label>
-                      <button type="submit" class="formbold-btn">Ajouter Salarié(e)</button>
+                      <button type="submit" class="formbold-btn">Modifier Utilisateur</button>
                     </div>
               
                   </form>

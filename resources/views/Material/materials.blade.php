@@ -110,10 +110,9 @@
                                     </button>
                                     <dialog class="modal" id="modal-{{ $material->id }}" style="margin:auto; align-content:center;">
                                         <h1>Etat de Stock </h1>
-                                        {{ $material->id }}
                                         <table>
                                             <td>
-                                                <label for="etat">Etat : </label>
+                                                <label for="etat" style="color: black">Etat : </label>
                                         
                                             </td>
                                             <td>
@@ -139,11 +138,13 @@
                                                 </select>
                                             </td>
                                         </table>
-                                        <div class="additional-content" data-material-id="{{ $material->id }}"></div>
-                                        <button class="button close-button" id="Operation">
+                                        <div>
+                                        <div class="additional-content" data-material-id="{{ $material->id }}">
+                                        </div>
+                                        <button class="button close-button" id="Operation" style="width:80px;">
                                             Close
                                         </button>
-                                        
+                                    </div>
                                         
                                     </dialog>
                                 </td>
@@ -213,10 +214,10 @@
                         <form action="/fix" method="POST">
                             @csrf
                             <input type="text" value="maintenance" name="etat" style="display:none;">
-                            <input type="text" value=`+materialId+` name="id" >
+                            <input type="text" value=`+materialId+` name="id" style="display:none;">
                             <label for="description">Description: </label>
                             <textarea name="description" id="description" cols="30" rows="4" required></textarea>                            </tr>
-                            <button type="submit">Submit</button>
+                            <button class="operation" style="width:80px;" type="submit">Submit</button>
                         </form>
                     `;
                 } else if (selectedValue === 'Assigne') {
@@ -229,8 +230,7 @@
                     <form action="/matt" method="POST">
                         @csrf
                     <input type="text" value="Disponible" name="etat" style="display:none;">
-                    <input type="text" value="Disponible" name="etat" style="display:none;">
-                    <input type="text" value=`+materialId+` name="id" >
+                    <input type="text" value=`+materialId+` name="id" style="display:none;">
                         <select name="emplacement">
                             <option value="2eme etage">2eme etage</option>
                             <option value="5eme etage">5eme etage</option>
@@ -240,7 +240,7 @@
                             <option value="Casablanca">Casablanca</option>
                             <option value="Oujda">Oujda</option>
                         </select>
-                        <button type="submit">Submit</button>
+                        <button class="operation" style="width:80px;" type="submit">Submit</button>
                     `;
                 } else {
                     additionalContent.innerHTML = ''; // Clear additional content

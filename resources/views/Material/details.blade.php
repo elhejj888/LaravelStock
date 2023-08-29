@@ -6,6 +6,10 @@
             <p class="details" style="text-align: center">Details</p>
             <dl class="description-list">
                 <div class="description-pair">
+                    <dt class="t1">ID :</dt>
+                    <dd>{{ $material->id }}</dd>
+                </div>
+                <div class="description-pair">
                     <dt class="t1">Type :</dt>
                     <dd>{{ $material->TypeProduit }}</dd>
                 </div>
@@ -25,6 +29,12 @@
                     <dt class="t1">Etat :</dt>
                     <dd>{{ $material->etat }}</dd>
                 </div>
+                @if($material->etat=="maintenance")
+                <div class="description-pair">
+                    <dt class="t1">Description :</dt>
+                    <dd>{{ $material->description }}</dd>
+                </div>
+                @endif
                 <div class="description-pair">
                     <dt class="t1">Numero de facture :</dt>
                     <dd>{{ $material->N_Facture }}</dd>
@@ -36,9 +46,9 @@
                 <div class="description-pair">
                     <dt class="t1">Garantie :</dt>
                     <dd>
-                        @if ($expired)
+                        @if ($expired > 2)
                         <span class="tooltip-container">
-                        <span id="expiredText" class="expired">Expirée</span>
+                        <span id="expiredText" class="expired">Expirée </span>
                                 <span class="tooltip-content" id="test">{{ $garantie }}</span>
                             </span>
                         @else

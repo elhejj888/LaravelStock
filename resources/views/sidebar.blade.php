@@ -83,7 +83,7 @@
                     </li>
                     @if(Auth::user()->Role === 'Admin')
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="/maintainMaterials">
                             <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"  id="icon2" class="bi bi-wrench-adjustable-circle" viewBox="0 0 16 16">
                                 <path d="M12.496 8a4.491 4.491 0 0 1-1.703 3.526L9.497 8.5l2.959-1.11c.027.2.04.403.04.61Z"/>

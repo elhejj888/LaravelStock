@@ -56,10 +56,22 @@ class MaterialObserver
     public function updated(material $material): void
 {
     $changes = [];
-    $allowedAttributes = ['etat', 'Emplacement', 'Site' , 'userId']; // List of attributes you want to track changes for
+    $allowedAttributes = ['TypeProduit',
+    'choix',
+    'Marque',
+    'Tag',
+    'AdresseMac',
+    'N_Facture',
+    'DateAchat',
+    'Fournisseur',
+    'Emplacement',
+    'etat',
+    'Emplacement',
+    'Site',]; // List of attributes you want to track changes for
     $user2 ="";
     foreach ($allowedAttributes as $attribute) {
         if ($material->isDirty($attribute)) {
+            if($material)
             if($attribute == 'userId')
             {
                 $user = User::find($material->userId);

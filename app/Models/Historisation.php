@@ -16,4 +16,13 @@ class Historisation extends Model
         'changes',
         'FullName',       
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id')->where('historisations.type', 'user'); // Assuming 'type' column in historisations indicates user or material
+    }
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class, 'edited_id')->where('historisations.type', 'material');// Assuming 'type' column in historisations indicates user or material
+    }
 }

@@ -28,11 +28,6 @@
                 <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Materiels"
                     style="width:100%;padding : 5px; margin-bottom:10px;">
             </div>
-            {{-- <dialog open class="modal" id="modal" style="margin:auto ; z-index:1; width:500px; display:flex; align-content:center;">
-                <h1>hell yaaaaa</h1>
-                <span for="test">name</span>
-                <input name="test" type="text">
-            </dialog> --}}
 
             <table class="table-auto" border="1px solid black">
                 <thead>
@@ -50,6 +45,8 @@
                         @endif
                         <th class="thh">Affecter</th>
                         <th class="thh">Detailles</th>
+                        <th class="thh">Gerer</th>
+
 
                     </tr>
                 </thead>
@@ -111,9 +108,46 @@
                                         </svg>
                                         Affecter
                                     </button>
+                                    <dialog class="modal" id="modal-{{ $material->id }}" style="margin:auto; align-content:center;">
+                                        <h1>Etat de Stock </h1>
+                                        {{ $material->id }}
+                                        <table>
+                                            <td>
+                                                <label for="etat">Etat : </label>
+                                        
+                                            </td>
+                                            <td>
+                                                <select class="etat-select" data-material-id="{{ $material->id }}" name="etat2" id="">
+                                                    <option value="{{ $material->etat }}" style="display: none;">{{ $material->etat }}</option>
+                                                    @if ($material->etat == "Assigne")
+                                                        
+                                                    <option value="Disponible">Disponible</option>
+                                                    <option value="Maintenance">Maintenance</option>
 
+                                                    @elseif ($material->etat =="Disponible")
 
+                                                    <option value="Maintenance">Maintenance</option>
+                                                    <option value="Assigne">Assigne</option>
+
+                                                    @else
+
+                                                    <option value="Assigne">Assigne</option>
+                                                    <option value="Disponible">Disponible</option>
+                                                    @endif
+                                                    
+
+                                                </select>
+                                            </td>
+                                        </table>
+                                        <div class="additional-content" data-material-id="{{ $material->id }}"></div>
+                                        <button class="button close-button" id="Operation">
+                                            Close
+                                        </button>
+                                        
+                                        
+                                    </dialog>
                                 </td>
+                                
 
                                 <td class="op">
                                     <button class="operation"
@@ -128,9 +162,16 @@
                                         Detailles
                                     </button>
                                 </td>
+                                <td class="op">
+                                    <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                                          </svg>
+                                        Gerer
+                                    </button>
+                                </td>
 
-
-                            </tr>
                         @endif
                         
                     @endforeach
@@ -138,11 +179,91 @@
             </table>
             
         </div>
+        
         <div class="pagination-links">
             {{ $materials->links() }}
         </div>
     </section>
     
+    <script>
+        document.querySelectorAll('#open-button').forEach(button => {
+            const modalId = button.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+    
+            button.addEventListener('click', () => {
+                modal.showModal();
+            });
+    
+            modal.querySelector('.close-button').addEventListener('click', () => {
+                modal.close();
+            });
+    
+            // Handle change in select
+            const etatSelect = modal.querySelector('.etat-select');
+            const additionalContent = modal.querySelector('.additional-content');
+    
+            etatSelect.addEventListener('change', () => {
+                const selectedValue = etatSelect.value;
+                console.log(etatSelect.value)
+                const materialId = etatSelect.getAttribute('data-material-id');
+                console.log(materialId)
+                // Update additional content based on selected value
+                if (selectedValue === 'Maintenance') {
+                    additionalContent.innerHTML = `
+                        <form action="/fix" method="POST">
+                            @csrf
+                            <input type="text" value="maintenance" name="etat" style="display:none;">
+                            <input type="text" value=`+materialId+` name="id" >
+                            <label for="description">Description: </label>
+                            <textarea name="description" id="description" cols="30" rows="4" required></textarea>                            </tr>
+                            <button type="submit">Submit</button>
+                        </form>
+                    `;
+                } else if (selectedValue === 'Assigne') {
+                    additionalContent.innerHTML = `
+                        <a href="{{ route('affectMaterial', ['id' => ':materialId']) }}"
+                            class="operation">Affecter</a>
+                    `.replace(':materialId', materialId);
+                } else if (selectedValue === 'Disponible') {
+                    additionalContent.innerHTML = `
+                    <form action="/matt" method="POST">
+                        @csrf
+                    <input type="text" value="Disponible" name="etat" style="display:none;">
+                    <input type="text" value="Disponible" name="etat" style="display:none;">
+                    <input type="text" value=`+materialId+` name="id" >
+                        <select name="emplacement">
+                            <option value="2eme etage">2eme etage</option>
+                            <option value="5eme etage">5eme etage</option>
+                            <option value="7eme etage">7eme etage</option>
+                        </select>
+                        <select name="site">
+                            <option value="Casablanca">Casablanca</option>
+                            <option value="Oujda">Oujda</option>
+                        </select>
+                        <button type="submit">Submit</button>
+                    `;
+                } else {
+                    additionalContent.innerHTML = ''; // Clear additional content
+                }
+                
+            });
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.open-button').forEach(button => {
+            const modalId = button.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+
+            button.addEventListener('click', () => {
+                modal.showModal();
+            });
+
+            modal.querySelector('.close-button').addEventListener('click', () => {
+                modal.close();
+            });
+        });
+    </script>
+
     <script type="text/javascript">
         $('#search').on('keyup', function() {
             $value = $(this).val();
@@ -167,6 +288,7 @@
         })
     </script>
     <style>
+        
         .table-auto {
             background-color: whitesmoke;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
@@ -223,5 +345,26 @@
             color: #fff;
             background-color: #037d48;
         }
+        .modal{
+            color: #019455;
+            background-color: whitesmoke;
+            border-radius: 15px;
+            padding: 1em;
+            width:400px;
+        }
+
+        .modal::backdrop{
+            background-color: #0194545f;
+        }
+        #Operation {
+            color: white;
+            background-color: #019455;
+            font-weight: bold;
+            padding: 2px;
+            margin: 2px;
+            border-radius: 3px;
+
+        }
+
     </style>
 @endsection

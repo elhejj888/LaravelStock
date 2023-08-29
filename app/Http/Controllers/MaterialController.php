@@ -28,7 +28,7 @@ class MaterialController extends Controller
     {
         if (auth()->check()) {
 
-            $historiques = Historisation::where('edited_id', $id)->where('type','materiel')->get();
+            $historiques = Historisation::where('edited_id', $id)->where('type', 'materiel')->get();
             $material = material::findOrFail($id);
             $currentDateTime = Carbon::now();
             $buyingTime = Carbon::parse($material->DateAchat);
@@ -44,14 +44,14 @@ class MaterialController extends Controller
     {
 
         if (auth()->check()) {
-            if($request->input('choix'))
-            $choix = $request->input('choix');
-            else $choix ="";
+            if ($request->input('choix'))
+                $choix = $request->input('choix');
+            else $choix = "";
             $material = material::create([
                 'Site' => $request->input('site'),
                 'choix' => $choix,
                 'Emplacement' => $request->input('emplacement'),
-                'DateAchat' => $request->input('achat'),
+                'DateAchat' => date('Y-m-d', strtotime($request->input('achat'))),
                 'N_Facture' => $request->input('facture'),
                 'Fournisseur' => $request->input('fournisseur'),
                 'AdresseMac' => $request->input('mac'),
@@ -76,16 +76,40 @@ class MaterialController extends Controller
         }
     }
 
-    public function updateValues(Request $request)
+    public function updateValues(Request $request ){
+        if (auth()->check()) {
+        $id = $request->input('id');
+        $material = material::findOrFail($id);
+
+        $material->TypeProduit = $request->input('type');
+        $material->Marque = $request->input('marque');
+        $material->Tag = $request->input('tag');
+        $material->AdresseMac = $request->input('mac');
+        $material->etat = $request->input('etat');
+        $material->N_Facture = $request->input('facture');
+        $material->DateAchat = date('Y-m-d', strtotime($request->input('achat')));
+        $material->fournisseur = $request->input('fournisseur');
+        $material->Emplacement = $request->input('emplacement');
+        $material->Site = $request->input('site');
+
+        $material->save();
+
+        return redirect('/materials')->with('success', 'Material updated successfully');
+        }
+        else{
+            return redirect('login')->with('error', 'Authentication failed.');
+        }
+    }
+    public function updateValues2(Request $request)
     {
         if (auth()->check()) {
             $id = $request->input('id');
             $material = material::findOrFail($id);
 
             $material->etat = $request->input('etat');
-            if ($material->etat == "Disponible") {
-                $material->userId = "";
-            }
+            if ($request->input('userId') == -1)
+                $material->userId = null;
+            $material->description = $request->input('description');
             $material->Emplacement = $request->input('emplacement');
             $material->Site = $request->input('site');
 
@@ -96,7 +120,24 @@ class MaterialController extends Controller
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
+    public function addDesc(Request $request)
+    {
+        if (auth()->check()) {
+            $id = $request->input('id');
+            $material = material::findOrFail($id);
 
+            $material->etat = $request->input('etat');
+            if ($request->input('userId') == -1)
+                $material->userId = null;
+            $material->description = $request->input('description');
+
+            $material->save();
+
+            return redirect('/materials')->with('message', 'Material updated successfully');
+        } else {
+            return redirect('login')->with('error', 'Authentication failed.');
+        }
+    }
     public function deletedvalues()
     {
         if (auth()->check()) {
@@ -106,7 +147,15 @@ class MaterialController extends Controller
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
-
+    public function maintainvalues()
+    {
+        if (auth()->check()) {
+            $materials = material::where('etat', 'maintenance')->simplePaginate(20);
+            return view('Material/maintain', ['materials' => $materials]);
+        } else {
+            return redirect('login')->with('error', 'Authentication failed.');
+        }
+    }
     public function deleteMaterial($id)
     {
         if (auth()->check()) {
@@ -160,14 +209,7 @@ class MaterialController extends Controller
 
     public function searchMaterial(Request $request)
     {
-        $materials = material::where('Marque', 'Like', '%' . $request->search . '%')->
-        orWhere('TypeProduit', 'Like', '%' . $request->search . '%')->
-        orWhere('Site', 'Like', '%' . $request->search . '%')->
-        orWhere('Emplacement', 'Like', '%' . $request->search . '%')->
-        orWhere('N_Facture', 'Like', '%' . $request->search . '%')->
-        orWhere('DateAchat', 'Like', '%' . $request->search . '%')->
-        orWhere('Fournisseur', 'Like', '%' . $request->search . '%')->
-        orWhere('Tag', 'Like', '%' . $request->search . '%')->get();
+        $materials = material::where('Marque', 'Like', '%' . $request->search . '%')->orWhere('TypeProduit', 'Like', '%' . $request->search . '%')->orWhere('N_Facture', 'Like', '%' . $request->search . '%')->orWhere('DateAchat', 'Like', '%' . $request->search . '%')->orWhere('Fournisseur', 'Like', '%' . $request->search . '%')->orWhere('Tag', 'Like', '%' . $request->search . '%')->orWhere('Site', 'Like', '%' . $request->search . '%')->orWhere('Emplacement', 'Like', '%' . $request->search . '%')->get();
         $output = "";
         foreach ($materials as $material) {
             if ($material->etat != 'rupture') {
@@ -254,7 +296,7 @@ class MaterialController extends Controller
                         <td>' . $user->Nom . '</td>
                         <td>' . $user->Prenom . '</td>
                         <td>' . $user->Service . '</td>
-                        <td>' . $user->Ville . '</td>
+                        <td>' . $user->Site . '</td>
                         <td class="op">
                         <button class="operation" onclick="window.location.href = \'' . route('assignMaterial', ['materialId' => $material->id, 'userId' => $user->id]) . '\';">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#101357" class="bi bi-send-plus" viewBox="0 0 16 16" style="text-decoration: none;">
@@ -268,8 +310,9 @@ class MaterialController extends Controller
         }
         return response($output);
     }
-    public function searchDeletedMaterial(Request $request){
-        $materials = material::where('Marque', 'Like', '%' . $request->search . '%')->orWhere('TypeProduit', 'Like', '%' . $request->search . '%')->orWhere('N_Facture', 'Like', '%' . $request->search . '%')->orWhere('DateAchat', 'Like', '%' . $request->search . '%')->orWhere('Fournisseur', 'Like', '%' . $request->search . '%')->orWhere('Tag', 'Like', '%' . $request->search . '%')->get();
+    public function searchDeletedMaterial(Request $request)
+    {
+        $materials = material::where('Marque', 'Like', '%' . $request->search . '%')->orWhere('TypeProduit', 'Like', '%' . $request->search . '%')->orWhere('N_Facture', 'Like', '%' . $request->search . '%')->orWhere('DateAchat', 'Like', '%' . $request->search . '%')->orWhere('Fournisseur', 'Like', '%' . $request->search . '%')->orWhere('Tag', 'Like', '%' . $request->search . '%')->orWhere('Site', 'Like', '%' . $request->search . '%')->orWhere('Emplacement', 'Like', '%' . $request->search . '%')->get();
         $output = "";
         foreach ($materials as $material) {
             if ($material->etat == 'rupture') {

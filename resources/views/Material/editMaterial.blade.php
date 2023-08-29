@@ -26,7 +26,7 @@
                             <label for="firstname" class="formbold-form-label">
                               Choix de Materiels
                             </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="type" disabled>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="type" >
                                     <option value="{{$material->TypeProduit}}" selected>{{$material->TypeProduit}}</option>
                             </select>
                               
@@ -47,7 +47,7 @@
                                 id="achat"
                                 class="formbold-form-input"
                                 value="{{ \Carbon\Carbon::parse($material->DateAchat)->format('Y-m-d') }}"
-                                 disabled />
+                                  />
                             </div>
                             
                           </div>
@@ -59,14 +59,14 @@
                             <label for="firstname" class="formbold-form-label">
                               Marque
                             </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="marque" disabled>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
                                     <option value="plantronics">plantronics</option>
                             </select>
                               
                           </div>
                           <div>
                             <label for="lastname" class="formbold-form-label"> Type </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" disabled>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" >
                               <option value="{{$material->choix}}" style="display: none">{{$material->choix}}</option>
                                
                         </select>
@@ -89,10 +89,14 @@
                               
                           </div>
                           <div>
-                            <label for="lastname" class="formbold-form-label"> Type </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" disabled>
+                            <label for="Type" class="formbold-form-label"> Type </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" >
                               <option value="{{$material->choix}}" style="display: none">{{$material->choix}}</option>
-                        </select>
+                              <option value="Switch">Switch</option>
+                                <option value="Routeur">Routeur</option>
+                                <option value="Point d'acces">Point d'acces</option>
+                                <option value="TV">TV</option>
+                            </select>
                           </div>
                         </div>
                         @elseif ($material->TypeProduit == "Telephone")
@@ -100,7 +104,7 @@
                           <label for="address" class="formbold-form-label">
                           Marque
                           </label>
-                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" disabled>
+                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
                             <option value="{{$material->Marque}}" style="display: none">{{$material->Marque}}</option>
                         </select>
                         </div>
@@ -109,7 +113,7 @@
                           <label for="address" class="formbold-form-label">
                           Marque
                           </label>
-                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" disabled>
+                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
                             <option value="Dell">Dell</option>
                             
                         </select>
@@ -124,7 +128,7 @@
                             name="mac"
                             id="mac"
                             class="formbold-form-input"
-                            value="{{$material->AdresseMac}}" disabled
+                            value="{{$material->AdresseMac}}" 
                           />
                         </div>
                         <div class="formbold-input-flex">
@@ -137,7 +141,7 @@
                             name="tag"
                             id="tag"
                             class="formbold-form-input"
-                            value="{{$material->Tag}}" disabled
+                            value="{{$material->Tag}}" 
                           />
                         </div>
                         <div>
@@ -150,16 +154,21 @@
                               id="facture"
                               class="formbold-form-input"
                               value="{{$material->N_Facture}}"
-                              disabled
+                              
                             />
                         </div>
                         </div>
                         <div class="formbold-input-flex">
                           <div>
                             <label for="fournisseur" class="formbold-form-label"> fournisseur </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="fournisseur" disabled>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="fournisseur" >
                               <option value="{{$material->Fournisseur}}" style="display: none">{{$material->Fournisseur}}</option>
-                              
+                              <option value="Wicoutil">Wicoutil</option>
+                              <option value="Pel Mel Tech">Pel Mel Tech</option>
+                              <option value="MIT">MIT</option>
+                              <option value="ADINGSS">ADINGSS</option>
+                              <option value="Free Zone">Free Zone</option>
+                              <option value="COSMOS">COSMOS</option>
                       </select>
                           </div>
                           <div>

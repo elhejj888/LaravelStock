@@ -51,15 +51,26 @@
     </script>   
 <style>
 
-    .table-auto{
-      background-color: whitesmoke;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
-      display: block;
-    
-    }
+.table-auto {
+            background-color: whitesmoke;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            display: block;
+            text-align: center;
+            overflow: scroll;
+            cursor: pointer;
+
+        }
+        .container {
+            height: 700px;
+            width: 40%;
+            /* Adjust the height as needed */
+            overflow-y: auto;
+            /* Add scroll if content exceeds container height */
+        }
         th{
           background-color: rgb(184, 184, 184);
             color:green;
+            width: 120px;
         }
         .add-button{
             height: 10%;

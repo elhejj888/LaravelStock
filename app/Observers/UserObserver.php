@@ -23,38 +23,45 @@ class UserObserver
         $historisation->save();
     }
 
-    public function updated(User $user): void
-    {
-        $changes = $user->getDirty();
-
-        if (!auth()->check()) {
+        public function updated(User $user): void
+        {
+            $changes = [];
+            $allowedAttributes = ['Nom', 'Prenom', 'extension', 'Role', 'Service', 'Site', 'Date_Embauche'];
+            $user2 = auth()->user();
+        
+            foreach ($allowedAttributes as $attribute) {
+                if ($user->isDirty($attribute)) {
+                    $changes[$attribute] = $user->getOriginal($attribute);
+                }
+            }
+            if (!auth()->check()) {
+                $historisation = new Historisation([
+                    'user_id'=> 0,
+                    'edited_id' => $user->id,
+                    'FullName' => "Systeme de Connexion",
+                    'operation' => 'updated',
+                    'type' => 'user',
+                    'changes' => json_encode($changes),]);
+                    $historisation->save();
+            
+            $historisation->save();
+        }
+        else {
+            $user2 = auth()->user();
             $historisation = new Historisation([
-                'user_id'=> 0,
+                'user_id' => auth()->id(),
+                'FullName' =>$user2->Nom." ".$user2->Prenom,
                 'edited_id' => $user->id,
-                'FullName' => "Inconnu",
                 'operation' => 'updated',
                 'type' => 'user',
-                'changes' => json_encode($changes),]);
-                $historisation->save();
-        
-        $historisation->save();
-    }
-    else {
-        $user2 = auth()->user();
-        $historisation = new Historisation([
-            'user_id' => auth()->id(),
-            'FullName' =>$user2->Nom." ".$user2->Prenom,
-            'edited_id' => $user->id,
-            'operation' => 'updated',
-            'type' => 'user',
-            'changes' => json_encode($changes),
-        ]);
-        $historisation->save();
+                'changes' => json_encode($changes),
+            ]);
+            $historisation->save();
 
-    }
+        }
 
 
-    }
+        }
 
     public function deleted(User $user): void
     {

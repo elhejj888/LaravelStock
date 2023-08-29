@@ -170,6 +170,50 @@ class UserController extends Controller
             }            
             return response($output);
         }
-    
+        
+        public function searchDeletedUser(Request $request){
+            $users = User::where('Nom','Like','%'.$request->search.'%')->
+            orWhere('Prenom','Like','%'.$request->search.'%')->
+            orWhere('Site','Like','%'.$request->search.'%')->
+            orWhere('Service','Like','%'.$request->search.'%')->
+            orWhere('email','Like','%'.$request->search.'%')->
+            orWhere('Date_Embauche','Like','%'.$request->search.'%')->get();
+            $output="";
+            foreach ($users as $user) {
+                if ($user->Role = 'Départ') {
+                    $output .= '<tr>
+                        <td>' . $user->Nom . '</td>
+                        <td>' . $user->Prenom . '</td>
+                        <td>' . $user->email . '</td>
+                        <td>' . $user->Service . '</td>
+                        <td>' . $user->Site . '</td>
+                        <td class="op">
+                            <button class="operation"  onclick="window.location.href = \'' . route('showUser', ['id' => $user->id]) . '\';">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                </svg>
+                                Détails
+                            </button>
+                        </td>';
+            
+                    if (Auth::user()->Role === 'Admin') {
+                        $output .= '<td class="op">
+                            <button class="operation"  onclick="if (confirm(\'Êtes-vous sûr de supprimer ..?\')) window.location.href = this.getAttribute(\'data-href\');"
+                                data-href="' . route('deleteUser', ['id' => $user->id]) . '">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
+                                    <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708Z"/>
+                                </svg>
+                                Supprimer
+                            </button>
+                        </td>';
+                    }
+            
+                    $output .= '</tr>';
+                }
+            }            
+            return response($output);
+        }
 
 }

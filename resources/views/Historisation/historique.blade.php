@@ -22,20 +22,20 @@
                 <tbody class="mainData">
                     @foreach ($historisations as $historisation)
                         <tr>
-                            @if($historisation->FullName != "Inconnu")
+                            @if($historisation->FullName != "Systeme de Connexion" || $historisation->FullName != "Iconnu")
                             <td><a
                                     href="{{ route('showUser', ['id' => $historisation->user_id]) }}">{{ $historisation->FullName }}</a>
                             </td>
                             @else
-                            <td>Inconnu</td>
+                            <td>Systeme de Connexion</td>
                             @endif
                             <td>
                               @if($historisation->type =="materiel")
                               <a
-                                    href="{{ route('showMaterial', ['id' => $historisation->edited_id]) }}">{{ $historisation->type }}</a>
+                                    href="{{ route('showMaterial', ['id' => $historisation->edited_id]) }}">{{ $historisation->MaterialType }}</a>
                               @else
                               <a
-                              href="{{ route('showUser', ['id' => $historisation->edited_id]) }}">{{ $historisation->type }}</a>
+                              href="{{ route('showUser', ['id' => $historisation->edited_id]) }}">{{ $historisation->Nom }}</a>
                             @endif      
                             </td>
                             <td>{{ $historisation->operation }}</td>
@@ -49,6 +49,7 @@
 
         </div>
         <div class="pagination-links">
+            {{ $historisations->links() }}
         </div>
     </section>
     <script type="text/javascript">

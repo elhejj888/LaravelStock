@@ -14,8 +14,14 @@
             </div>
           </a>
         </div>
-        <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Materiels"
-                    style="width:100%;padding : 5px; margin-bottom:10px;">
+        <div class="search">
+            <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
+                    {{ session('message') }}
+  
+            </p>
+            <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Materiels"
+                style="width:100%;padding : 5px; margin-bottom:10px;">
+        </div>
         <table class="table-auto" border="1px solid black" >
             <thead>
               <tr>
@@ -28,6 +34,9 @@
                 <th>Emplacement</th>
                 <th>Site</th>
                 <th>Detailles</th>
+                @if(Auth::user()->Role === 'Admin')
+                <th>Mise en Sortie</th>
+                @endif
                 
               </tr>
             </thead>
@@ -60,13 +69,70 @@
                           Detailles
                       </button>
                   </td>
-                
+                  @if(Auth::user()->Role === 'Admin')
+              <td class="op">
+                  <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}" >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-folder-x" viewBox="0 0 16 16">
+                        <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zm6.339-1.577A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
+                        <path d="M11.854 10.146a.5.5 0 0 0-.707.708L12.293 12l-1.146 1.146a.5.5 0 0 0 .707.708L13 12.707l1.146 1.147a.5.5 0 0 0 .708-.708L13.707 12l1.147-1.146a.5.5 0 0 0-.707-.708L13 11.293l-1.146-1.147z"/>
+                      </svg>
+                      Mise en Sortie
+                  </button>
+                  <dialog class="modal" id="modal-{{ $material->id }}" style="margin:auto; align-content:center; width:32%;">
+                    <div>
+                    <h1>Mise En Sortie </h1>
+                    <form action="/Sortie" method="POST" >
+                        @csrf
+                        <input type="text" name="id" value="{{ $material->id }}" style="display: none">
+                        <div>
+                            <label for="etat" >Date de Sortie : </label>
+                    
+                        
+                            <input type="date" class="Sortie" name="Sortie" id="sortie" data-material-id="{{ $material->id }}">
+                        </div>
+                    <button type="submit">Valider</button>
+                </form>  
+
+
+                    <div>
+                    <div class="additional-content" data-material-id="{{ $material->id }}">
+                    </div>
+                    <button class="button close-button" id="Operation" style="width:80px;">
+                        Close
+                    </button>
+                </div>
+                    </div>  
+
+                </dialog>
+              </td>
+              @endif
               </tr>
               @endforeach
             </tbody>
           </table>
       
     </div>
+    <script>
+        const openButtons = document.querySelectorAll('#open-button');
+        const closeButtons = document.querySelectorAll('.close-button');
+        const dialogs = document.querySelectorAll('.modal');
+    
+        openButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                modal.showModal();
+            });
+        });
+    
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('dialog');
+                modal.close();
+            });
+        });
+    </script>
+    
     <script type="text/javascript">
       $('#search').on('keyup', function() {
           $value = $(this).val();
@@ -91,6 +157,44 @@
       })
   </script>
 <style>
+    .modal h1{
+        background-color: #019455;
+        color: #fff;
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 40px;
+        padding-top: 10px;
+        height: 50px;
+        text-align: center;
+    }
+    .modal::backdrop{
+        background-color: #1c5d4161;
+    }
+    .modal {
+        background-color: rgb(243, 245, 241);
+        text-align: center;
+        align-items: center;
+        margin: auto;
+        height: 300px;
+        border-radius: 10px;
+        border: 2px solid black;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+
+    }
+    #Operation{
+        background-color: #019455;
+        color: #fff;    
+        width:100% ;
+        margin-top: 30px;
+    }
+    .modal button{
+        width: 60px;
+        background-color: #019455;
+        color: #fff;  
+    }
+    .modal input{
+        margin-bottom: 20px;
+    }
         .table-auto {
             background-color: whitesmoke;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);

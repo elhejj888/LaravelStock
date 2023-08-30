@@ -3,10 +3,18 @@
     <section class="home">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <div class="container">
-          <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Utilisateur"
-          style="padding : 5px; margin-bottom:10px;">
+          
             <div class="search">
-                
+                <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
+                    @if (session('message'))
+                        {{ session('message') }}
+                    @else
+                        {{ $message }}
+                    @endif
+
+                </p>
+                <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Materiels"
+                    style="width:100%;padding : 5px; margin-bottom:10px;">
             </div>
             <table class="table-auto" border="1px solid black ; ">
                 <thead>
@@ -30,14 +38,24 @@
                             <td>Connexion</td>
                             @endif
                             <td>
-                              @if($historisation->type =="materiel")
-                              <a
+                            @php
+                            $changes = json_decode($historisation->changes, true);
+                            @endphp
+                              @if($historisation->operation=="deleted" && isset($changes['TypeProduit']) && $historisation->type =="materiel")
+                              {{ $changes['TypeProduit']}}
+                              
+                                @elseif($historisation->operation=="deleted" && isset($changes['Nom']) && $historisation->type =="user")
+                                {{ $changes['Nom']}} {{ $changes['Prenom']}}
+                                @elseif($historisation->type =="materiel")
+                                <a
                                     href="{{ route('showMaterial', ['id' => $historisation->edited_id]) }}">{{ $historisation->MaterialType }}</a>
-                              @else
+                                
+                                @else
                               <a
                               href="{{ route('showUser', ['id' => $historisation->edited_id]) }}">{{ $historisation->Nom }}</a>
                             @endif      
                             </td>
+                          
                             <td>{{ $historisation->operation }}</td>
                             <td>{{ $historisation->changes }}</td>
                             <td>{{ $historisation->created_at }}</td>

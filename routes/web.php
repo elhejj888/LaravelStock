@@ -42,6 +42,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');//to L
 Route::get('users', [UserController::class, 'RetrieveUsers']);//Displaying All the users in the database except the deleted ones
 Route::post('/users', [UserController::class, 'updateValues']);//Same but after updating a value
 Route::get('deletedusers', [UserController::class, 'deletedvalues']);//After Deleting
+Route::get('DeleteUser/{id}', [UserController::class, 'DeleteUser2'])->name('DeleteUser');//After Deleting
 Route::get('user/{id}', [UserController::class, 'show'])->name('showUser');//Showing a user details
 Route::get('updateuser/{id}', [UserController::class, 'updateUser'])->name('updateUser');//updating a specefic user
 Route::get('deleteUser/{id}', [UserController::class, 'deleteUser'])->name('deleteUser');//deleting a user 
@@ -52,11 +53,15 @@ Route::get('/adduser', function () {
     return view('User/addUser');
 });
 
+
+
 Route::post('/matt', [MaterialController::class, 'updateValues2']);//Same After Update
+Route::post('/Sortie', [MaterialController::class, 'MiseEnSortie']);//Same After Update
 Route::post('/fix', [MaterialController::class, 'addDesc']);//Same After Update
 Route::post('/addmaterial', [MaterialController::class, 'addMaterial']);//Displaying all the Materials After inserting
 Route::get('materials', [MaterialController::class, 'RetrieveMaterials']);//Displaying all materials with a get request
 Route::post('/materials', [MaterialController::class, 'updateValues']);//Same After Update
+Route::get('DeleteMaterial/{id}', [MaterialController::class, 'DeleteMaterial2'])->name('DeleteMaterial');//After Deleting
 Route::get('/assign', [MaterialController::class, 'find'])->name('assign');//Assign a material to a User Page Request
 Route::get('material/{id}', [MaterialController::class, 'showMaterial'])->name('showMaterial');//Displaying a Material Details
 Route::get('updatematerial/{id}', [MaterialController::class, 'updateMaterial'])->name('updateMaterial');//Update a Meterial

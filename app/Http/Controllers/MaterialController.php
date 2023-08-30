@@ -172,6 +172,35 @@ class MaterialController extends Controller
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
+
+    public function DeleteMaterial2($id){
+        if (auth()->check()) {
+            
+            $material = material::findOrFail($id);
+            $material->delete();
+            return redirect('/deletedmaterials')->with('message','Supprimé avec Succes..!');
+        }
+        else{
+            return redirect('login')->with('message', 'Veuillez vous Connecter...');
+        }
+
+    }
+
+    public function MiseEnSortie(Request $request){
+        if (auth()->check()) {
+            $material = material::findOrFail($request->input('id'));
+            $material->DateSortie = $request->input('Sortie');
+            $material->etat = "Sortie";
+            $material->save();
+            return redirect('/deletedmaterials')->with('message','Met en Sortie avec Succes..!');
+
+        }
+        else{
+            return redirect('login')->with('message', 'Veuillez vous Connecter...');
+        }
+
+    }
+
     public function home(Request $request)
     {
         if (auth()->check()) {

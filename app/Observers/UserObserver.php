@@ -10,6 +10,7 @@ class UserObserver
 {
     public function created(User $user): void
     {
+        if (auth()->check()) {
         $historisation = new Historisation([
             $user2 = auth()->user(),
             'user_id' => auth()->id(),
@@ -19,7 +20,16 @@ class UserObserver
             'type' => 'user',
             'changes' => json_encode($user->toArray()), // Enregistre toutes xles valeurs du nouveau matériel
         ]);
-    
+        }
+        else{
+            $historisation = new Historisation([
+                'edited_id' => $user->id,
+                'FullName' =>"Systeme",
+                'operation' => 'created',
+                'type' => 'user',
+                'changes' => json_encode($user->toArray()), // Enregistre toutes xles valeurs du nouveau matériel
+            ]);
+        }
         $historisation->save();
     }
 
@@ -65,8 +75,10 @@ class UserObserver
 
     public function deleted(User $user): void
     {
+        $user2 = auth()->user();
         $historisation = new Historisation([
             'user_id' => auth()->id(),
+            'FullName' =>$user2->Nom." ".$user2->Prenom,
             'edited_id' => $user->id,
             'operation' => 'deleted',
             'type' => 'user',

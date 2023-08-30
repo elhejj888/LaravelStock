@@ -106,6 +106,24 @@ class UserController extends Controller
             }
 
         }
+        public function DeleteUser2($id){
+            if (auth()->check()) {
+                if(auth()->user()->id != $id){
+                $user = User::findOrFail($id);
+                $user->delete();
+                return redirect('/deletedusers')->with('message','Supprimé avec Succes..!');
+            }
+            else
+            return redirect('/deletedusers')->with('message','Vous pouvez pas Supprimer vous-mêmes !!');
+
+
+                }
+                else{
+                    return redirect('login')->with('message', 'Veuillez vous Connecter...');
+                }
+        }
+
+        
 
         public function deletedvalues(){
             if (auth()->check()) {

@@ -18,7 +18,6 @@ class UserFactory extends Factory
 
         return [
             'email' =>Str::lower( $faker->unique()->safeEmail),
-            'email_verified_at' => $faker->randomElement([null, now()]),
             'password' => $faker->password, // Assuming you want to hash the password
             'Nom' => $faker->lastName,
             'Prenom' => $faker->firstName,

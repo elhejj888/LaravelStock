@@ -29,6 +29,7 @@ class materialFactory extends Factory
                 'AdresseMac' => $faker->macAddress,
                 'N_Facture' => $faker->unique()->numerify('FA####'),
                 'DateAchat' => $faker->dateTimeThisDecade,
+                'DateSortie' => $faker->dateTimeThisDecade,
                 'Fournisseur' => $faker->name,
                 'Emplacement' => $faker->randomElement(['1re étage ', '2eme étage', '3eme étage']),
                 'Site' => $faker->randomElement(['Casablanca', 'Oujda', 'Paris']),

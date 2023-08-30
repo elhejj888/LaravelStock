@@ -15,6 +15,7 @@ class material extends Model
         'AdresseMac',
         'N_Facture',
         'DateAchat',
+        'DateSortie',
         'Fournisseur',
         'Emplacement',
         'Site',

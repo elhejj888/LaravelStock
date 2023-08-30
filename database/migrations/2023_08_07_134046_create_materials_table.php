@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('TypeProduit');
             $table->string('Marque');
-            $table->string('Tag');
-            $table->string('AdresseMac');
+            $table->string('Tag')->unique();
+            $table->string('AdresseMac')->unique();
             $table->string('N_Facture')->unique();
             $table->dateTime('DateAchat');
+            $table->dateTime('DateSortie')->nullable();
             $table->string('Fournisseur');
             $table->string('Emplacement');
             $table->string('Site');

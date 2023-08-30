@@ -39,13 +39,14 @@
                         <th class="thh">Date d'achat</th>
                         <th class="thh">Emplacement</th>
                         <th class="thh">Site</th>
-                        <th class="thh">Modifier</th>
-                        @if (Auth::user()->Role === 'Admin')
-                            <th class="thh">Supprimer</th>
-                        @endif
-                        <th class="thh">Affecter</th>
                         <th class="thh">Detailles</th>
+                        <th class="thh">Affecter</th>
                         <th class="thh">Gerer</th>
+                        @if (Auth::user()->Role === 'Admin')
+                            <th class="thh">Modifier</th>
+                            <th class="thh">Mise en rebut
+                            </th>
+                        @endif
 
 
                     </tr>
@@ -65,35 +66,18 @@
                                 <td>{{ $material->Site }}</td>
                                 <td class="op">
                                     <button class="operation"
-                                        onclick="window.location.href = '{{ route('updateMaterial', ['id' => $material->id]) }}';"
-                                        style="text-decoration: none;">
+                                        onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#101357"
-                                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            class="bi bi-plus-circle" viewBox="0 0 16 16">
                                             <path
-                                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                            <path fill-rule="evenodd"
-                                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                            <path
+                                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                         </svg>
-                                        Modifier
+                                        Detailles
                                     </button>
                                 </td>
-
-                                @if (Auth::user()->Role === 'Admin')
-                                    <td class="op">
-                                        <button class="operation"
-                                            onclick="if (confirm('Êtes-vous sûr de supprimer ..?')) window.location.href = this.getAttribute('data-href');"
-                                            data-href="{{ route('deleteMaterial', ['id' => $material->id]) }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
-                                                fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                                <path
-                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                            </svg>
-                                            Supprimer
-                                        </button>
-                                    </td>
-                                @endif
+                                
 
                                 <td class="op">
                                     <button class="operation"
@@ -137,6 +121,7 @@
 
                                                 </select>
                                             </td>
+                                            
                                         </table>
                                         <div>
                                         <div class="additional-content" data-material-id="{{ $material->id }}">
@@ -148,21 +133,6 @@
                                         
                                     </dialog>
                                 </td>
-                                
-
-                                <td class="op">
-                                    <button class="operation"
-                                        onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#101357"
-                                            class="bi bi-plus-circle" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                            <path
-                                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                                        </svg>
-                                        Detailles
-                                    </button>
-                                </td>
                                 <td class="op">
                                     <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
@@ -172,6 +142,41 @@
                                         Gerer
                                     </button>
                                 </td>
+                                @if (Auth::user()->Role === 'Admin')
+                                <td class="op">
+                                    <button class="operation"
+                                        onclick="window.location.href = '{{ route('updateMaterial', ['id' => $material->id]) }}';"
+                                        style="text-decoration: none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#101357"
+                                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path
+                                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd"
+                                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                        </svg>
+                                        Modifier
+                                    </button>
+                                </td>
+                                    <td class="op">
+                                        <button class="operation"
+                                            onclick="if (confirm('Êtes-vous sûr de supprimer ..?')) window.location.href = this.getAttribute('data-href');"
+                                            data-href="{{ route('deleteMaterial', ['id' => $material->id]) }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
+                                                fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                <path
+                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                            </svg>
+                                            Mise en rebut
+                                        </button>
+                                    </td>
+                                    
+                                @endif
+                                
+
+                                
+                                
 
                         @endif
                         

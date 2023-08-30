@@ -13,30 +13,24 @@ class MaterialObserver
      */
     public function created(material $material): void
     {
+        // Specify the attributes you want to track for the created material
+        $trackedAttributes = [
+            'TypeProduit',
+            'Marque',
+            'N_Facture',
+            'DateAchat',
+            'Fournisseur',
+            'Emplacement',
+            'Site',
+            // Add more attributes here as needed
+        ];
+            // Create an array containing only the tracked attributes
+        $changes = [];
+        foreach ($trackedAttributes as $attribute) {
+            $changes[$attribute] = $material->{$attribute};
+        }
+    if (auth()->check()) {
         $user2 = auth()->user();
-
-    // Specify the attributes you want to track for the created material
-    $trackedAttributes = [
-        'TypeProduit',
-        'choix',
-        'Marque',
-        'Tag',
-        'AdresseMac',
-        'N_Facture',
-        'DateAchat',
-        'Fournisseur',
-        'Emplacement',
-        'etat',
-        'Emplacement',
-        'Site',
-        // Add more attributes here as needed
-    ];
-
-    // Create an array containing only the tracked attributes
-    $changes = [];
-    foreach ($trackedAttributes as $attribute) {
-        $changes[$attribute] = $material->{$attribute};
-    }
 
     $historisation = new Historisation([
         'user_id' => auth()->id(),
@@ -46,6 +40,16 @@ class MaterialObserver
         'type' => 'materiel',
         'changes' => json_encode($changes), // Convertir en JSON pour stockage
     ]);
+    }
+    else{
+        $historisation = new Historisation([
+            'FullName' => "Systeme",
+            'edited_id' => $material->id,
+            'operation' => 'created',
+            'type' => 'materiel',
+            'changes' => json_encode($changes), // Convertir en JSON pour stockage
+        ]);
+        }
 
     $historisation->save();
     }
@@ -67,7 +71,8 @@ class MaterialObserver
     'Emplacement',
     'etat',
     'Emplacement',
-    'Site',]; // List of attributes you want to track changes for
+    'Site',
+    'userId',]; // List of attributes you want to track changes for
     $user2 ="";
     foreach ($allowedAttributes as $attribute) {
         if ($material->isDirty($attribute)) {
@@ -75,7 +80,7 @@ class MaterialObserver
             if($attribute == 'userId')
             {
                 $user = User::find($material->userId);
-                $changes['userId'] = $user->Nom ." ".$user->Prenom;
+                $changes['Assignation'] = $user->Nom ." ".$user->Prenom;
             }
             else
             $changes[$attribute] = $material->getOriginal($attribute);
@@ -111,9 +116,11 @@ class MaterialObserver
      */
     public function deleted(material $material): void
     {
+        $user2 = auth()->user();
         $historisation = new Historisation([
             'user_id' => auth()->id(),
             'edited_id' => $material->id,
+            'FullName' => $user2->Nom . " " . $user2->Prenom,
             'operation' => 'deleted',
             'type' => 'materiel',
             'changes' => json_encode($material->toArray()), // Enregistre toutes les valeurs du matériel supprimé

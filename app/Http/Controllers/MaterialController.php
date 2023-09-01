@@ -3,21 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\material;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\Historisation;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Observers\MaterialObserver;
 use Illuminate\Support\Facades\Auth;
 
 class MaterialController extends Controller
 {
+    public function recupererValeurs(){
+        $TypeProduit = DB::table('admins')
+            ->select('TypeProduit') // Specify the column you want distinct values from
+            ->whereNotNull('TypeProduit')
+            ->distinct()
+            ->get();
+            $sites = DB::table('admins')
+            ->select('Site') // Specify the column you want distinct values from
+            ->whereNotNull('Site')
+            ->distinct()
+            ->get();
+        $values=Admin::where('Qui','materiel')->get();
+        return view('Material/addMaterial',['TypeProduits'=>$TypeProduit ,'sites'=>$sites , 'values'=>$values]);
+
+    }
+
     function RetrieveMaterials()
     {
         if (auth()->check()) {
-            $materials = material::orderBy('TypeProduit')->orderBy('etat')->simplePaginate(25);
-            return view('Material/materials', ['materials' => $materials, 'message' => '']);
+            $materials = material::orderBy('TypeProduit')->orderBy('etat')->simplePaginate(8);
+            
+        
+        // $distinctValues will contain an array of distinct values from the specified column        
+            return view('Material/materials', ['materials' => $materials, 'message' => '' ]);
         } else {
             return redirect('login')->with('error', 'Authentication failed.');
         }
@@ -30,12 +51,15 @@ class MaterialController extends Controller
 
             $historiques = Historisation::where('edited_id', $id)->where('type', 'materiel')->get();
             $material = material::findOrFail($id);
+            $user="";
+            if($material->etat == "Assigne")
+            $user = User::where('id',$material->userId)->first();
             $currentDateTime = Carbon::now();
             $buyingTime = Carbon::parse($material->DateAchat);
             $garantie = $currentDateTime->diff($buyingTime);
             $garantie = $garantie->format('%y Années, %m Mois, et %d Jours');
             $garantieYears = explode(' ', $garantie)[0];
-            return view('Material/details', ['material' => $material, 'garantie' => $garantie, 'expired' => $garantieYears, 'historiques' => $historiques]);
+            return view('Material/details', ['material' => $material, 'garantie' => $garantie, 'expired' => $garantieYears, 'historiques' => $historiques , 'user'=>$user]);
         } else
             return redirect('login')->with('error', 'Authentication failed.');
     }
@@ -120,6 +144,20 @@ class MaterialController extends Controller
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
+    
+    public function checkDuplicate(Request $request)
+    {
+    $tagExists = material::where('Tag', $request->tag)->exists();
+    $macExists = material::where('AdresseMac', $request->mac)->exists();
+    $invoiceExists = material::where('N_Facture', $request->facture)->exists();
+
+
+    return response()->json([
+        'macExists' => $macExists,
+        'tagExists' => $tagExists,
+        'invoiceExists' => $invoiceExists,
+    ]);
+    }
     public function addDesc(Request $request)
     {
         if (auth()->check()) {
@@ -185,6 +223,21 @@ class MaterialController extends Controller
         }
 
     }
+    public function repareMaterial(Request $request){
+        if (auth()->check()) {
+
+            $material = material::findOrFail($request->input('id'));
+                $material->etat = "Disponible";
+                $material->emplacement = $request->input('emplacement');
+                $material->Site = $request->input('site');  
+                $material->description = "";
+                $material->save();
+                return redirect('/maintainMaterials')->with('message', 'Materiel mit en stock avec succes');
+            
+        } else {
+            return redirect('login')->with('error', 'Authentication failed.');
+        }
+    }
 
     public function MiseEnSortie(Request $request){
         if (auth()->check()) {
@@ -192,7 +245,7 @@ class MaterialController extends Controller
             $material->DateSortie = $request->input('Sortie');
             $material->etat = "Sortie";
             $material->save();
-            return redirect('/deletedmaterials')->with('message','Met en Sortie avec Succes..!');
+            return redirect('/deletedmaterials')->with('message','Mit en Sortie avec Succes..!');
 
         }
         else{
@@ -317,13 +370,17 @@ class MaterialController extends Controller
     public function find(Request $request)
     {
         $material = material::findOrFail($request->id);
-        $users = User::where('Nom', 'Like', '%' . $request->search . '%')->orWhere('Prenom', 'Like', '%' . $request->search . '%')->get();
+        $users = User::where('Nom', 'Like', '%' . $request->search . '%')
+        ->orWhere('Prenom', 'Like', '%' . $request->search . '%')
+        ->orWhere('email', 'Like', '%' . $request->search . '%')->get();
         $output = "";
         foreach ($users as $user) {
-
+            if($user->Role!="Départ")
+            {
             $output .= '<tr>
                         <td>' . $user->Nom . '</td>
                         <td>' . $user->Prenom . '</td>
+                        <td>' . $user->email . '</td>
                         <td>' . $user->Service . '</td>
                         <td>' . $user->Site . '</td>
                         <td class="op">
@@ -338,6 +395,7 @@ class MaterialController extends Controller
                         </tr>';
         }
         return response($output);
+    }
     }
     public function searchDeletedMaterial(Request $request)
     {

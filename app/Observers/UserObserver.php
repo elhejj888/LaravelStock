@@ -10,6 +10,18 @@ class UserObserver
 {
     public function created(User $user): void
     {
+        $trackedAttributes = [
+            'Nom',
+            'Prenom',
+            'Service',
+            'Site',
+            // Add more attributes here as needed
+        ];
+            // Create an array containing only the tracked attributes
+        $changes = [];
+        foreach ($trackedAttributes as $attribute) {
+            $changes[$attribute] = $user->{$attribute};
+        }
         if (auth()->check()) {
         $historisation = new Historisation([
             $user2 = auth()->user(),
@@ -18,11 +30,12 @@ class UserObserver
             'FullName' =>$user2->Nom." ".$user2->prenom,
             'operation' => 'created',
             'type' => 'user',
-            'changes' => json_encode($user->toArray()), // Enregistre toutes xles valeurs du nouveau matériel
+            'changes' => json_encode($changes), // Enregistre toutes xles valeurs du nouveau matériel
         ]);
         }
         else{
             $historisation = new Historisation([
+                'user_id'=>0,
                 'edited_id' => $user->id,
                 'FullName' =>"Systeme",
                 'operation' => 'created',
@@ -36,7 +49,7 @@ class UserObserver
         public function updated(User $user): void
         {
             $changes = [];
-            $allowedAttributes = ['Nom', 'Prenom', 'extension', 'Role', 'Service', 'Site', 'Date_Embauche'];
+            $allowedAttributes = ['Nom', 'Prenom', 'Role', 'Service', 'Site', 'email'];
             $user2 = auth()->user();
         
             foreach ($allowedAttributes as $attribute) {

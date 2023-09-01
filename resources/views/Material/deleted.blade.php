@@ -84,20 +84,20 @@
                     <form action="/Sortie" method="POST" >
                         @csrf
                         <input type="text" name="id" value="{{ $material->id }}" style="display: none">
-                        <div>
+                        <div class="inputs">
                             <label for="etat" >Date de Sortie : </label>
                     
                         
-                            <input type="date" class="Sortie" name="Sortie" id="sortie" data-material-id="{{ $material->id }}">
+                            <input type="date" class="Sortie" name="Sortie"  data-material-id="{{ $material->id }}">
                         </div>
-                    <button type="submit">Valider</button>
+                    <button id="sortie" type="submit">Valider</button>
                 </form>  
 
 
                     <div>
                     <div class="additional-content" data-material-id="{{ $material->id }}">
                     </div>
-                    <button class="button close-button" id="Operation" style="width:80px;">
+                    <button class="button close-button" id="Operation" >
                         Close
                     </button>
                 </div>
@@ -175,25 +175,45 @@
         text-align: center;
         align-items: center;
         margin: auto;
-        height: 300px;
+        height: 250px;
         border-radius: 10px;
         border: 2px solid black;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+        position: absolute;
+        top: 0px;
 
     }
     #Operation{
         background-color: #019455;
-        color: #fff;    
-        width:100% ;
-        margin-top: 30px;
+        color: #fff;   
+        font-size: 20px;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 50%;
     }
-    .modal button{
-        width: 60px;
+    #sortie{
         background-color: #019455;
-        color: #fff;  
+        color: #fff;   
+        font-size: 20px;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 50%;
     }
+        
     .modal input{
-        margin-bottom: 20px;
+        font-size: 17px;
+
+    }
+    
+    .modal label{
+        font-size: 17px;
+    }
+    .inputs{
+        border: 1px solid #019455;
+        background-color: #fff;
+
     }
         .table-auto {
             background-color: whitesmoke;

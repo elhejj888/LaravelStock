@@ -14,6 +14,10 @@
             </div>
           </a>
         </div>
+        <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
+            {{ session('message') }}
+
+    </p>
         <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Materiels"
                     style="width:100%;padding : 5px; margin-bottom:10px;">
         <table class="table-auto" border="1px solid black" >
@@ -26,6 +30,7 @@
                 <th>Emplacement</th>
                 <th>Site</th>
                 <th>Detailles</th>
+                <th>Réparé</th>
                 
               </tr>
             </thead>
@@ -46,7 +51,7 @@
                     <td class="op">
                       <button class="operation"
                           onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#101357"
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#fff"
                               class="bi bi-plus-circle" viewBox="0 0 16 16">
                               <path
                                   d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -56,6 +61,61 @@
                           Detailles
                       </button>
                   </td>
+                  <td class="op">
+                    <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                            <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                            <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                          </svg>
+                        Réparé
+                    </button>
+                    <dialog class="modal" id="modal-{{ $material->id }}" style="margin:auto; align-content:center; width:32%;">
+                        <div>
+                        <h1>Etat de Stock</h1>
+                        <form action="/repareMaterial" method="POST" >
+                            @csrf
+                            <input type="text" name="id" value="{{ $material->id }}" style="display: none">
+                            <div class="inputs">
+                                <label for="etat" >Date de Sortie : </label>
+                        
+                                <table>
+                                    <tr>
+                                        <td><label>Emplacement :</label>
+                                            </td>
+                                            <td>
+                                    <select name="emplacement">
+                                        <option value="2eme etage">2eme etage</option>
+                                        <option value="5eme etage">5eme etage</option>
+                                        <option value="7eme etage">7eme etage</option>
+                                    </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp</td>
+                                    <td>&nbsp</td>
+                                    </tr>
+                                <tr>
+                                    <td><label>Site : </label></td>
+                                    <td>
+                                    <select name="site">
+                                        <option value="Casablanca">Casablanca</option>
+                                        <option value="Oujda">Oujda</option>
+                                    </select>
+                                    </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        <button id="submit" type="submit">Valider</button>
+                    </form>  
+    
+    
+                        <div>
+                        <div class="additional-content" data-material-id="{{ $material->id }}">
+                        </div>
+                        <button class="button close-button" id="Operation" >
+                            Close
+                        </button>
+                </td>
                 
               </tr>
               @endforeach
@@ -63,6 +123,26 @@
           </table>
       
     </div>
+    <script>
+        const openButtons = document.querySelectorAll('#open-button');
+        const closeButtons = document.querySelectorAll('.close-button');
+        const dialogs = document.querySelectorAll('.modal');
+    
+        openButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                modal.showModal();
+            });
+        });
+    
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('dialog');
+                modal.close();
+            });
+        });
+    </script>
     <script type="text/javascript">
       $('#search').on('keyup', function() {
           $value = $(this).val();
@@ -87,6 +167,75 @@
       })
   </script>
 <style>
+    .modal h1{
+        background-color: #019455;
+        color: #fff;
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 40px;
+        padding-top: 10px;
+        height: 50px;
+        text-align: center;
+    }
+    .modal::backdrop{
+        background-color: #1c5d4161;
+    }
+    .modal {
+        background-color: rgb(243, 245, 241);
+        text-align: center;
+        align-items: center;
+        margin: auto;
+        height: 300px;
+        width: 500px;
+        border-radius: 10px;
+        border: 2px solid black;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+        position: absolute;
+        top: 0px;
+
+    }
+    #Operation{
+        background-color: #019455;
+        color: #fff;   
+        font-size: 20px;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 50%;
+    }
+    #submit{
+        background-color: #019455;
+        color: #fff;   
+        font-size: 20px;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 50%;
+    }
+    .modal table{
+        margin: auto;  
+    }    
+    
+
+    .modal select{
+        font-size: 17px;
+
+    }
+    .modal label{
+        font-size: 17px;
+    }
+    .inputs{
+        margin: auto;
+        border-radius:10px;
+        margin-top: 25px;
+
+    }
+    .area{
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Horizontally center-align items */
+    }
         .table-auto {
             background-color: whitesmoke;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);

@@ -92,11 +92,11 @@
                                         </svg>
                                         Affecter
                                     </button>
-                                    <dialog class="modal" id="modal-{{ $material->id }}" style="margin:auto; align-content:center;">
+                                    <dialog class="modal" id="modal-{{ $material->id }}" >
                                         <h1>Etat de Stock </h1>
                                         <table>
                                             <td>
-                                                <label for="etat" style="color: black">Etat : </label>
+                                                <label for="etat" >Etat : </label>
                                         
                                             </td>
                                             <td>
@@ -105,17 +105,17 @@
                                                     @if ($material->etat == "Assigne")
                                                         
                                                     <option value="Disponible">Disponible</option>
-                                                    <option value="Maintenance">Maintenance</option>
+                                                    <option value="maintenance">Maintenance</option>
 
-                                                    @elseif ($material->etat =="Disponible")
+                                                    @elseif ($material->etat =="maintenance")
 
-                                                    <option value="Maintenance">Maintenance</option>
+                                                    <option value="Disponible">Disponible</option>
                                                     <option value="Assigne">Assigne</option>
 
                                                     @else
-
-                                                    <option value="Assigne">Assigne</option>
                                                     <option value="Disponible">Disponible</option>
+                                                    <option value="maintenance">Maintenance</option>
+                                                    <option value="Assigne">Assigne</option>
                                                     @endif
                                                     
 
@@ -126,7 +126,7 @@
                                         <div>
                                         <div class="additional-content" data-material-id="{{ $material->id }}">
                                         </div>
-                                        <button class="button close-button" id="Operation" style="width:80px;">
+                                        <button class="button close-button" id="Operation" >
                                             Close
                                         </button>
                                     </div>
@@ -214,38 +214,59 @@
                 const materialId = etatSelect.getAttribute('data-material-id');
                 console.log(materialId)
                 // Update additional content based on selected value
-                if (selectedValue === 'Maintenance') {
+                if (selectedValue === 'maintenance') {
                     additionalContent.innerHTML = `
                         <form action="/fix" method="POST">
                             @csrf
+                            <div class="area">
                             <input type="text" value="maintenance" name="etat" style="display:none;">
                             <input type="text" value=`+materialId+` name="id" style="display:none;">
-                            <label for="description">Description: </label>
-                            <textarea name="description" id="description" cols="30" rows="4" required></textarea>                            </tr>
-                            <button class="operation" style="width:80px;" type="submit">Submit</button>
+                            <label for="description">Description:&nbsp &nbsp &nbsp &nbsp </label>
+                            <textarea name="description" id="description" cols="30" rows="4" required></textarea> 
+                            </div>                          
+                            <button id="submit" type="submit">Submit</button>
                         </form>
                     `;
                 } else if (selectedValue === 'Assigne') {
                     additionalContent.innerHTML = `
-                        <a href="{{ route('affectMaterial', ['id' => ':materialId']) }}"
-                            class="operation">Affecter</a>
+                    <button id="submit" onclick="window.location='{{ route('affectMaterial', ['id' => ':materialId']) }}'" >Affecter</button>
                     `.replace(':materialId', materialId);
                 } else if (selectedValue === 'Disponible') {
                     additionalContent.innerHTML = `
                     <form action="/matt" method="POST">
                         @csrf
+                        
                     <input type="text" value="Disponible" name="etat" style="display:none;">
                     <input type="text" value=`+materialId+` name="id" style="display:none;">
+                    <div class="inputs">
+                    <table>
+                        <tr>
+                            <td><label>Emplacement :</label>
+                                </td>
+                                <td>
                         <select name="emplacement">
                             <option value="2eme etage">2eme etage</option>
                             <option value="5eme etage">5eme etage</option>
                             <option value="7eme etage">7eme etage</option>
                         </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp</td>
+                        <td>&nbsp</td>
+                        </tr>
+                    <tr>
+                        <td><label>Site : </label></td>
+                        <td>
                         <select name="site">
                             <option value="Casablanca">Casablanca</option>
                             <option value="Oujda">Oujda</option>
                         </select>
-                        <button class="operation" style="width:80px;" type="submit">Submit</button>
+                        </td>
+                        </tr>
+                    </table>
+                    </div>
+                        <button id="submit" type="submit">Submit</button>
                     `;
                 } else {
                     additionalContent.innerHTML = ''; // Clear additional content
@@ -293,13 +314,81 @@
         })
     </script>
     <style>
+        .modal h1{
+        background-color: #019455;
+        color: #fff;
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 40px;
+        padding-top: 10px;
+        height: 50px;
+        text-align: center;
+    }
+    .modal::backdrop{
+        background-color: #1c5d4161;
+    }
+    .modal {
+        background-color: rgb(243, 245, 241);
+        text-align: center;
+        align-items: center;
+        margin: auto;
+        height: 300px;
+        width: 500px;
+        border-radius: 10px;
+        border: 2px solid black;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+        position: absolute;
+        top: 0px;
+
+    }
+    #Operation{
+        background-color: #019455;
+        color: #fff;   
+        font-size: 20px;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 50%;
+    }
+    #submit{
+        background-color: #019455;
+        color: #fff;   
+        font-size: 20px;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 50%;
+    }
+    .modal table{
+        margin: auto;  
+    }    
+    
+
+    .modal select{
+        font-size: 17px;
+
+    }
+    .modal label{
+        font-size: 17px;
+    }
+    .inputs{
+        margin: auto;
+        border-radius:10px;
+        margin-top: 25px;
+
+    }
+    .area{
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Horizontally center-align items */
+    }
         
         .table-auto {
             background-color: whitesmoke;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
             display: block;
             text-align: center;
-            overflow: scroll;
             cursor: pointer;
 
         }
@@ -341,7 +430,6 @@
             height: 700px;
             width: 87%;
             /* Adjust the height as needed */
-            overflow-y: auto;
             /* Add scroll if content exceeds container height */
         }
 
@@ -350,26 +438,7 @@
             color: #fff;
             background-color: #037d48;
         }
-        .modal{
-            color: #019455;
-            background-color: whitesmoke;
-            border-radius: 15px;
-            padding: 1em;
-            width:400px;
-        }
-
-        .modal::backdrop{
-            background-color: #0194545f;
-        }
-        #Operation {
-            color: white;
-            background-color: #019455;
-            font-weight: bold;
-            padding: 2px;
-            margin: 2px;
-            border-radius: 3px;
-
-        }
+        
 
     </style>
 @endsection

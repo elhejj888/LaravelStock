@@ -15,6 +15,14 @@
             </div>
         </div>
         <div class="search">
+          <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
+            @if (session('message'))
+                {{ session('message') }}
+            @else
+                {{ $message }}
+            @endif
+
+        </p>
           <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Utilisateur" style="width:100%;padding : 5px; margin-bottom:10px;">
         </div>
         <table class="table-auto" border="1px solid black ; " >

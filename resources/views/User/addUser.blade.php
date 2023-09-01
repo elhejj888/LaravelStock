@@ -1,5 +1,6 @@
 @extends('sidebar')
 @section('content')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <section >
  
  
@@ -30,6 +31,7 @@
                           name="Nom"
                           id="Nom"
                           class="formbold-form-input"
+                          required
                         />
                       </div>
                       <div>
@@ -39,6 +41,7 @@
                           name="Prenom"
                           id="Prenom"
                           class="formbold-form-input"
+                          required
                         />
                       </div>
                     </div>
@@ -51,7 +54,10 @@
                           name="Email"
                           id="email"
                           class="formbold-form-input"
+                          required
+                          autocomplete="off"
                         />
+                        <span id="emailValidation" style="color: red;"></span>
                       </div>
                       <div>
                         <label for="Extension" class="formbold-form-label"> Extension </label>
@@ -60,13 +66,16 @@
                           name="Extension"
                           id="Extension"
                           class="formbold-form-input"
+                          required
+                          autocomplete="off"
                         />
+                        <span id="extensionValidation" style="color: red;"></span>
                       </div>
                     </div>
                     <div class="formbold-input-flex">
                       <div>
                         <label for="site" class="formbold-form-label"> Role </label>
-                        <select id="Produit" class="formbold-form-input" name="Role" height="80px">
+                        <select id="Produit" class="formbold-form-input" name="Role" height="80px" required>
                             <option value="Autorisé">Autorisé</option>
                             <option value="Restreint">Restreint</option>
                             
@@ -74,7 +83,8 @@
                       </div>
                       <div>
                         <label for="site" class="formbold-form-label"> Service </label>
-                        <select id="Produit" class="formbold-form-input" name="Service" height="80px">
+                        <select id="Produit" class="formbold-form-input" name="Service" height="80px" required>
+                          <option style="display: none" selected></option>
                           <option value="Adict" >Adict</option>
                           <option value="Auto">Auto</option>
                           <option value="Cergap" >Cergap</option>
@@ -97,7 +107,8 @@
                     <div class="formbold-input-flex">
                       <div>
                         <label for="site" class="formbold-form-label"> Site </label>
-                        <select id="Produit" class="formbold-form-input" name="Site" height="80px">
+                        <select id="Produit" class="formbold-form-input" name="Site" height="80px" required>
+                          <option style="display: none" selected></option>
                           <option value="Casablanca">Casablanca</option>
                           <option value="Oujda">Oujda</option>
                           
@@ -110,18 +121,59 @@
                           name="DateEmbauche"
                           id="DateEmbauche"
                           class="formbold-form-input"
+                          required
                         />
                       </div>
                         
                         
                     </div>
                       </label>
-                      <button type="submit" class="formbold-btn">Ajouter Salarié(e)</button>
+                      <button type="submit" class="formbold-btn" id="submitButton" disabled>Ajouter Salarié(e)</button>
                     </div>
               
                   </form>
                 </div>
               </div>
+              <!-- Add this script before the closing </body> tag -->
+<script>
+    $(document).ready(function() {
+      var submitButton = $('#submitButton');
+        $('#email, #Extension').on('keyup', function () {
+            var emailValue = $('#email').val();
+            var extensionValue = $('#Extension').val();
+
+            $.ajax({
+                url: '/check-duplicate',
+                method: 'POST',
+                data: {
+                    email: emailValue,
+                    extension: extensionValue,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    if (response.emailExists || response.extensionExists) {
+                        submitButton.prop('disabled', true);
+                        submitButton.sty
+                    } else {
+                        submitButton.prop('disabled', false);
+                    }
+                    if (response.emailExists) {
+                        $('#emailValidation').text('Email Existe Deja.');
+                    } else {
+                        $('#emailValidation').text('');
+                    }
+
+                    if (response.extensionExists) {
+                        $('#extensionValidation').text('Extension Existe Deja.');
+                    } else {
+                        $('#extensionValidation').text('');
+                    }
+                }
+            });
+        });
+    });
+</script>
+
                <style>
                  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
                  * {
@@ -129,6 +181,11 @@
                    padding: 0;
                    box-sizing: border-box;
                  }
+                 #submitButton[disabled] {
+                background-color: #ccc; /* Change to your desired color */
+                color: #666; /* Change to your desired color */
+                cursor: not-allowed;
+                }
                  body {
                    font-family: 'Inter', sans-serif;
                  }

@@ -29,6 +29,12 @@
                     <dt class="t1">Etat :</dt>
                     <dd>{{ $material->etat }}</dd>
                 </div>
+                @if($material->etat==="Assigne")
+                <div class="description-pair">
+                    <dt class="t1">Assigné à :</dt>
+                    <dd>{{ $user->Prenom }} {{ $user->Nom }}</dd>
+                </div>
+                @endif
                 @if($material->etat=="maintenance")
                 <div class="description-pair">
                     <dt class="t1">Description :</dt>
@@ -77,12 +83,12 @@
         </div>
         </div>
         
-        <div class="table-container">
+        <div class="table-container2">
             <div>
               @if ($historiques->isEmpty())
         <p style="color: red; backgound-color:white; text-align:center; font-weight:300;font-size:25px" >Il n'y a aucune historisation pour ce matériel !!</p>
               @else
-                <table class="table-auto2" style="border: 1px solid black">
+                <table class="table-auto2" >
                     <thead>
                         <tr>
                             <th class="thh">Modificateur</th>
@@ -95,7 +101,7 @@
                         @foreach ($historiques as $historisation)
                             <tr>
                                 <td><a
-                                        href="{{ route('showUser', ['id' => $historisation->user_id]) }}">{{ $historisation->user_id }}</a>
+                                        href="{{ route('showUser', ['id' => $historisation->user_id]) }}">{{ $historisation->FullName }}</a>
                                 </td>
                                 <td>{{ $historisation->operation }}</td>
                                 <td>{{ $historisation->changes }}</td>
@@ -125,7 +131,14 @@
         display: flex;
         align-items: center;
     }
-
+    th {
+            position: sticky;
+            top: 0;
+            background-color: #019455;
+            color: #fff;
+            font-weight: 500;
+            height: 50px;
+        }
     .t1 {
         background-color: rgb(242, 242, 242);
         color: green;
@@ -137,6 +150,16 @@
         margin: 0;
         padding-left: 10px;
     }
+    .table-auto2 {
+            background-color: whitesmoke;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            display: block;
+            text-align: center;
+            overflow: scroll;
+            cursor: pointer;
+            border: 1px solid black
+
+        }
 
     .expired {
         color: red;
@@ -155,8 +178,29 @@
         width: 80%;
         margin-left: 12%;
         margin-top: 40px;
-    }
 
+    }
+    
+ 
+    .table-container2 {
+        background-color: whitesmoke;
+        width: 72%;
+        margin: auto;
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .table-container2 > div {
+    max-width: 100%;
+    margin-left: 5%;
+    width: 100%;
+    }
+    .table-container2 < div {
+    max-width: 66%;
+    margin-left: 5%;
+    width: 100%;
+    }
     .table-auto2 {
         border: 1px solid black;
         background-color: whitesmoke;

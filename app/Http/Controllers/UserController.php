@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Historisation;
+use App\Models\material;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -15,7 +16,7 @@ class UserController extends Controller
         if (auth()->check()) {
 
         $users = User::orderBy('Site')->orderBy('Service')->simplePaginate(20);
-        return view('User/users',['users'=>$users]);
+        return view('User/users',['users'=>$users , 'message'=>""]);
     }
     else
         return redirect('login')->with('error', 'Authentication failed.');
@@ -24,12 +25,21 @@ class UserController extends Controller
     public function show($id)
     {
         if (auth()->check()) {
+            if($id == 0){
+                $historiques = Historisation::where('FullName', 'Systeme')->where('type','user')->get();
+                $user = array(
+                    "Details" => "Ceci est le système responsable de la gestion des connexions. Vous pouvez vérifier toutes les connexions passées par les utilisateurs ici."
+                );                
+            }
+            else{
+            $materials = material::where('userId',$id)->get();
             $historiques = Historisation::where('edited_id', $id)->where('type','user')->get();
             $user = User::findOrFail($id);
-            return view('User/showUser', ['user' => $user , 'historiques' => $historiques]);
+            }
+            return view('User/showUser', ['user' => $user , 'historiques' => $historiques , 'materials'=>$materials]);
         }
         else{
-            return redirect('login')->with('error', 'Authentication failed.');
+            return redirect('login')->with('message', 'Veuillez vous connecter..!');
         }
     }
 
@@ -48,12 +58,22 @@ class UserController extends Controller
         'Date_Embauche'=>$request->input('DateEmbauche')
         ]);
         
-        return redirect('/users');
+        return redirect('/users')->with('message', "L'utilisateur a bien etait ajouté");
     }
     else{
-        return redirect('login')->with('error', 'Authentication failed.');
+        return redirect('login')->with('error', 'Veuillez vous connecter..!');
     }
 
+    }
+    public function checkDuplicate(Request $request)
+    {
+    $emailExists = User::where('email', $request->email)->exists();
+    $extensionExists = User::where('extension', $request->extension)->exists();
+
+    return response()->json([
+        'emailExists' => $emailExists,
+        'extensionExists' => $extensionExists,
+    ]);
     }
 
     public function updateUser($id){
@@ -64,7 +84,7 @@ class UserController extends Controller
         return view('User/editUser', ['user' => $user]);
     }
         else{
-            return redirect('login')->with('error', 'Authentication failed.');
+            return redirect('login')->with('message', 'Veuillez vous connecter..!');
         }
         }
 
@@ -85,24 +105,30 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect('/users')->with('success', 'User updated successfully');
+        return redirect('/users')->with('message', "Utilisateur Modifié avec succes");
         }
         else{
             return redirect('login')->with('error', 'Authentication failed.');
         }
         }
 
+        
 
         public function deleteUser($id){
             if (auth()->check()) {
 
             $user = User::findOrFail($id);
+            $user2 = material::where('userId',$id)->exists();
+            if($user2)
+            return redirect('/users')->with('message','Départ impossible , utilisateur a encore un materiel..!');
+            else {
             $user->Role = "Départ";
             $user->save();
-            return redirect('/users');
+            return redirect('/users')->with('message','Succes , Departure bien executée');
+            }
             }
             else{
-                return redirect('login')->with('error', 'Authentication failed.');
+                return redirect('login')->with('message', 'Authentication failed.');
             }
 
         }

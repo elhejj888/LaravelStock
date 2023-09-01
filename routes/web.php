@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HistoriqueController;
@@ -39,6 +40,13 @@ Route::post('/connection', [AuthController::class, 'authenticate'])->name('authe
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');//to Logout
 
 
+Route::post('/saveRoute',[AdminController::class , 'saveValues'])->name('saveRoute');
+Route::get('/ManageDrops', function () {
+    return view('Administration/drops', ['message' => 'Bonjour..']);
+});
+
+
+
 Route::get('users', [UserController::class, 'RetrieveUsers']);//Displaying All the users in the database except the deleted ones
 Route::post('/users', [UserController::class, 'updateValues']);//Same but after updating a value
 Route::get('deletedusers', [UserController::class, 'deletedvalues']);//After Deleting
@@ -49,12 +57,13 @@ Route::get('deleteUser/{id}', [UserController::class, 'deleteUser'])->name('dele
 Route::get('/searchUser', [UserController::class, 'searchUser'])->name('searchUser');//Search a user
 Route::get('/searchDeletedUser', [UserController::class, 'searchDeletedUser'])->name('searchDeletedUser');//search in the deleted materials
 Route::post('/adduser', [UserController::class, 'addUser']);//Add a New User
+Route::post('/check-duplicate', [UserController::class, 'checkDuplicate']);
 Route::get('/adduser', function () {
     return view('User/addUser');
 });
 
 
-
+Route::post('/check-duplicate2', [MaterialController::class, 'checkDuplicate']);
 Route::post('/matt', [MaterialController::class, 'updateValues2']);//Same After Update
 Route::post('/Sortie', [MaterialController::class, 'MiseEnSortie']);//Same After Update
 Route::post('/fix', [MaterialController::class, 'addDesc']);//Same After Update
@@ -62,6 +71,7 @@ Route::post('/addmaterial', [MaterialController::class, 'addMaterial']);//Displa
 Route::get('materials', [MaterialController::class, 'RetrieveMaterials']);//Displaying all materials with a get request
 Route::post('/materials', [MaterialController::class, 'updateValues']);//Same After Update
 Route::get('DeleteMaterial/{id}', [MaterialController::class, 'DeleteMaterial2'])->name('DeleteMaterial');//After Deleting
+Route::post('repareMaterial', [MaterialController::class, 'repareMaterial'])->name('repareMaterial');//After Deleting
 Route::get('/assign', [MaterialController::class, 'find'])->name('assign');//Assign a material to a User Page Request
 Route::get('material/{id}', [MaterialController::class, 'showMaterial'])->name('showMaterial');//Displaying a Material Details
 Route::get('updatematerial/{id}', [MaterialController::class, 'updateMaterial'])->name('updateMaterial');//Update a Meterial
@@ -74,9 +84,7 @@ Route::get('maintainMaterials', [MaterialController::class, 'maintainvalues']);/
 Route::get('affectmaterial/{id}', function ($id) {
     return view('Material/affecting', ['id' => $id]);
 })->name('affectMaterial');//the page to assign material
-Route::get('/addmaterial', function () {
-    return view('Material/addMaterial');
-});//the page to add material
+Route::get('/addmaterial', [MaterialController::class , 'recupererValeurs']);//the page to add material
 
 
 

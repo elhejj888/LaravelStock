@@ -29,7 +29,7 @@ class Login extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('elhejjioui.joseph@imycorp.com', 'Youssef ElHejjioui'),
+            from: new Address('elhejjioui.joseph@imycorp.com', 'ECA Assurance'),
             subject: 'Code de Verification',
         );
     }

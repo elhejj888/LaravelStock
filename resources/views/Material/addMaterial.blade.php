@@ -1,5 +1,6 @@
 @extends('sidebar')
 @section('content')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <section >
     
     
@@ -28,11 +29,10 @@
                             </label>
                             <select id="Produit" class="formbold-form-input" height="80px" name="type">
                               <option value="" selected></option>
-                                    <option value="Ordinateur">Ordinateur</option>
-                                    <option value="Ecran">Ecran</option>
-                                    <option value="Casque">Casque</option>
-                                    <option value="Materiel Reseau">Materiel Reseau</option>
-                                    <option value="Telephone">Téléphone</option>
+                              @foreach ($TypeProduits as $TypeProduit)
+                              <option value="{{ $TypeProduit->TypeProduit }}">{{ $TypeProduit->TypeProduit }}</option>
+                              @endforeach
+                                
                             </select>
                               
                           </div>
@@ -43,18 +43,20 @@
                            
                           </div>
                           <div>
-                            <label for="phone" class="formbold-form-label"> Tag de Produit </label>
+                            <label for="tag" class="formbold-form-label"> Tag de Produit </label>
                             <input
                               type="text"
                               name="tag"
                               id="tag"
                               class="formbold-form-input"
                               required
+                              autocomplete="off"
                             />
+                            <span id="TagValidation" style="color: red;"></span>
                           </div>
                   
                         <div class="formbold-mb-3">
-                          <label for="address" class="formbold-form-label">
+                          <label for="mac" class="formbold-form-label">
                           Adresse Mac
                           </label>
                           <input
@@ -63,7 +65,9 @@
                             id="mac"
                             class="formbold-form-input"
                             required
+                            autocomplete="off"
                           />
+                          <span id="MacValidation" style="color: red;"></span>
                         </div>
                   
                         <div class="formbold-mb-3">
@@ -76,7 +80,9 @@
                             id="facture"
                             class="formbold-form-input"
                             required
+                            autocomplete="off"
                           />
+                          <span id="InvoiceValidation" style="color: red;"></span>
                         </div>
                   
                         <div class="formbold-input-flex">
@@ -104,21 +110,29 @@
                         </div>
                         <div class="formbold-input-flex">
                           <div>
-                            <label for="post" class="formbold-form-label"> Emplacement </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="emplacement">
-                              <option value="3eme etage">3eme étage</option>
-                              <option value="2eme etage">2eme étage</option>
-                              <option value="1re etage">1re étage</option>
+                            <label for="area" class="formbold-form-label"> Site</label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="site">
+                              @foreach ($sites as $site)
+                              <option value="{{ $site->Site }}">{{ $site->Site }}</option>
+                              @endforeach
                               
+                                                            
                       </select>
                           </div>
                           <div>
-                            <label for="area" class="formbold-form-label"> Site D'emplacement </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="site">
-                              <option value="Casablanca">Casablanca</option>
-                              <option value="Oujda">Oujda</option>                              
+                            <label for="post" class="formbold-form-label"> Emplacement </label>
+                            <select id="Produit" class="formbold-form-input" height="80px" name="emplacement">
+                              @foreach ($sites as $site)
+                              @foreach ($values as $value)
+                                @if($site->Site == $value->Site && $value->Emplacement!="")
+                                <option value="{{ $value->Emplacement }}">{{ $value->Emplacement }}</option>
+                                @endif
+                              @endforeach
+                              @endforeach
+                              
                       </select>
                           </div>
+                         
                       </div>
                   
                         <div class="formbold-checkbox-wrapper">
@@ -132,13 +146,65 @@
                               
                             </div>
                           </label>
-                          <button type="submit" class="formbold-btn">Ajouter Produit</button>
+                          <button type="submit" id="submitButton" class="formbold-btn" disabled>Ajouter Produit</button>
                         </div>
                   
                       </form>
                     </div>
                   </div>
+                  <script>
+                    $(document).ready(function() {
+                      var submitButton = $('#submitButton');
+                        $('#tag, #mac,#facture').on('keyup', function () {
+                            var tagValue = $('#tag').val();
+                            var macValue = $('#mac').val();
+                            var invoiceValue = $('#facture').val();
+                
+                            $.ajax({
+                                url: '/check-duplicate2',
+                                method: 'POST',
+                                data: {
+                                    tag: tagValue,
+                                    mac: macValue,
+                                    facture: invoiceValue,
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function (response) {
+                                  if (response.macExists || response.tagExists || response.invoiceExists) {
+                                        submitButton.prop('disabled', true);
+                                    } else {
+                                        submitButton.prop('disabled', false);
+                                    }
+
+                                    if (response.tagExists) {
+                                        $('#TagValidation').text('Tag Existe Deja.');
+                                    } else {
+                                        $('#TagValidation').text('');
+                                    }
+
+                                    if (response.macExists) {
+                                        $('#MacValidation').text('Adresse Mac Existe Deja.');
+                                    } else {
+                                        $('#MacValidation').text('');
+                                    }
+
+                                    if (response.invoiceExists) {
+                                        $('#InvoiceValidation').text('Code Facture Existe Deja.');
+                                    } else {
+                                        $('#InvoiceValidation').text('');
+                                    }
+
+                                }
+                            });
+                        });
+                    });
+                </script>
                   <style>
+                    #submitButton[disabled] {
+                    background-color: #ccc; /* Change to your desired color */
+                    color: #666; /* Change to your desired color */
+                    cursor: not-allowed;
+                    }
                     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
                     * {
                       margin: 0;
@@ -370,7 +436,7 @@
                           Marque
                           </label>
                           <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
-                            <option value="Snome710">Snom710</option>
+                            <option value="Snome710">Snome710</option>
                             <option value="SnomeD712">SnomeD712</option>
                             
                         </select>

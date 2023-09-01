@@ -13,6 +13,7 @@
                     <tr>
                       <th class="thh">Nom</th>
                       <th class="thh">Prenom</th>
+                      <th class="thh">Email</th>
                       <th class="thh">Service</th>
                       <th class="thh">Site</th>
                       <th class="thh">Action</th>
@@ -62,7 +63,7 @@
         }
         .container {
             height: 700px;
-            width: 40%;
+            width: 50%;
             /* Adjust the height as needed */
             overflow-y: auto;
             /* Add scroll if content exceeds container height */

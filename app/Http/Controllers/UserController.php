@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Mail;
 use App\Models\User;
+use App\Models\Admin;
+use App\Models\material;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Historisation;
-use App\Models\material;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -258,6 +260,18 @@ class UserController extends Controller
                 }
             }            
             return response($output);
+        }
+
+        public function recupererValeurs(){
+            $sites= DB::table('admins')
+                ->select('Site') // Specify the column you want distinct values from
+                ->whereNotNull('Site')
+                ->where('Qui','user')
+                ->distinct()
+                ->get();
+            $values=Admin::where('Qui','materiel')->get();
+            return view('User/addUser',['sites'=>$sites , 'values'=>$values]);
+    
         }
 
 }

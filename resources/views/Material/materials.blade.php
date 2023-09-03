@@ -5,15 +5,13 @@
         <div class="container">
             <div>
                 <div class="add-button">
-                    <a href="addmaterial" class="add-user">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="auto" fill="#019455"
-                            class="bi bi-send-plus" viewBox="0 0 16 16">
-                            <path
-                                d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178 1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494-1.895 4.738a.5.5 0 1 0 .928.372l2.8-7Zm-2.54 1.183L5.93 9.363 1.591 6.602l11.833-4.733Z" />
-                            <path
-                                d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z" />
+                    <button class="add-mat" onclick="window.location.href = 'addmaterial';">
+                        Ajouter Materiel
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#fff" class="bi bi-send-plus" viewBox="0 0 16 16">
+                            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178 1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494-1.895 4.738a.5.5 0 1 0 .928.372l2.8-7Zm-2.54 1.183L5.93 9.363 1.591 6.602l11.833-4.733Z" />
+                            <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z" />
                         </svg>
-                    </a>
+                    </button>                    
                 </div>
             </div>
             <div class="search">
@@ -77,7 +75,7 @@
                                         Detailles
                                     </button>
                                 </td>
-                                
+
 
                                 <td class="op">
                                     <button class="operation"
@@ -92,71 +90,72 @@
                                         </svg>
                                         Affecter
                                     </button>
-                                    <dialog class="modal" id="modal-{{ $material->id }}" >
+                                    <dialog class="modal" id="modal-{{ $material->id }}">
                                         <h1>Etat de Stock </h1>
                                         <table>
                                             <td>
-                                                <label for="etat" >Etat : </label>
-                                        
+                                                <label for="etat">Etat : </label>
+
                                             </td>
                                             <td>
-                                                <select class="etat-select" data-material-id="{{ $material->id }}" name="etat2" id="">
-                                                    <option value="{{ $material->etat }}" style="display: none;">{{ $material->etat }}</option>
-                                                    @if ($material->etat == "Assigne")
-                                                        
-                                                    <option value="Disponible">Disponible</option>
-                                                    <option value="maintenance">Maintenance</option>
-
-                                                    @elseif ($material->etat =="maintenance")
-
-                                                    <option value="Disponible">Disponible</option>
-                                                    <option value="Assigne">Assigne</option>
-
+                                                <select class="etat-select" data-material-id="{{ $material->id }}"
+                                                    name="etat2" id="">
+                                                    <option value="{{ $material->etat }}" style="display: none;">
+                                                        {{ $material->etat }}</option>
+                                                    @if ($material->etat == 'Assigne')
+                                                        <option value="Disponible">Disponible</option>
+                                                        <option value="maintenance">Maintenance</option>
+                                                    @elseif ($material->etat == 'maintenance')
+                                                        <option value="Disponible">Disponible</option>
+                                                        <option value="Assigne">Assigne</option>
                                                     @else
-                                                    <option value="Disponible">Disponible</option>
-                                                    <option value="maintenance">Maintenance</option>
-                                                    <option value="Assigne">Assigne</option>
+                                                        <option value="Disponible">Disponible</option>
+                                                        <option value="maintenance">Maintenance</option>
+                                                        <option value="Assigne">Assigne</option>
                                                     @endif
-                                                    
+
 
                                                 </select>
                                             </td>
-                                            
+
                                         </table>
                                         <div>
-                                        <div class="additional-content" data-material-id="{{ $material->id }}">
+                                            <div class="additional-content" data-material-id="{{ $material->id }}">
+                                            </div>
+                                            <button class="button close-button" id="Operation">
+                                                Close
+                                            </button>
                                         </div>
-                                        <button class="button close-button" id="Operation" >
-                                            Close
-                                        </button>
-                                    </div>
-                                        
+
                                     </dialog>
                                 </td>
                                 <td class="op">
                                     <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-                                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-                                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-                                          </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
+                                            fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+                                            <path
+                                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
+                                        </svg>
                                         Gerer
                                     </button>
                                 </td>
                                 @if (Auth::user()->Role === 'Admin')
-                                <td class="op">
-                                    <button class="operation"
-                                        onclick="window.location.href = '{{ route('updateMaterial', ['id' => $material->id]) }}';"
-                                        style="text-decoration: none;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#101357"
-                                            class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                            <path
-                                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                            <path fill-rule="evenodd"
-                                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                        </svg>
-                                        Modifier
-                                    </button>
-                                </td>
+                                    <td class="op">
+                                        <button class="operation"
+                                            onclick="window.location.href = '{{ route('updateMaterial', ['id' => $material->id]) }}';"
+                                            style="text-decoration: none;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
+                                                fill="#101357" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                            </svg>
+                                            Modifier
+                                        </button>
+                                    </td>
                                     <td class="op">
                                         <button class="operation"
                                             onclick="if (confirm('Êtes-vous sûr de supprimer ..?')) window.location.href = this.getAttribute('data-href');"
@@ -171,43 +170,36 @@
                                             Mise en rebut
                                         </button>
                                     </td>
-                                    
                                 @endif
-                                
-
-                                
-                                
-
                         @endif
-                        
                     @endforeach
                 </tbody>
             </table>
-            
+
         </div>
-        
+
         <div class="pagination-links">
             {{ $materials->links() }}
         </div>
     </section>
-    
+
     <script>
         document.querySelectorAll('#open-button').forEach(button => {
             const modalId = button.getAttribute('data-modal');
             const modal = document.getElementById(modalId);
-    
+
             button.addEventListener('click', () => {
                 modal.showModal();
             });
-    
+
             modal.querySelector('.close-button').addEventListener('click', () => {
                 modal.close();
             });
-    
+
             // Handle change in select
             const etatSelect = modal.querySelector('.etat-select');
             const additionalContent = modal.querySelector('.additional-content');
-    
+
             etatSelect.addEventListener('change', () => {
                 const selectedValue = etatSelect.value;
                 console.log(etatSelect.value)
@@ -220,7 +212,7 @@
                             @csrf
                             <div class="area">
                             <input type="text" value="maintenance" name="etat" style="display:none;">
-                            <input type="text" value=`+materialId+` name="id" style="display:none;">
+                            <input type="text" value=` + materialId + ` name="id" style="display:none;">
                             <label for="description">Description:&nbsp &nbsp &nbsp &nbsp </label>
                             <textarea name="description" id="description" cols="30" rows="4" required></textarea> 
                             </div>                          
@@ -237,7 +229,7 @@
                         @csrf
                         
                     <input type="text" value="Disponible" name="etat" style="display:none;">
-                    <input type="text" value=`+materialId+` name="id" style="display:none;">
+                    <input type="text" value=` + materialId + ` name="id" style="display:none;">
                     <div class="inputs">
                     <table>
                         <tr>
@@ -271,7 +263,7 @@
                 } else {
                     additionalContent.innerHTML = ''; // Clear additional content
                 }
-                
+
             });
         });
     </script>
@@ -314,76 +306,111 @@
         })
     </script>
     <style>
-        .modal h1{
-        background-color: #019455;
-        color: #fff;
-        font-weight: bold;
-        font-size: 20px;
-        margin-bottom: 40px;
-        padding-top: 10px;
-        height: 50px;
-        text-align: center;
-    }
-    .modal::backdrop{
-        background-color: #1c5d4161;
-    }
-    .modal {
-        background-color: rgb(243, 245, 241);
-        text-align: center;
-        align-items: center;
-        margin: auto;
-        height: 300px;
-        width: 500px;
-        border-radius: 10px;
-        border: 2px solid black;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
-        position: absolute;
-        top: 0px;
+        .add-mat{
+            background-color: #019455;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius:7px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+            padding: 5px;
+             margin-bottom:8px;
 
-    }
-    #Operation{
-        background-color: #019455;
-        color: #fff;   
-        font-size: 20px;
-        position: absolute;
-        bottom: 0px;
-        left: 0px;
-        width: 50%;
-    }
-    #submit{
-        background-color: #019455;
-        color: #fff;   
-        font-size: 20px;
-        position: absolute;
-        bottom: 0px;
-        right: 0px;
-        width: 50%;
-    }
-    .modal table{
-        margin: auto;  
-    }    
-    
+        }
 
-    .modal select{
-        font-size: 17px;
+        .add-mat:hover{
+            background-color: #016a3d;
+            color: rgb(226, 226, 226);
+            font-weight: bold;
+            font-size: 20px;
+            border-radius:7px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
 
-    }
-    .modal label{
-        font-size: 17px;
-    }
-    .inputs{
-        margin: auto;
-        border-radius:10px;
-        margin-top: 25px;
+        }
+        .add-mat:hover svg{
+            fill: rgb(226, 226, 226);
+        }
 
-    }
-    .area{
-        margin-top: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center; /* Horizontally center-align items */
-    }
-        
+
+        .modal h1 {
+            background-color: #019455;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 40px;
+            padding-top: 10px;
+            height: 50px;
+            text-align: center;
+        }
+
+        .modal::backdrop {
+            background-color: #1c5d4161;
+        }
+
+        .modal {
+            background-color: rgb(243, 245, 241);
+            text-align: center;
+            align-items: center;
+            margin: auto;
+            height: 300px;
+            width: 500px;
+            border-radius: 10px;
+            border: 2px solid black;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0px;
+
+        }
+
+        #Operation {
+            background-color: #019455;
+            color: #fff;
+            font-size: 20px;
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            width: 50%;
+        }
+
+        #submit {
+            background-color: #019455;
+            color: #fff;
+            font-size: 20px;
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            width: 50%;
+        }
+
+        .modal table {
+            margin: auto;
+        }
+
+
+        .modal select {
+            font-size: 17px;
+
+        }
+
+        .modal label {
+            font-size: 17px;
+        }
+
+        .inputs {
+            margin: auto;
+            border-radius: 10px;
+            margin-top: 25px;
+
+        }
+
+        .area {
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Horizontally center-align items */
+        }
+
         .table-auto {
             background-color: whitesmoke;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
@@ -438,7 +465,5 @@
             color: #fff;
             background-color: #037d48;
         }
-        
-
     </style>
 @endsection

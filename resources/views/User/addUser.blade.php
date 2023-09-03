@@ -82,37 +82,24 @@
                     </select>
                       </div>
                       <div>
-                        <label for="site" class="formbold-form-label"> Service </label>
-                        <select id="Produit" class="formbold-form-input" name="Service" height="80px" required>
+                        <label for="site" class="formbold-form-label"> Site </label>
+                        <select id="site" class="formbold-form-input" name="Site" height="80px" required>
                           <option style="display: none" selected></option>
-                          <option value="Adict" >Adict</option>
-                          <option value="Auto">Auto</option>
-                          <option value="Cergap" >Cergap</option>
-                          <option value="Fidelisation">Fidelisation</option>
-                          <option value="Gestion" >Gestion</option>
-                          <option value="Informatique">Informatique</option>
-                          <option value="Marketing" >Marketing</option>
-                          <option value="MRH">MRH</option>
-                          <option value="Calinia">Calinia</option>
-                          <option value="Qualite" >Qualite</option>
-                          <option value="RH">RH</option>
-                          <option value="Sante" >Sante</option>
-                          <option value="TMK">TMK </option>
-                          <option value="VDI" >VDI</option>
-                          <option value="Weedoit">Weedoit</option>
-                      
-                  </select> 
+                          @foreach ($sites as $site)
+                          <option value="{{ $site->Site }}">{{ $site->Site }}</option>
+                          @endforeach
+                          
+                        </select>
+                        
                       </div>
                     </div>
                     <div class="formbold-input-flex">
                       <div>
-                        <label for="site" class="formbold-form-label"> Site </label>
-                        <select id="Produit" class="formbold-form-input" name="Site" height="80px" required>
+                        <label for="site" class="formbold-form-label"> Service </label>
+                        <select id="service" class="formbold-form-input" name="Service" height="80px" required>
                           <option style="display: none" selected></option>
-                          <option value="Casablanca">Casablanca</option>
-                          <option value="Oujda">Oujda</option>
-                          
-                        </select>
+                      
+                  </select> 
                       </div>
                       <div>
                         <label for="date" class="formbold-form-label" > Date d'embauche </label>
@@ -172,6 +159,43 @@
             });
         });
     });
+                    $(document).ready(function() {
+                        const siteSelect = $('#site');
+                        
+                        const serviceSelect = $('#service');
+
+                        // Add an event listener for the site select box change
+                        siteSelect.on('change', function() {
+                            const selectedSite = $(this).val();
+
+                            // Make an AJAX request to fetch emplacement options based on the selected site
+                            $.ajax({
+                                url: '{{ route('getServices') }}',
+                                method: 'GET',
+                                data: {
+                                    site: selectedSite
+                                },
+                                success: function(response) {
+                                    // Clear existing options in the emplacement select box
+                                    serviceSelect.empty();
+
+                                    // Populate emplacement select box with fetched options
+                                    $.each(response, function(key, value) {
+                                        serviceSelect.append($('<option>', {
+                                            value: key,
+                                            text: value
+                                        }));
+                                    });
+                                },
+                                error: function() {
+                                    // Handle error if necessary
+                                }
+                            });
+                        });
+                        typeSelect.on('change', function() {
+                            const selectedtype = $(this).val();
+                        });
+                      });
 </script>
 
                <style>

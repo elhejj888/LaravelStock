@@ -35,266 +35,369 @@
 <!-- JavaScript to handle dynamic fields -->
 <script>
     $(document).ready(function () {
-        const selectType = $('#selectType');
-        const dynamicFieldsContainer = $('#dynamic-fields-container');
-        const saveButton = $('#submitButton');
+    const selectType = $('#selectType');
+    const dynamicFieldsContainer = $('#dynamic-fields-container');
+    const saveButton = $('#submitButton');
 
-        function createDynamicFields(selectedType) {
-            dynamicFieldsContainer.empty();
+    function createDynamicFields(selectedType) {
+        dynamicFieldsContainer.empty();
 
-            if (selectedType === 'materiel') {
-                dynamicFieldsContainer.append(`
-                    <div class="formbold-mb-3">
-                        <label for="materielOptions" class="formbold-form-label">Choix de l'option</label>
-                        <select class="formbold-form-input" name="materielOptions" id="materielOptions">
-                            <option value=""></option>
-                            <option value="type">Type de Produit</option>
-                            <option value="marque">Marque</option>
-                            <option value="choix">Option</option>
-                            <option value="fournisseur">Fournisseur</option>
-                            <option value="stock">Stock</option>
-                            <option value="site">Site</option>
-                        </select>
-                    </div>
-                `);
-            } else if (selectedType === 'utilisateur') {
-                dynamicFieldsContainer.append(`
-                    <div class="formbold-mb-3">
-                        <label for="userOptions" class="formbold-form-label">Choix de l'option</label>
-                        <select class="formbold-form-input" name="userOptions" id="userOptions">
-                            <option value=""></option>
-                            <option value="service">Service</option>
-                            <option value="site">Site</option>
-                        </select>
-                    </div>
-                `);
-            }
-            
-            // Add event listener for the selected option
-            $('#materielOptions').on('change', function () {
-                const selectedMaterielOption = $(this).val();
-                handleMaterielOptionChange(selectedMaterielOption);
-            });
-
-            $('#userOptions').on('change', function () {
-                const selectedUserOption = $(this).val();
-                handleUserOptionChange(selectedUserOption);
-            });
+        if (selectedType === 'materiel') {
+            dynamicFieldsContainer.append(`
+                <div class="formbold-mb-3">
+                    <label for="materielOptions" class="formbold-form-label">Choix de l'option</label>
+                    <select class="formbold-form-input" name="materielOptions" id="materielOptions">
+                        <option value=""></option>
+                        <option value="type">Type de Produit</option>
+                        <option value="marque">Marque</option>
+                        <option value="choix">Option</option>
+                        <option value="fournisseur">Fournisseur</option>
+                        <option value="stock">Stock</option>
+                        <option value="site">Site</option>
+                    </select>
+                </div>
+            `);
+        } else if (selectedType === 'utilisateur') {
+            dynamicFieldsContainer.append(`
+                <div class="formbold-mb-3">
+                    <label for="userOptions" class="formbold-form-label">Choix de l'option</label>
+                    <select class="formbold-form-input" name="userOptions" id="userOptions">
+                        <option value=""></option>
+                        <option value="service">Service</option>
+                        <option value="site">Site</option>
+                    </select>
+                </div>
+            `);
         }
 
-        function handleMaterielOptionChange(selectedOption) {
-            // Remove existing dynamic input fields, if any
-            dynamicFieldsContainer.find('.dynamic-input').remove();
-
-            // Handle each selected option
-            if (selectedOption === 'type') {
-                dynamicFieldsContainer.append(`
-                    <div class="formbold-mb-3 dynamic-input">
-                        <label for="typeInput" class="formbold-form-label">Type de Produit</label>
-                        <input type="text" class="formbold-form-input" name="type" id="typeInput" required>
-                    </div>
-                `);
-            } else if (selectedOption === 'marque') {
-                dynamicFieldsContainer.append(`
-                <div class="formbold-mb-3 dynamic-input">
-                        <label for="marqueInput" class="formbold-form-label">choix de Produit</label>
-                        <select class="formbold-form-input" name="type" id="typeInput" required>
-                          <option value="" selected></option>
-                                    <option value="Ordinateur">Ordinateur</option>
-                                    <option value="Ecran">Ecran</option>
-                                    <option value="Casque">Casque</option>
-                                    <option value="Materiel Reseau">Materiel Reseau</option>
-                                    <option value="Telephone">Téléphone</option>
-                        </select>
-                   </div>
-                <div class="formbold-mb-3 dynamic-input">
-                        <label for="marqueInput" class="formbold-form-label">Marque</label>
-                        <input type="text" class="formbold-form-input" name="marque" id="marqueInput" required>
-                    </div>
-                    
-                `);
-            }
-            else if (selectedOption === 'choix') {
-                dynamicFieldsContainer.append(`
-                <div class="formbold-mb-3 dynamic-input">
-                        <label for="marqueInput" class="formbold-form-label">choix de Produit</label>
-                        <select class="formbold-form-input" name="type" id="typeInput" required>
-                          <option value="" selected></option>
-                                    <option value="Ordinateur">Ordinateur</option>
-                                    <option value="Ecran">Ecran</option>
-                                    <option value="Casque">Casque</option>
-                                    <option value="Materiel Reseau">Materiel Reseau</option>
-                                    <option value="Telephone">Téléphone</option>
-                        </select>
-                   </div>
-                    <div class="formbold-mb-3 dynamic-input">
-                        <label for="choixInput" class="formbold-form-label">Option</label>
-                        <input type="text" class="formbold-form-input" name="choix" id="choixInput" required>
-                    </div>
-                `);
-            }
-            else if (selectedOption === 'fournisseur') {
-                dynamicFieldsContainer.append(`
-                    <div class="formbold-mb-3 dynamic-input">
-                        <label for="fournisseurInput" class="formbold-form-label">fournisseur</label>
-                        <input type="text" class="formbold-form-input" name="fournisseur" id="fournisseurInput" required>
-                    </div>
-                `);
-            }
-            else if (selectedOption === 'stock') {
-                dynamicFieldsContainer.append(`
-                <div class="formbold-mb-3 dynamic-input">
-                      <label for="area" class="formbold-form-label"> Site D'emplacement </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="site" id="siteInput" required>
-                              <option value="Casablanca">Casablanca</option>
-                              <option value="Oujda">Oujda</option>                              
-                      </select>
-                    </div>
-                    <div class="formbold-mb-3 dynamic-input">
-                        <label for="StockInput" class="formbold-form-label">Stock</label>
-                        <input type="text" class="formbold-form-input" name="stock" id="stockInput" required>
-                    </div>
-                `);
-            }
-            else if (selectedOption === 'site') {
-                dynamicFieldsContainer.append(`
-                    <div class="formbold-mb-3 dynamic-input">
-                        <label for="siteInput" class="formbold-form-label">Site</label>
-                        <input type="text" class="formbold-form-input" name="site" id="siteInput" required>
-                    </div>
-                `);
-            }
-        }
-
-        function handleUserOptionChange(selectedOption) {
-            // Remove existing dynamic input fields, if any
-            dynamicFieldsContainer.find('.dynamic-input').remove();
-
-            // Handle each selected option
-            if (selectedOption === 'service') {
-                dynamicFieldsContainer.append(`
-                <div class="formbold-mb-3 dynamic-input">
-                      <label for="area" class="formbold-form-label"> Site D'emplacement </label>
-                            <select class="formbold-form-input" height="80px" name="site" id="siteInput" required>
-                              <option value="Casablanca">Casablanca</option>
-                              <option value="Oujda">Oujda</option>                              
-                      </select>
-                    </div>
-                    <div class="formbold-mb-3 dynamic-input">
-                        <label for="serviceInput" class="formbold-form-label">Service</label>
-                        <input type="text" class="formbold-form-input" name="service" id="serviceInput" required>
-                    </div>
-                `);
-            }
-            if (selectedOption === 'site') {
-                dynamicFieldsContainer.append(`
-                    <div class="formbold-mb-3 dynamic-input">
-                        <label for="serviceInput" class="formbold-form-label">Site</label>
-                        <input type="text" class="formbold-form-input" name="site" id="siteInput" required>
-                    </div>
-                `);
-            }
-        }
-        
-        selectType.on('change', function () {
-            const selectedType = $(this).val();
-            createDynamicFields(selectedType);
+        // Add event listener for the selected option
+        $('#materielOptions').on('change', function () {
+            const selectedMaterielOption = $(this).val();
+            handleMaterielOptionChange(selectedMaterielOption);
         });
 
-        createDynamicFields(selectType.val());
+        $('#userOptions').on('change', function () {
+            const selectedUserOption = $(this).val();
+            handleUserOptionChange(selectedUserOption);
+        });
+    }
 
-        saveButton.on('click', function () {
-            const selectedType = selectType.val();
-            let data = {};
+    function handleMaterielOptionChange(selectedOption) {
+        // Remove existing dynamic input fields, if any
+        dynamicFieldsContainer.find('.dynamic-input').remove();
 
-            if (selectedType === 'materiel') {
-                data = 'materiel';
-                
-            } else if (selectedType === 'utilisateur') {
-              data = 'user';
+        // Handle each selected option
+        if (selectedOption === 'type') {
+            dynamicFieldsContainer.append(`
+                <div class="formbold-mb-3 dynamic-input">
+                    <label for="typeInput" class="formbold-form-label">Type de Produit</label>
+                    <input type="text" class="formbold-form-input" name="type" id="typeInput" required>
+                </div>
+            `);
+        } else if (selectedOption === 'marque') {
+          $.ajax({
+            url: '{{ route('getTypes') }}',
+            method: 'GET',
+            success: function (response) {
+                // Create a new select element
+                var selectElement = $('<select>', {
+                    'class': 'formbold-form-input',
+                    'name': 'type',
+                    'id': 'typeInput',
+                    'required': 'required'
+                });
 
+                // Add an empty default option
+                selectElement.append($('<option>', {
+                    'value': '',
+                    'text': ''
+                }));
+
+                // Loop through the response and create options
+                $.each(response, function (key, value) {
+                    selectElement.append($('<option>', {
+                        value: value.TypeProduit,
+                        text: value.TypeProduit
+                    }));
+                });
+
+                // Create a div for the select and append it to dynamicFieldsContainer
+                var selectDiv = $('<div>', {
+                    'class': 'formbold-mb-3 dynamic-input'
+                });
+                selectDiv.append($('<label>', {
+                    'for': 'marqueInput',
+                    'class': 'formbold-form-label',
+                    'text': 'Choix de Produit'
+                }));
+                selectDiv.append(selectElement);
+                dynamicFieldsContainer.append(selectDiv);
+                // Create an input field for 'Marque'
+                dynamicFieldsContainer.append($('<div>', {
+                    'class': 'formbold-mb-3 dynamic-input'
+                }).append($('<label>', {
+                    'for': 'marqueInput',
+                    'class': 'formbold-form-label',
+                    'text': 'Marque'
+                })).append($('<input>', {
+                    'type': 'text',
+                    'class': 'formbold-form-input',
+                    'name': 'marque',
+                    'id': 'marqueInput',
+                    'required': 'required'
+                })));
+            },
+            error: function () {
+                // Handle error if necessary
             }
-            console.log(data);
-            // Send data to Laravel backend using AJAX
+          });
+
+        } else if (selectedOption === 'choix') {
+          $.ajax({
+            url: '{{ route('getTypes') }}',
+            method: 'GET',
+            success: function (response) {
+                // Create a new select element
+                var selectElement = $('<select>', {
+                    'class': 'formbold-form-input',
+                    'name': 'type',
+                    'id': 'typeInput',
+                    'required': 'required'
+                });
+
+                // Add an empty default option
+                selectElement.append($('<option>', {
+                    'value': '',
+                    'text': ''
+                }));
+
+                // Loop through the response and create options
+                $.each(response, function (key, value) {
+                    selectElement.append($('<option>', {
+                        value: value.TypeProduit,
+                        text: value.TypeProduit
+                    }));
+                });
+
+                // Create a div for the select and append it to dynamicFieldsContainer
+                var selectDiv = $('<div>', {
+                    'class': 'formbold-mb-3 dynamic-input'
+                });
+                selectDiv.append($('<label>', {
+                    'for': 'marqueInput',
+                    'class': 'formbold-form-label',
+                    'text': 'Choix de Produit'
+                }));
+                selectDiv.append(selectElement);
+                dynamicFieldsContainer.append(selectDiv);
+                // Create an input field for 'Marque'
+                dynamicFieldsContainer.append($('<div>', {
+                    'class': 'formbold-mb-3 dynamic-input'
+                }).append($('<label>', {
+                    'for': 'choixInput',
+                    'class': 'formbold-form-label',
+                    'text': 'Option'
+                })).append($('<input>', {
+                    'type': 'text',
+                    'class': 'formbold-form-input',
+                    'name': 'choix',
+                    'id': 'choixInput',
+                    'required': 'required'
+                })));
+            },
+            error: function () {
+                // Handle error if necessary
+            }
+          });
+        } else if (selectedOption === 'fournisseur') {
+            dynamicFieldsContainer.append(`
+                <div class="formbold-mb-3 dynamic-input">
+                    <label for="fournisseurInput" class="formbold-form-label">fournisseur</label>
+                    <input type="text" class="formbold-form-input" name="fournisseur" id="fournisseurInput" required>
+                </div>
+            `);
+        } else if (selectedOption === 'stock') {
             $.ajax({
-                url: '{{ route('saveRoute') }}', // Replace with your Laravel route
-                method: 'POST',
-                data: {selected : data,
-                    type: $('#typeInput').val(),
-                    marque: $('#marqueInput').val(),
-                    choix: $('#choixInput').val(),
-                    fournisseur: $('#fournisseurInput').val(),
-                    stock: $('#stockInput').val(),
-                    site: $('#siteInput').val(),
-                    service: $('#serviceInput').val(),
-                _token: '{{ csrf_token() }}'
-                },
-                success: function (data) {
-                  $('#responseMessage').html('<p style="color:green;">Valeurs ajoutes avec Succes..!</p>');
-                },
-                error: function (error) {
-                  $('#responseMessage').html('<p style="color:green;">Valeurs Non Ajoutes..!</p>');
-                }
-            });
-        });
+            url: '{{ route('getSites') }}',
+            method: 'GET',
+            success: function (response) {
+                // Create a new select element
+                var selectElement = $('<select>', {
+                    'class': 'formbold-form-input',
+                    'name': 'site',
+                    'id': 'siteInput',
+                    'required': 'required'
+                });
 
-        selectType.on('change', function () {
-            const selectedType = $(this).val();
-            createDynamicFields(selectedType);
-        });
+                // Add an empty default option
+                selectElement.append($('<option>', {
+                    'value': '',
+                    'text': ''
+                }));
 
-        createDynamicFields(selectType.val());
+                // Loop through the response and create options
+                $.each(response, function (key, value) {
+                    selectElement.append($('<option>', {
+                        value: value.Site,
+                        text: value.Site
+                    }));
+                });
+
+                // Create a div for the select and append it to dynamicFieldsContainer
+                var selectDiv = $('<div>', {
+                    'class': 'formbold-mb-3 dynamic-input'
+                });
+                selectDiv.append($('<label>', {
+                    'for': 'marqueInput',
+                    'class': 'formbold-form-label',
+                    'text': 'Site de Materiel'
+                }));
+                selectDiv.append(selectElement);
+                dynamicFieldsContainer.append(selectDiv);
+                // Create an input field for 'Marque'
+                dynamicFieldsContainer.append($('<div>', {
+                    'class': 'formbold-mb-3 dynamic-input'
+                }).append($('<label>', {
+                    'for': 'StockInput',
+                    'class': 'formbold-form-label',
+                    'text': 'Emplacement'
+                })).append($('<input>', {
+                    'type': 'text',
+                    'class': 'formbold-form-input',
+                    'name': 'stock',
+                    'id': 'stockInput',
+                    'required': 'required'
+                })));
+            },
+            error: function () {
+                // Handle error if necessary
+            }
+        });
+        } else if (selectedOption === 'site') {
+            dynamicFieldsContainer.append(`
+                <div class="formbold-mb-3 dynamic-input">
+                    <label for="siteInput" class="formbold-form-label">Site</label>
+                    <input type="text" class="formbold-form-input" name="site" id="siteInput" required>
+                </div>
+            `);
+        }
+    }
+
+    function handleUserOptionChange(selectedOption) {
+        // Remove existing dynamic input fields, if any
+        dynamicFieldsContainer.find('.dynamic-input').remove();
+
+        // Handle each selected option
+        if (selectedOption === 'service') {
+          $.ajax({
+            url: '{{ route('getUserSites') }}',
+            method: 'GET',
+            success: function (response) {
+                // Create a new select element
+                var selectElement = $('<select>', {
+                    'class': 'formbold-form-input',
+                    'name': 'site',
+                    'id': 'siteInput',
+                    'required': 'required'
+                });
+
+                // Add an empty default option
+                selectElement.append($('<option>', {
+                    'value': '',
+                    'text': ''
+                }));
+
+                // Loop through the response and create options
+                $.each(response, function (key, value) {
+                    selectElement.append($('<option>', {
+                        value: value.Site,
+                        text: value.Site
+                    }));
+                });
+
+                // Create a div for the select and append it to dynamicFieldsContainer
+                var selectDiv = $('<div>', {
+                    'class': 'formbold-mb-3 dynamic-input'
+                });
+                selectDiv.append($('<label>', {
+                    'for': 'siteInput',
+                    'class': 'formbold-form-label',
+                    'text': 'Site'
+                }));
+                selectDiv.append(selectElement);
+                dynamicFieldsContainer.append(selectDiv);
+                // Create an input field for 'Marque'
+                dynamicFieldsContainer.append($('<div>', {
+                    'class': 'formbold-mb-3 dynamic-input'
+                }).append($('<label>', {
+                    'for': 'serviceInput',
+                    'class': 'formbold-form-label',
+                    'text': 'Service'
+                })).append($('<input>', {
+                    'type': 'text',
+                    'class': 'formbold-form-input',
+                    'name': 'service',
+                    'id': 'serviceInput',
+                    'required': 'required'
+                })));
+            },
+            error: function () {
+                // Handle error if necessary
+            }
+          });
+        }
+        if (selectedOption === 'site') {
+            dynamicFieldsContainer.append(`
+                <div class="formbold-mb-3 dynamic-input">
+                    <label for="serviceInput" class="formbold-form-label">Site</label>
+                    <input type="text" class="formbold-form-input" name="site" id="siteInput" required>
+                </div>
+            `);
+        }
+    }
+
+    selectType.on('change', function () {
+        const selectedType = $(this).val();
+        createDynamicFields(selectedType);
     });
 
-    
-</script>
+    createDynamicFields(selectType.val());
 
-<script>
-  $(document).ready(function() {
-    var submitButton = $('#submitButton');
-      $('#tag, #mac,#facture').on('keyup', function () {
-          var tagValue = $('#tag').val();
-          var macValue = $('#mac').val();
-          var invoiceValue = $('#facture').val();
+    saveButton.on('click', function () {
+        const selectedType = selectType.val();
+        let data = {};
 
-          $.ajax({
-              url: '/check-duplicate2',
-              method: 'POST',
-              data: {
-                  tag: tagValue,
-                  mac: macValue,
-                  facture: invoiceValue,
-                  _token: '{{ csrf_token() }}'
-              },
-              success: function (response) {
-                if (response.macExists || response.tagExists || response.invoiceExists) {
-                      submitButton.prop('disabled', true);
-                  } else {
-                      submitButton.prop('disabled', false);
-                  }
+        if (selectedType === 'materiel') {
+            data = 'materiel';
+        } else if (selectedType === 'utilisateur') {
+            data = 'user';
+        }
+        console.log(data);
+        // Send data to Laravel backend using AJAX
+        $.ajax({
+            url: '{{ route('saveRoute') }}', // Replace with your Laravel route
+            method: 'POST',
+            data: {
+                selected: data,
+                type: $('#typeInput').val(),
+                marque: $('#marqueInput').val(),
+                choix: $('#choixInput').val(),
+                fournisseur: $('#fournisseurInput').val(),
+                stock: $('#stockInput').val(),
+                site: $('#siteInput').val(),
+                service: $('#serviceInput').val(),
+                _token: '{{ csrf_token() }}'
+            },
+            success: function (data) {
+                $('#responseMessage').html('<p style="color:green;">Valeurs ajoutes avec Succes..!</p>');
+            },
+            error: function (error) {
+                $('#responseMessage').html('<p style="color:red;">Valeurs Non Ajoutes..!</p>');
+            }
+        });
+    });
+});
 
-                  if (response.tagExists) {
-                      $('#TagValidation').text('Tag Existe Deja.');
-                  } else {
-                      $('#TagValidation').text('');
-                  }
-
-                  if (response.macExists) {
-                      $('#MacValidation').text('Adresse Mac Existe Deja.');
-                  } else {
-                      $('#MacValidation').text('');
-                  }
-
-                  if (response.invoiceExists) {
-                      $('#InvoiceValidation').text('Code Facture Existe Deja.');
-                  } else {
-                      $('#InvoiceValidation').text('');
-                  }
-
-              }
-          });
-      });
-  });
 </script>
 
 <script type="text/javascript">

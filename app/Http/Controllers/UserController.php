@@ -80,10 +80,17 @@ class UserController extends Controller
 
     public function updateUser($id){
         if (auth()->check()) {
-
+        
         $user = User::findOrFail($id);
         
-        return view('User/editUser', ['user' => $user]);
+            $sites= DB::table('admins')
+                ->select('Site') // Specify the column you want distinct values from
+                ->whereNotNull('Site')
+                ->where('Qui','user')
+                ->distinct()
+                ->get();
+        
+        return view('User/editUser', ['user' => $user , 'sites'=>$sites] );
     }
         else{
             return redirect('login')->with('message', 'Veuillez vous connecter..!');

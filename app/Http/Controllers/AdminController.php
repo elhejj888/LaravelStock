@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\Models\Admin;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -25,6 +26,42 @@ class AdminController extends Controller
     return response($response);
 }
 
+
+public function getSites()
+{
+    $sites= DB::table('admins')
+                ->select('Site') // Specify the column you want distinct values from
+                ->whereNotNull('Site')
+                ->where('Qui','materiel')
+                ->distinct()
+                ->get();
+
+    return response()->json($sites);
+}
+
+public function getUserSites()
+{
+    $sites= DB::table('admins')
+                ->select('Site') // Specify the column you want distinct values from
+                ->whereNotNull('Site')
+                ->where('Qui','user')
+                ->distinct()
+                ->get();
+
+    return response()->json($sites);
+}
+
+public function getTypes()
+{
+    $types= DB::table('admins')
+                ->select('TypeProduit') // Specify the column you want distinct values from
+                ->whereNotNull('TypeProduit')
+                ->where('Qui','materiel')
+                ->distinct()
+                ->get();
+
+    return response()->json($types);
+}
 
 public function getEmplacements(Request $request)
 {
@@ -68,4 +105,22 @@ public function getServices(Request $request)
 
     return response()->json($services);
 }
+
+public function getSitesAndEmplacements()
+{
+    $marques = Admin::where('Qui', 'materiel')
+        ->whereNotNull('Site') // Filter out NULL values
+        ->distinct()
+        ->pluck('Site', 'Marque')
+        ->toArray();
+
+    $choix = Admin::where('TypeProduit', $type)
+        ->whereNotNull('Choix') // Filter out NULL values
+        ->distinct()
+        ->pluck('choix', 'Choix')
+        ->toArray();    
+
+    return response()->json(['marques'=>$marques,'choix'=>$choix]);
+}
+
 }

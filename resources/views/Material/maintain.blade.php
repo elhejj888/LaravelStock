@@ -80,13 +80,16 @@
                         
                                 <table>
                                     <tr>
-                                        <td><label>Emplacement :</label>
+                                        <td><label>Site :</label>
                                             </td>
                                             <td>
-                                    <select name="emplacement">
-                                        <option value="2eme etage">2eme etage</option>
-                                        <option value="5eme etage">5eme etage</option>
-                                        <option value="7eme etage">7eme etage</option>
+                                    <select name="site" id="site">
+                                        <option value=""></option>
+                                        @foreach ($sites as $site)
+                                        <option value="{{ $site->Site }}">{{ $site->Site }}</option>
+                                        @endforeach
+                                        
+                                        
                                     </select>
                                     </td>
                                 </tr>
@@ -97,9 +100,8 @@
                                 <tr>
                                     <td><label>Site : </label></td>
                                     <td>
-                                    <select name="site">
-                                        <option value="Casablanca">Casablanca</option>
-                                        <option value="Oujda">Oujda</option>
+                                    <select name="emplacement" id="emplacement">
+                                        <option value=""></option>
                                     </select>
                                     </td>
                                     </tr>
@@ -124,6 +126,38 @@
       
     </div>
     <script>
+                    $(document).ready(function() {
+                        const siteSelect = $('#site');
+                        const emplacementSelect = $('#emplacement');
+
+                        // Add an event listener for the site select box change
+                        siteSelect.on('change', function() {
+                            const selectedSite = $(this).val();
+
+                            // Make an AJAX request to fetch emplacement options based on the selected site
+                            $.ajax({
+                                url: '{{ route('getEmplacements') }}',
+                                method: 'GET',
+                                data: {
+                                    site: selectedSite
+                                },
+                                success: function(response) {
+                                    // Clear existing options in the emplacement select box
+                                    emplacementSelect.empty();
+                                    // Populate emplacement select box with fetched options
+                                    $.each(response, function(key, value) {
+                                        emplacementSelect.append($('<option>', {
+                                            value: key,
+                                            text: value
+                                        }));
+                                    });
+                                },
+                                error: function() {
+                                    // Handle error if necessary
+                                }
+                            });
+                        });
+                    });
         const openButtons = document.querySelectorAll('#open-button');
         const closeButtons = document.querySelectorAll('.close-button');
         const dialogs = document.querySelectorAll('.modal');

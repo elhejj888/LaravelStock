@@ -26,15 +26,18 @@
                             <label for="firstname" class="formbold-form-label">
                               Choix de Materiels
                             </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="type" >
-                                    <option value="{{$material->TypeProduit}}" selected>{{$material->TypeProduit}}</option>
+                            <select id="type" class="formbold-form-input" height="80px" name="type" >
+                                    <option value="{{$material->TypeProduit}}" selected style="display: none">{{$material->TypeProduit}}</option>
+                                    @foreach ($types as $type)
+                                    <option value="{{$type->TypeProduit}}">{{$type->TypeProduit}}</option>
+                                    @endforeach
                             </select>
                               
                           </div>
                           <input
                               type="hidden"
                               name="id"
-                              id="marque"
+                              id="idMateriel"
                               class="formbold-form-input"
                               value="{{$material->id}}"
                             />
@@ -52,73 +55,21 @@
                             
                           </div>
                         </div>
-                        @if ($material->TypeProduit == "Casque")
-                          
-                        <div class="formbold-input-flex">
-                          <div>
-                            <label for="firstname" class="formbold-form-label">
-                              Marque
-                            </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
-                                    <option value="plantronics">plantronics</option>
-                            </select>
-                              
-                          </div>
-                          <div>
-                            <label for="lastname" class="formbold-form-label"> Type </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" >
-                              <option value="{{$material->choix}}" style="display: none">{{$material->choix}}</option>
-                               
-                        </select>
-                          </div>
-                        </div>
-                        @elseif ($material->TypeProduit == "Materiel reseau")
-                          
-                        <div class="formbold-input-flex">
-                          <div>
-                            <label for="Marque" class="formbold-form-label">
-                              Marque
-                            </label>
-                            <input
-                            type="text"
-                            name="marque"
-                            id="marque"
-                            class="formbold-form-input"
-                            value="{{$material->Marque}}"
-                          />
-                              
-                          </div>
-                          <div>
-                            <label for="Type" class="formbold-form-label"> Type </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="choix" >
-                              <option value="{{$material->choix}}" style="display: none">{{$material->choix}}</option>
-                              <option value="Switch">Switch</option>
-                                <option value="Routeur">Routeur</option>
-                                <option value="Point d'acces">Point d'acces</option>
-                                <option value="TV">TV</option>
-                            </select>
-                          </div>
-                        </div>
-                        @elseif ($material->TypeProduit == "Telephone")
                         <div class="formbold-mb-3">
                           <label for="address" class="formbold-form-label">
                           Marque
                           </label>
-                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
-                            <option value="{{$material->Marque}}" style="display: none">{{$material->Marque}}</option>
-                        </select>
-                        </div>
-                        @else
-                        <div class="formbold-mb-3">
-                          <label for="address" class="formbold-form-label">
-                          Marque
-                          </label>
-                          <select id="Produit" class="formbold-form-input" height="80px" name="marque" >
+                          <select id="marque" class="formbold-form-input" height="80px" name="marque" >
                             <option value="Dell">Dell</option>
                             
                         </select>
                         </div>
-                        @endif
+                        <div>
+                          <label for="choix" class="formbold-form-label"> Type </label>
+                          <select id="choix" class="formbold-form-input" height="80px" name="choix" >
+                              <option value=""></option>
+                      </select>
+                        </div>
                         <div class="formbold-mb-3">
                           <label for="address" class="formbold-form-label">
                           Adresse Mac
@@ -163,12 +114,9 @@
                             <label for="fournisseur" class="formbold-form-label"> fournisseur </label>
                             <select id="Produit" class="formbold-form-input" height="80px" name="fournisseur" >
                               <option value="{{$material->Fournisseur}}" style="display: none">{{$material->Fournisseur}}</option>
-                              <option value="Wicoutil">Wicoutil</option>
-                              <option value="Pel Mel Tech">Pel Mel Tech</option>
-                              <option value="MIT">MIT</option>
-                              <option value="ADINGSS">ADINGSS</option>
-                              <option value="Free Zone">Free Zone</option>
-                              <option value="COSMOS">COSMOS</option>
+                              @foreach ($fournisseurs as $fournisseur)
+                              <option value="{{$fournisseur->Foutnisseur}}">{{$fournisseur->Foutnisseur}}</option>
+                              @endforeach
                       </select>
                           </div>
                           <div>
@@ -182,23 +130,22 @@
                         </div>
                         <div class="formbold-input-flex">
                           <div>
-                            <label for="post" class="formbold-form-label"> Emplacement </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="emplacement">
-                              <option value="{{ $material->Emplacement }}" style="display:none;">{{ $material->Emplacement }}</option>
-                              <option value="3eme étage">3eme étage</option>
-                              <option value="2eme étage">2eme étage</option>
-                              <option value="1re étage">1re étage</option>
-                              
+                            <label for="area" class="formbold-form-label"> Site D'emplacement </label>
+                            <select id="site" class="formbold-form-input" height="80px" name="site">
+                              <option value="{{ $material->Site }}" style="display: none">{{ $material->Site }}</option>
+                              @foreach ($sites as $site)
+                              <option value="{{ $site->Site }}">{{ $site->Site }}</option>
+                              @endforeach                             
                       </select>
                           </div>
                           <div>
-                            <label for="area" class="formbold-form-label"> Site D'emplacement </label>
-                            <select id="Produit" class="formbold-form-input" height="80px" name="site">
-                              <option value="{{ $material->Site }}" style="display: none">{{ $material->Site }}</option>
-                              <option value="Casablanca">Casablanca</option>
-                              <option value="Oujda">Oujda</option>                              
+                            <label for="post" class="formbold-form-label"> Emplacement </label>
+                            <select id="emplacement" class="formbold-form-input" height="80px" name="emplacement">
+                              <option value="{{ $material->Emplacement }}" style="display:none;">{{ $material->Emplacement }}</option>
+                              
                       </select>
                           </div>
+                          
                       </div>
                   
                         <div class="formbold-checkbox-wrapper">
@@ -218,6 +165,85 @@
                       </form>
                     </div>
                   </div>
+                  <script>
+                    $(document).ready(function() {
+                        const siteSelect = $('#site');
+                        const typeSelect = $('#type');
+                        const marqueSelect = $('#marque');
+                        const choixSelect = $('#choix');
+                        const emplacementSelect = $('#emplacement');
+
+                        // Add an event listener for the site select box change
+                        siteSelect.on('change', function() {
+                            const selectedSite = $(this).val();
+
+                            // Make an AJAX request to fetch emplacement options based on the selected site
+                            $.ajax({
+                                url: '{{ route('getEmplacements') }}',
+                                method: 'GET',
+                                data: {
+                                    site: selectedSite
+                                },
+                                success: function(response) {
+                                    // Clear existing options in the emplacement select box
+                                    emplacementSelect.empty();
+
+                                    // Populate emplacement select box with fetched options
+                                    $.each(response, function(key, value) {
+                                        emplacementSelect.append($('<option>', {
+                                            value: key,
+                                            text: value
+                                        }));
+                                    });
+                                },
+                                error: function() {
+                                    // Handle error if necessary
+                                }
+                            });
+                        });
+                        typeSelect.on('change', function() {
+                            const selectedtype = $(this).val();
+
+                            // Make an AJAX request to fetch emplacement options based on the selected site
+                            $.ajax({
+                                url: '{{ route('getMarque') }}',
+                                method: 'GET',
+                                data: {
+                                    type: selectedtype
+                                },
+                                success: function(response) {
+                                    // Clear existing options in the emplacement select box
+                                    marqueSelect.empty();
+                                    choixSelect.empty();
+                                    let resp = response.marques;
+                                    let resp2 = response.choix;
+                                    console.log(resp);
+                                    console.log(resp2);
+                                    var marques = resp.marques;
+                                    var choix = resp.choix;
+                                    // Populate emplacement select box with fetched options
+                                    $.each(resp, function(key, value) {
+                                      if(key)
+                                      marqueSelect.append($('<option>', {
+                                            value: key,
+                                            text: value
+                                        }));
+                                    });
+                                    $.each(resp2, function(key, value) {
+                                      choixSelect.append($('<option>', {
+                                            value: key,
+                                            text: value
+                                        }));
+                                    });
+                                    
+                                },
+                                error: function() {
+                                    // Handle error if necessary
+                                }
+                            });
+                        });
+                    });
+                </script>
                   <style>
                     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
                     * {

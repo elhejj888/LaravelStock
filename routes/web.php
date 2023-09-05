@@ -40,6 +40,9 @@ Route::post('/connection', [AuthController::class, 'authenticate'])->name('authe
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');//to Logout
 
 
+Route::get('/getUserSites', [AdminController::class, 'getUserSites'])->name('getUserSites');Route::get('/getSites', [AdminController::class, 'getSites'])->name('getSites');
+Route::get('/getSites', [AdminController::class, 'getSites'])->name('getSites');Route::get('/getSites', [AdminController::class, 'getSites'])->name('getSites');
+Route::get('/getTypes', [AdminController::class, 'getTypes'])->name('getTypes');
 Route::get('/getServices', [AdminController::class, 'getServices'])->name('getServices');
 Route::get('/getMarque', [AdminController::class, 'getMarque'])->name('getMarque');
 Route::get('/getEmplacements', [AdminController::class, 'getEmplacements'])->name('getEmplacements');

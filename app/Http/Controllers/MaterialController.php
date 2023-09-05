@@ -35,10 +35,14 @@ class MaterialController extends Controller
     {
         if (auth()->check()) {
             $materials = material::orderBy('TypeProduit')->orderBy('etat')->simplePaginate(8);
-
-
+            $sites= DB::table('admins')
+                ->select('Site') // Specify the column you want distinct values from
+                ->whereNotNull('Site')
+                ->where('Qui','materiel')
+                ->distinct()
+                ->get();
             // $distinctValues will contain an array of distinct values from the specified column        
-            return view('Material/materials', ['materials' => $materials, 'message' => '']);
+            return view('Material/materials', ['materials' => $materials, 'message' => '' , 'sites'=>$sites]);
         } else {
             return redirect('login')->with('error', 'Authentication failed.');
         }
@@ -94,7 +98,24 @@ class MaterialController extends Controller
     {
         if (auth()->check()) {
             $material = material::findOrFail($id);
-            return view('Material/editMaterial', ['material' => $material]);
+            $types= DB::table('admins')
+                ->select('TypeProduit') // Specify the column you want distinct values from
+                ->whereNotNull('TypeProduit')
+                ->where('Qui','materiel')
+                ->distinct()
+                ->get();
+            $sites= DB::table('admins')
+                ->select('Site') // Specify the column you want distinct values from
+                ->whereNotNull('Site')
+                ->where('Qui','materiel')
+                ->distinct()
+                ->get();
+                $fournisseur = DB::table('admins')
+                ->select('Foutnisseur') // Specify the column you want distinct values from
+                ->whereNotNull('Foutnisseur')
+                ->distinct()
+                ->get();
+            return view('Material/editMaterial', ['material' => $material , 'types'=>$types , 'sites'=>$sites , 'fournisseurs' =>$fournisseur]);
         } else {
             return redirect('login')->with('error', 'Authentication failed.');
         }
@@ -189,7 +210,14 @@ class MaterialController extends Controller
     {
         if (auth()->check()) {
             $materials = material::where('etat', 'maintenance')->simplePaginate(20);
-            return view('Material/maintain', ['materials' => $materials]);
+            $sites= DB::table('admins')
+                ->select('Site') // Specify the column you want distinct values from
+                ->whereNotNull('Site')
+                ->where('Qui','materiel')
+                ->distinct()
+                ->get();
+
+            return view('Material/maintain', ['materials' => $materials , 'sites'=>$sites]);
         } else {
             return redirect('login')->with('error', 'Authentication failed.');
         }

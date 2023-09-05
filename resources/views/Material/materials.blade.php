@@ -185,26 +185,24 @@
 
     <script>
         document.querySelectorAll('#open-button').forEach(button => {
-            const modalId = button.getAttribute('data-modal');
-            const modal = document.getElementById(modalId);
+        const modalId = button.getAttribute('data-modal');
+        const modal = document.getElementById(modalId);
 
-            button.addEventListener('click', () => {
-                modal.showModal();
-            });
+        button.addEventListener('click', () => {
+            modal.showModal();
+        });
 
-            modal.querySelector('.close-button').addEventListener('click', () => {
-                modal.close();
-            });
+        modal.querySelector('.close-button').addEventListener('click', () => {
+            modal.close();
+        });
 
-            // Handle change in select
-            const etatSelect = modal.querySelector('.etat-select');
-            const additionalContent = modal.querySelector('.additional-content');
+        // Handle change in select
+        const etatSelect = modal.querySelector('.etat-select');
+        const additionalContent = modal.querySelector('.additional-content');
 
-            etatSelect.addEventListener('change', () => {
-                const selectedValue = etatSelect.value;
-                console.log(etatSelect.value)
-                const materialId = etatSelect.getAttribute('data-material-id');
-                console.log(materialId)
+        etatSelect.addEventListener('change', () => {
+            const selectedValue = etatSelect.value;
+            const materialId = etatSelect.getAttribute('data-material-id');
                 // Update additional content based on selected value
                 if (selectedValue === 'maintenance') {
                     additionalContent.innerHTML = `
@@ -224,48 +222,127 @@
                     <button id="submit" onclick="window.location='{{ route('affectMaterial', ['id' => ':materialId']) }}'" >Affecter</button>
                     `.replace(':materialId', materialId);
                 } else if (selectedValue === 'Disponible') {
-                    additionalContent.innerHTML = `
-                    <form action="/matt" method="POST">
-                        @csrf
-                        
-                    <input type="text" value="Disponible" name="etat" style="display:none;">
-                    <input type="text" value=` + materialId + ` name="id" style="display:none;">
-                    <div class="inputs">
-                    <table>
-                        <tr>
-                            <td><label>Emplacement :</label>
-                                </td>
-                                <td>
-                        <select name="emplacement">
-                            <option value="2eme etage">2eme etage</option>
-                            <option value="5eme etage">5eme etage</option>
-                            <option value="7eme etage">7eme etage</option>
-                        </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp</td>
-                        <td>&nbsp</td>
-                        </tr>
-                    <tr>
-                        <td><label>Site : </label></td>
-                        <td>
-                        <select name="site">
-                            <option value="Casablanca">Casablanca</option>
-                            <option value="Oujda">Oujda</option>
-                        </select>
-                        </td>
-                        </tr>
-                    </table>
-                    </div>
-                        <button id="submit" type="submit">Submit</button>
-                    `;
-                } else {
-                    additionalContent.innerHTML = ''; // Clear additional content
-                }
+                    $.ajax({
+                        url: '{{ route('getSites') }}',
+                        method: 'GET',
+                        success: function (response) {
+                            const csrfToken = '{{ csrf_token() }}'; // Get the CSRF token from Blade
+                            const form = document.createElement('form');
+                            form.action = '/matt';
+                            form.method = 'POST';
 
-            });
+                            const csrfInput = document.createElement('input');
+                            csrfInput.type = 'hidden';
+                            csrfInput.name = '_token';
+                            csrfInput.value = csrfToken;
+
+                            form.appendChild(csrfInput);
+                            
+
+                            const table = document.createElement('table');
+                            
+                            const trSite = document.createElement('tr');
+                            const tdSiteLabel = document.createElement('td');
+                            tdSiteLabel.innerHTML = '<label for="site">Site:</label>';
+                            const tdSiteSelect = document.createElement('td');
+                            const selectSite = document.createElement('select');
+                            selectSite.name = 'site';
+                            selectSite.id = 'siteInput';
+                            selectSite.innerHTML = '<option value="">Select a Site</option>';
+
+                            // Loop through the response and create options for 'Site'
+                            response.forEach(function (value) {
+                                const option = document.createElement('option');
+                                option.value = value.Site;
+                                option.text = value.Site;
+                                selectSite.appendChild(option);
+                            });
+
+                            tdSiteSelect.appendChild(selectSite);
+                            trSite.appendChild(tdSiteLabel);
+                            trSite.appendChild(tdSiteSelect);
+                            table.appendChild(trSite);
+
+                            const trEmplacement = document.createElement('tr');
+                            const tdEmplacementLabel = document.createElement('td');
+                            tdEmplacementLabel.innerHTML = '<label for="emplacement">Emplacement:</label>';
+                            const tdEmplacementSelect = document.createElement('td');
+                            const selectEmplacement = document.createElement('select');
+                            selectEmplacement.name = 'emplacement';
+                            selectEmplacement.id = 'emplacementInput';
+                            selectEmplacement.innerHTML = '<option value="">Select an Emplacement</option>';
+                            
+                            tdEmplacementSelect.appendChild(selectEmplacement);
+                            trEmplacement.appendChild(tdEmplacementLabel);
+                            trEmplacement.appendChild(tdEmplacementSelect);
+                            table.appendChild(trEmplacement);
+
+                            const etatInput = document.createElement('input');
+                            etatInput.type = 'text';
+                            etatInput.name = 'etat';
+                            etatInput.value = 'Disponible';
+                            etatInput.style.display = 'none';
+
+                            const idInput = document.createElement('input');
+                            idInput.type = 'text';
+                            idInput.name = 'id';
+                            idInput.value = materialId;
+                            idInput.style.display = 'none';
+
+                            const submitButton = document.createElement('button');
+                            submitButton.type = 'submit';
+                            submitButton.id = 'submit';
+                            submitButton.textContent = 'Submit';
+
+                            form.appendChild(etatInput);
+                            form.appendChild(idInput);
+                            form.appendChild(table);
+                            form.appendChild(submitButton);
+
+                            // Event handler for when the 'Site' select changes
+                            selectSite.addEventListener('change', () => {
+                                const selectedSite = selectSite.value;
+
+                                if (selectedSite) {
+                                    // Make an AJAX request to fetch warehouses based on the selected site
+                                    $.ajax({
+                                        url: '{{ route('getEmplacements') }}',
+                                        method: 'GET',
+                                        data: {
+                                            site: selectedSite
+                                        },
+                                        success: function (emplacementResponse) {
+                                            selectEmplacement.innerHTML = '<option value="">Select an Emplacement</option>';
+                                            $.each(emplacementResponse, function (key, value) {
+                                                const option = document.createElement('option');
+                                                option.value = key;
+                                                option.text = value;
+                                                selectEmplacement.appendChild(option);
+                                            });
+                                        },
+                                        error: function () {
+                                            // Handle error if necessary
+                                        }
+                                    });
+                                } else {
+                                    // Clear the 'Emplacement' select if 'Site' is not selected
+                                    selectEmplacement.innerHTML = '<option value="">Select an Emplacement</option>';
+                                }
+                            });
+
+                            // Replace the dynamicFieldsContainer content with the form
+                            additionalContent.innerHTML = '';
+                            additionalContent.appendChild(form);
+                        },
+                        error: function () {
+                            // Handle error if necessary
+                        }
+                    });
+            } else {
+                additionalContent.innerHTML = ''; // Clear additional content
+            }
         });
+    });
     </script>
     <script>
         document.querySelectorAll('.open-button').forEach(button => {

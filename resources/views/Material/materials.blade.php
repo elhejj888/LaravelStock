@@ -182,24 +182,46 @@
             {{ $materials->links() }}
         </div>
     </section>
-
-    <script>
+    <script type="text/javascript">
+        $('#search').on('keyup', function() {
+            $value = $(this).val();
+            if ($value) {
+                $('.mainData').hide();
+                $('.searchData').show();
+            } else {
+                $('.mainData').show();
+                $('.searchData').hide();
+            }
+            $.ajax({
+                type: 'get',
+                url: '{{ URL::to('searchMaterial') }}',
+                data: {
+                    'search': $value
+                },
+                success: function(data) {
+                    console.log(data);
+                    $('#Content').html(data);
+                }
+            });
+        })
+        document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('#open-button').forEach(button => {
         const modalId = button.getAttribute('data-modal');
         const modal = document.getElementById(modalId);
-
+    
         button.addEventListener('click', () => {
+            console.log("clicked");
             modal.showModal();
         });
-
+    
         modal.querySelector('.close-button').addEventListener('click', () => {
             modal.close();
         });
-
+    
         // Handle change in select
         const etatSelect = modal.querySelector('.etat-select');
         const additionalContent = modal.querySelector('.additional-content');
-
+    
         etatSelect.addEventListener('change', () => {
             const selectedValue = etatSelect.value;
             const materialId = etatSelect.getAttribute('data-material-id');
@@ -230,15 +252,15 @@
                             const form = document.createElement('form');
                             form.action = '/matt';
                             form.method = 'POST';
-
+    
                             const csrfInput = document.createElement('input');
                             csrfInput.type = 'hidden';
                             csrfInput.name = '_token';
                             csrfInput.value = csrfToken;
-
+    
                             form.appendChild(csrfInput);
                             
-
+    
                             const table = document.createElement('table');
                             
                             const trSite = document.createElement('tr');
@@ -249,7 +271,7 @@
                             selectSite.name = 'site';
                             selectSite.id = 'siteInput';
                             selectSite.innerHTML = '<option value="">Select a Site</option>';
-
+    
                             // Loop through the response and create options for 'Site'
                             response.forEach(function (value) {
                                 const option = document.createElement('option');
@@ -257,12 +279,12 @@
                                 option.text = value.Site;
                                 selectSite.appendChild(option);
                             });
-
+    
                             tdSiteSelect.appendChild(selectSite);
                             trSite.appendChild(tdSiteLabel);
                             trSite.appendChild(tdSiteSelect);
                             table.appendChild(trSite);
-
+    
                             const trEmplacement = document.createElement('tr');
                             const tdEmplacementLabel = document.createElement('td');
                             tdEmplacementLabel.innerHTML = '<label for="emplacement">Emplacement:</label>';
@@ -276,33 +298,33 @@
                             trEmplacement.appendChild(tdEmplacementLabel);
                             trEmplacement.appendChild(tdEmplacementSelect);
                             table.appendChild(trEmplacement);
-
+    
                             const etatInput = document.createElement('input');
                             etatInput.type = 'text';
                             etatInput.name = 'etat';
                             etatInput.value = 'Disponible';
                             etatInput.style.display = 'none';
-
+    
                             const idInput = document.createElement('input');
                             idInput.type = 'text';
                             idInput.name = 'id';
                             idInput.value = materialId;
                             idInput.style.display = 'none';
-
+    
                             const submitButton = document.createElement('button');
                             submitButton.type = 'submit';
                             submitButton.id = 'submit';
                             submitButton.textContent = 'Submit';
-
+    
                             form.appendChild(etatInput);
                             form.appendChild(idInput);
                             form.appendChild(table);
                             form.appendChild(submitButton);
-
+    
                             // Event handler for when the 'Site' select changes
                             selectSite.addEventListener('change', () => {
                                 const selectedSite = selectSite.value;
-
+    
                                 if (selectedSite) {
                                     // Make an AJAX request to fetch warehouses based on the selected site
                                     $.ajax({
@@ -329,7 +351,7 @@
                                     selectEmplacement.innerHTML = '<option value="">Select an Emplacement</option>';
                                 }
                             });
-
+    
                             // Replace the dynamicFieldsContainer content with the form
                             additionalContent.innerHTML = '';
                             additionalContent.appendChild(form);
@@ -343,45 +365,38 @@
             }
         });
     });
+    });
+
+    
     </script>
-    <script>
-        document.querySelectorAll('.open-button').forEach(button => {
-            const modalId = button.getAttribute('data-modal');
-            const modal = document.getElementById(modalId);
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Attach the click event listener to a common parent element (e.g., the document)
+        document.addEventListener('click', function(event) {
+            const target = event.target;
 
-            button.addEventListener('click', () => {
-                modal.showModal();
-            });
+            // Check if the clicked element has both "operation" and "open-button" classes
+            if (target.classList.contains('operation') && target.classList.contains('hh')) {
+                // Find the closest modal dialog element
+                const modal = target.closest('dialog');
 
-            modal.querySelector('.close-button').addEventListener('click', () => {
-                modal.close();
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-        $('#search').on('keyup', function() {
-            $value = $(this).val();
-            if ($value) {
-                $('.mainData').hide();
-                $('.searchData').show();
-            } else {
-                $('.mainData').show();
-                $('.searchData').hide();
-            }
-            $.ajax({
-                type: 'get',
-                url: '{{ URL::to('searchMaterial') }}',
-                data: {
-                    'search': $value
-                },
-                success: function(data) {
-                    console.log(data);
-                    $('#Content').html(data);
+                if (modal) {
+                    modal.showModal(); // Open the dialog
                 }
-            });
-        })
-    </script>
+            }
+
+            // Check if the clicked element is the "Close" button within the modal
+            if (target.classList.contains('close-button')) {
+                const modal = target.closest('dialog');
+                if (modal) {
+                    modal.close(); // Close the dialog
+                }
+            }
+
+            // Add similar checks for other buttons if needed
+        });
+    });
+</script>
     <style>
         .add-mat{
             background-color: #019455;
@@ -543,4 +558,7 @@
             background-color: #037d48;
         }
     </style>
+
 @endsection
+
+

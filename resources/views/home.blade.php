@@ -1,5 +1,4 @@
 
-    <!-- Coding by CodingLab | www.codinglabweb.com -->
     <!DOCTYPE html>
     <html lang="en">
     <head>

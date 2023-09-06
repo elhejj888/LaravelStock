@@ -53,18 +53,18 @@ Route::get('/ManageDrops', function () {
 
 
 
-Route::get('users', [UserController::class, 'RetrieveUsers']);//Displaying All the users in the database except the deleted ones
-Route::post('/users', [UserController::class, 'updateValues']);//Same but after updating a value
-Route::get('deletedusers', [UserController::class, 'deletedvalues']);//After Deleting
-Route::get('DeleteUser/{id}', [UserController::class, 'DeleteUser2'])->name('DeleteUser');//After Deleting
-Route::get('user/{id}', [UserController::class, 'show'])->name('showUser');//Showing a user details
-Route::get('updateuser/{id}', [UserController::class, 'updateUser'])->name('updateUser');//updating a specefic user
-Route::get('deleteUser/{id}', [UserController::class, 'deleteUser'])->name('deleteUser');//deleting a user 
-Route::get('/searchUser', [UserController::class, 'searchUser'])->name('searchUser');//Search a user
-Route::get('/searchDeletedUser', [UserController::class, 'searchDeletedUser'])->name('searchDeletedUser');//search in the deleted materials
-Route::post('/adduser', [UserController::class, 'addUser']);//Add a New User
+Route::get('users', [UserController::class, 'retrieveAndPaginateUsers']);//Displaying All the users in the database except the deleted ones
+Route::post('/users', [UserController::class, 'setUpdatedUserValues']);//Same but after updating a value
+Route::get('deletedusers', [UserController::class, 'showDeletedUsers']);//After Deleting
+Route::get('DeleteUser/{id}', [UserController::class, 'permanentlyDeleteUser'])->name('DeleteUser');//After Deleting
+Route::get('user/{id}', [UserController::class, 'showUserDetails'])->name('showUser');//Showing a user details
+Route::get('updateuser/{id}', [UserController::class, 'updatedUserInfo'])->name('updateUser');//updating a specefic user
+Route::get('deleteUser/{id}', [UserController::class, 'markUserAsDeparted'])->name('deleteUser');//deleting a user 
+Route::get('/searchUser', [UserController::class, 'searchUsers'])->name('searchUser');//Search a user
+Route::get('/searchDeletedUser', [UserController::class, 'searchDeletedUsers'])->name('searchDeletedUser');//search in the deleted materials
+Route::post('/adduser', [UserController::class, 'saveUser']);//Add a New User
 Route::post('/check-duplicate', [UserController::class, 'checkDuplicate']);
-Route::get('/adduser', [UserController::class ,'recupererValeurs']);
+Route::get('/adduser', [UserController::class ,'fetchUserFormValues']);
 
 
 Route::post('/check-duplicate2', [MaterialController::class, 'checkDuplicate']);
@@ -88,7 +88,7 @@ Route::get('maintainMaterials', [MaterialController::class, 'maintainvalues']);/
 Route::get('affectmaterial/{id}', function ($id) {
     return view('Material/affecting', ['id' => $id]);
 })->name('affectMaterial');//the page to assign material
-Route::get('/addmaterial', [MaterialController::class , 'recupererValeurs']);//the page to add material
+Route::get('/addmaterial', [MaterialController::class , 'fetchMaterialFormValues']);//the page to add material
 
 
 

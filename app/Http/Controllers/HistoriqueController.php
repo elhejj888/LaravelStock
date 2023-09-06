@@ -9,6 +9,7 @@ class HistoriqueController extends Controller
 {
     
     public function findMaterial(Request $request){
+        if (auth()->check()) {
         $historisations = Historisation::where('user_id','Like','%'.$request->search.'%')->
                 orWhere('operation','Like','%'.$request->search.'%')->
                 orWhere('changes','Like','%'.$request->search.'%')->get();
@@ -26,8 +27,13 @@ class HistoriqueController extends Controller
                     
         }
         return response($output);
+    } else {
+        return redirect('login')->with('message', 'Authentication failed.');
+    }
+
     }
     public function retrieveUserHistorisation(){
+        if (auth()->check()) {
         $historisations = Historisation::where('changes', 'NOT LIKE', '%password%')
     
     ->leftJoin('materials', function ($join) {
@@ -42,9 +48,14 @@ class HistoriqueController extends Controller
     ->orderByDesc('historisations.created_at')
     ->simplePaginate(15);
 
-        return view('Historisation/historique', ['historisations'=>$historisations , 'message'=>''] );
-    }
+    
+    return view('Historisation/historique', ['historisations'=>$historisations , 'message'=>''] );
+    }else {
+        return redirect('login')->with('message', 'Authentication failed.');
+    }    
+}
     public function find(Request $request){
+        if (auth()->check()) {
         $historisations = Historisation::where('user_id','Like','%'.$request->search.'%')->
                 orWhere('operation','Like','%'.$request->search.'%')->
                 orWhere('FullName','Like','%'.$request->search.'%')->
@@ -63,5 +74,9 @@ class HistoriqueController extends Controller
                     
         }
         return response($output);
+    }else {
+        return redirect('login')->with('message', 'Authentication failed.');
+    }
+
     }
 }

@@ -15,19 +15,36 @@ use Illuminate\Support\Facades\Auth;
 
 class MaterialController extends Controller
 {
-    public function recupererValeurs()
+
+    /**
+     * Récupère les valeurs nécessaires pour le formulaire d'ajout de matériel.
+     *
+     * Cette fonction récupère les types de produits, les sites disponibles et d'autres valeurs spécifiques
+     * depuis la base de données pour les utiliser dans le formulaire d'ajout de matériel.
+     *
+     * @return \Illuminate\View\View La vue du formulaire d'ajout de matériel avec les données nécessaires.
+     */
+
+    public function fetchMaterialFormValues()
     {
+        // Récupérer les types de produits disponibles depuis la table 'admins'.
         $TypeProduit = DB::table('admins')
-            ->select('TypeProduit') // Specify the column you want distinct values from
+            ->select('TypeProduit') // Spécifiez la colonne dont vous voulez des valeurs distinctes
             ->whereNotNull('TypeProduit')
             ->distinct()
             ->get();
+
+    // Récupérer les sites disponibles pour les utilisateurs depuis la table 'admins'.
         $sites = DB::table('admins')
-            ->select('Site') // Specify the column you want distinct values from
+            ->select('Site') // Spécifiez la colonne dont vous voulez des valeurs distinctes
             ->whereNotNull('Site')
             ->distinct()
             ->get();
-        $values = Admin::where('Qui', 'materiel')->get();
+
+    // Récupérer d'autres valeurs nécessaires depuis la table 'admins' (par exemple, pour les matériels).
+            $values = Admin::where('Qui', 'materiel')->get();
+
+    // Retourner la vue du formulaire d'ajout de matériel avec les données récupérées.
         return view('Material/addMaterial', ['TypeProduits' => $TypeProduit, 'sites' => $sites, 'values' => $values]);
     }
 
@@ -352,7 +369,55 @@ class MaterialController extends Controller
                             </svg>
                         Affecter
                         </button>
-                        </td>';
+                        <dialog class="modal" id="modal-' . $material->id . '">
+                    <h1>Etat de Stock </h1>
+                    <table>
+                        <td>
+                            <label for="etat">Etat : </label>
+                        </td>
+                        <td>
+                            <select class="etat-select" data-material-id="' . $material->id . '"
+                                name="etat2" id="">
+                                <option value="' . $material->etat . '" style="display: none;">
+                                    ' . $material->etat . '</option>';
+                                if ($material->etat == 'Assigne'){
+                                    $output.= '<option value="Disponible">Disponible</option>
+                                        <option value="maintenance">Maintenance</option>';
+                                    }
+                                elseif ($material->etat == 'maintenance'){
+                                    $output.= '<option value="Disponible">Disponible</option>
+                                        <option value="Assigne">Assigne</option>';
+                                    }
+                                else{
+                                    $output.= '<option value="Disponible">Disponible</option>
+                                        <option value="maintenance">Maintenance</option>
+                                        <option value="Assigne">Assigne</option>';
+                                    }
+                            $output .= '</select>
+                        </td>
+                    </table>
+                    <div>
+                        <div class="additional-content" data-material-id="' . $material->id . '">
+                        </div>
+                        <button class="button close-button" id="Operation">
+                            Close
+                        </button>
+                    </div>
+                </dialog>
+                        </td>
+                        <td class="op">
+                <button id="open-button" class="operation" data-modal="modal-'. $material->id .'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
+                                            fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+                                            <path
+                                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
+                                        </svg>
+
+                    Gerer
+                </button>
+            </td>';
                 if (Auth::user()->Role === 'Admin') {
                     $output .= '<td class="op">
                     <button class="operation"

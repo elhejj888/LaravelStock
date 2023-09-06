@@ -5,6 +5,7 @@ namespace App\Observers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Historisation;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 
 class UserObserver
 {
@@ -49,13 +50,17 @@ class UserObserver
         public function updated(User $user): void
         {
             $changes = [];
-            $allowedAttributes = ['Nom', 'Prenom', 'Role', 'Service', 'Site', 'email'];
+            $allowedAttributes = ['Nom', 'Prenom', 'Role', 'Service', 'Site', 'email','password'];
             $user2 = auth()->user();
         
             foreach ($allowedAttributes as $attribute) {
-                if ($user->isDirty($attribute)) {
+                if($attribute == 'password')
+                    $changes['Connexion'] = "Tentative de Connexion";
+                else if ($user->isDirty($attribute)) {
                     $changes[$attribute] = $user->getOriginal($attribute);
+                    
                 }
+                
             }
             if (!auth()->check()) {
                 $historisation = new Historisation([

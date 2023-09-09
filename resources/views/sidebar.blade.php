@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('../img/logo1.png')}}" />
     <!----======== CSS ======== -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/dataTables.searchBuilder.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.5.0/css/searchBuilder.dataTables.min.css">
     <link rel="stylesheet" href="{{asset('../css/style.css')}}">
     
     <!----===== Boxicons CSS ===== -->
@@ -152,10 +158,10 @@
         </div>
 
     </nav>
-    @yield('content')
 
     <script src="{{asset('../js/script.js')}}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @yield('content')
 <script>
   // When hovering over .box, also apply the hover effect to .box and .lab in the same table cell
   $(".box").hover(function () {

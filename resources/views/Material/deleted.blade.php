@@ -16,13 +16,16 @@
         </div>
         <div class="search">
             <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
+                @if (session('message'))
                     {{ session('message') }}
-  
+                @else
+                    {{ $message }}
+                @endif
+
             </p>
-            <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Materiels"
-                style="width:100%;padding : 5px; margin-bottom:10px;">
         </div>
-        <table class="table-auto" border="1px solid black" >
+    <div class="container" id="container">
+        <table id="example" class="display" >
             <thead>
               <tr>
                 <th>Type</th>
@@ -40,9 +43,9 @@
                 
               </tr>
             </thead>
-            <tbody id="Content" class="searchData"></tbody>
             <tbody class="mainData">
               @foreach ($materials as $material)
+                  @if ($material->etat == 'rupture')
               <tr>
                 
                 <td>{{$material->TypeProduit}}</td>
@@ -107,11 +110,11 @@
               </td>
               @endif
               </tr>
+              @endif
               @endforeach
             </tbody>
           </table>
-      
-    </div>
+</div>
     <script>
         const openButtons = document.querySelectorAll('#open-button');
         const closeButtons = document.querySelectorAll('.close-button');

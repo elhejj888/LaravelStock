@@ -102,7 +102,7 @@ class UserController extends Controller
         ]);
 
         // Rediriger vers la liste des utilisateurs avec un message de succès.
-        return redirect('/users')->with('message', "L'utilisateur a bien etait ajouté");
+        return redirect('/usersDataTable')->with('message', "L'utilisateur a bien etait ajouté");
     }
     else{
         // Rediriger l'utilisateur vers la page de connexion avec un message d'erreur.
@@ -199,7 +199,7 @@ class UserController extends Controller
         $user->save();
 
         // Rediriger vers la liste des utilisateurs avec un message de confirmation.
-        return redirect('/users')->with('message', "Utilisateur Modifié avec succes");
+        return redirect('/usersDataTable')->with('message', "Utilisateur Modifié avec succes");
         }
         else{
             return redirect('login')->with('message', 'Veuillez vous connecter..!');
@@ -233,7 +233,7 @@ class UserController extends Controller
                 $user->Role = "Départ";
                 $user->save();
         // Rediriger vers la liste des utilisateurs avec un message de confirmation.
-                return redirect('/users')->with('message','Succes , Departure bien executée');
+                return redirect('/usersDataTable')->with('message','Succes , Departure bien executée');
             }
             }
             else{
@@ -289,10 +289,10 @@ class UserController extends Controller
         {
             if (auth()->check()) {
                 // Récupérer les utilisateurs ayant le rôle "Départ" et les paginer.
-                $users = User::where('Role', 'Départ')->orderBy('Site')->orderBy('Service')->simplePaginate(20);
+                $users = User::where('Role', 'Départ')->get();
 
                 // Afficher la vue des utilisateurs supprimés.
-                return view('User/deleted', ['users' => $users]);
+                return view('User/deleted', ['users' => $users , 'message'=>'']);
             
             } else {
                 
@@ -451,5 +451,11 @@ class UserController extends Controller
             return view('User/addUser',['sites'=>$sites , 'values'=>$values]);
     
         }
+
+    public function index()
+    {
+    $users = User::all();
+    return view('User.userDataTable', ['users'=>$users , 'message' => '']);
+    }
 
 }

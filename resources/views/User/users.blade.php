@@ -25,25 +25,24 @@
             @endif
 
         </p>
-          <input type="search" name="search" id="search" class="form-control" placeholder="rechercher Utilisateur" style="width:100%;padding : 5px; margin-bottom:10px;">
         </div>
-        <table class="table-auto" border="1px solid black ; " >
+        <div class="container" id="container">
+        <table id="example" class="display" >
             <thead>
               <tr>
-                <th class="thh">Nom</th>
-                <th class="thh">Prenom</th>
-                <th class="thh">Email</th>
-                <th class="thh">Service</th>
-                <th class="thh">Role</th>
-                <th class="thh">Site</th>
-                <th class="thh">Detailles</th>
-                <th class="thh">Modifier</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>Service</th>
+                <th>Role</th>
+                <th>Site</th>
+                <th>Detailles</th>
+                <th>Modifier</th>
                 @if(Auth::user()->Role === 'Admin')
-                <th class="thh">Supprimer</th>
+                <th>Supprimer</th>
                 @endif
               </tr>
             </thead>
-            <tbody id="Content" class="searchData"></tbody>
             <tbody class="mainData">
               @foreach ($users as $user)
               @if ($user->Role != 'Départ')
@@ -92,34 +91,12 @@
             </tbody>
             
           </table>
-      
-    </div>
-    <div class="pagination-links">
-      {{ $users->links() }}
-  </div>
+</div>
 </section>
-<script type="text/javascript">
-$('#search').on('keyup',function(){
-  $value = $(this).val();
-  if($value){
-    $('.mainData').hide();
-    $('.searchData').show();
-  }
-  else{
-    $('.mainData').show();
-    $('.searchData').hide();
-  }
-  $.ajax({
-    type:'get',
-    url:'{{URL::to('searchUser')}}',
-    data:{'search':$value},
-    success:function(data){
-      console.log(data);
-      $('#Content').html(data);
-    }
-  });
-}
-)
+<script>
+  $(document).ready(function() {
+  $('#example').DataTable();
+});
 </script>
 <style>
 

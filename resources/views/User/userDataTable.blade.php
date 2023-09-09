@@ -1,9 +1,12 @@
-<script src="{{asset('../js/script.js')}}"></script>
+<!-- Coding by CodingLab | www.codinglabweb.com -->
+!----======== CSS ======== -->
+    <script src="{{asset('../js/script.js')}}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/dataTables.searchBuilder.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.5.0/css/searchBuilder.dataTables.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="{{asset('../css/style.css')}}">
     
     <!----===== Boxicons CSS ===== -->
@@ -152,6 +155,17 @@
 <body>
     <div class="home">
         <div>
+               <div class="add-button">
+                <button class="add-user" onclick="window.location.href = 'adduser';">
+                  Ajouter Employé(e)
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="auto" fill="#fff" class="bi bi-person-add" viewBox="0 0 16 16">
+                      <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+                      <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                  </svg>
+              </button>
+              
+              
+                </div>
             <div class="search">
               <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
                 @if (session('message'))
@@ -163,88 +177,100 @@
             </p>
             </div>
             <div class="container" id="container">
-            <table id="example" class="display">
+            <table id="example" class="display" >
                 <thead>
-                    <tr>
-                        <th>Utilisateur</th>
-                        <th>Sur qui</th>
-                        <th>Operation</th>
-                        <th id="modif">modifications</th>
-                        <th>date des modifications</th>
-                    </tr>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Email</th>
+                    <th>Service</th>
+                    <th>Role</th>
+                    <th>Site</th>
+                    <th>Detailles</th>
+                    <th>Modifier</th>
+                    @if(Auth::user()->Role === 'Admin')
+                    <th>Supprimer</th>
+                    @endif
+                  </tr>
                 </thead>
                 <tbody class="mainData">
-                    @foreach ($historisations as $historisation)
-                        <tr>
-                            @if($historisation->FullName != "Systeme de Connexion" || $historisation->FullName != "Inconnu")
-                            <td><a
-                                    href="{{ route('showUser', ['id' => $historisation->user_id]) }}">{{ $historisation->FullName }}</a>
-                            </td>
-                            @else
-                            <td>Connexion</td>
-                            @endif
-                            <td>
-                            @php
-                            $changes = json_decode($historisation->changes, true);
-                            @endphp
-                              @if($historisation->operation=="deleted" && isset($changes['TypeProduit']) && $historisation->type =="materiel")
-                              {{ $changes['TypeProduit']}}
-                              
-                                @elseif($historisation->operation=="deleted" && isset($changes['Nom']) && $historisation->type =="user")
-                                {{ $changes['Nom']}} {{ $changes['Prenom']}}
-                                @elseif($historisation->type =="materiel")
-                                <a
-                                    href="{{ route('showMaterial', ['id' => $historisation->edited_id]) }}">{{ $historisation->MaterialType }}</a>
-                                
-                                @else
-                              <a
-                              href="{{ route('showUser', ['id' => $historisation->edited_id]) }}">{{ $historisation->Nom }}</a>
-                            @endif      
-                            </td>
-                          
-                            <td>{{ $historisation->operation }}</td>
-                            <td>{{ $historisation->changes }}</td>
-                            <td>{{ $historisation->created_at }}</td>
-                        </tr>
-                    @endforeach
+                  @foreach ($users as $user)
+                  @if ($user->Role != 'Départ')
+                  <tr>
+                    <td>{{$user->Nom}}</td>
+                    <td>{{$user->Prenom}}</td>
+                    <td>{{$user->email}}</td>
+                    <td>{{$user->Service}}</td>
+                    <td>{{$user->Role}}</td>
+                    <td>{{$user->Site}}</td>
+                    <td class="op">
+                      <button class="operation"  onclick="window.location.href = '{{ route('showUser', ['id' => $user->id]) }}';">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                          </svg>
+                          Détails
+                      </button>
+                  </td>
+                    <td class="op">
+                      <button class="operation"  onclick="window.location.href = '{{ route('updateUser', ['id' => $user->id]) }}';">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                          </svg>
+                          Modifier
+                      </button>
+                  </td>
+                  @if(Auth::user()->Role === 'Admin')
+                  <td class="op">
+                      <button class="operation"  onclick="if (confirm('Êtes-vous sûr de supprimer ..?')) window.location.href = this.getAttribute('data-href');"
+                          data-href="{{ route('deleteUser', ['id' => $user->id]) }}">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
+                              <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                              <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708Z"/>
+                          </svg>
+                          Supprimer
+                      </button>
+                  </td>
+                  @endif
+                      
+                    
+                  </tr>
+                  @endif
+                  @endforeach
                 </tbody>
+                
+              </table>
+</div>
+</div>
+</body>
+<script>
+    $(document).ready(function() {
+    $('#example').DataTable();
+});
+</script>
 
-            </table>
 
-        </div>
+<style>
+/* Apply a transition to the scale and opacity properties of .box and .lab when hovered */
+
+
+.home{
+    width: 80%;
+    height: 300px;
+    overflow-y: auto;
+}
+.home input{
+    background-color: #fff;
+    margin-bottom: 10px;
+}
+</style>
+</html>
+
+    
         
-    </section>
-    <script>
-        $(document).ready(function() {
-        $('#example').DataTable();
-    });
-    </script>
-    <style>
+    
 
-        
-        #modif{
-            width: 450px;
-        }
-        a{
-            text-decoration: none;
-            color: black;            
-        }
-        a:hover{
-            color: white;
-            background-color: #019455;
-        }
+    
 
-        
 
-        .add-button {
-            height: 10%;
-        }
-
-        .operation:hover {
-            text-decoration: none;
-            color: #fff;
-            background-color: #037d48;
-        }
-    </style>
-      
-         

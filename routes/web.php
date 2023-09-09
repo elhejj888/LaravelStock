@@ -53,7 +53,7 @@ Route::get('/ManageDrops', function () {
 
 
 
-Route::get('users', [UserController::class, 'retrieveAndPaginateUsers']);//Displaying All the users in the database except the deleted ones
+Route::get('users', [UserController::class, 'index']);//Displaying All the users in the database except the deleted ones
 Route::post('/users', [UserController::class, 'setUpdatedUserValues']);//Same but after updating a value
 Route::get('deletedusers', [UserController::class, 'showDeletedUsers']);//After Deleting
 Route::get('DeleteUser/{id}', [UserController::class, 'permanentlyDeleteUser'])->name('DeleteUser');//After Deleting
@@ -65,14 +65,17 @@ Route::get('/searchDeletedUser', [UserController::class, 'searchDeletedUsers'])-
 Route::post('/adduser', [UserController::class, 'saveUser']);//Add a New User
 Route::post('/check-duplicate', [UserController::class, 'checkDuplicate']);
 Route::get('/adduser', [UserController::class ,'fetchUserFormValues']);
+Route::get('/usersDataTable', [UserController::class, 'index'])->name('usersDataTable');//Assign a material to a User Page Request
 
 
+Route::get('/Corbeille', [MaterialController::class, 'MeterielsEnRebut'])->name('MeterielsEnRebut');//Assign a material to a User Page Request
+Route::get('/dataTable', [MaterialController::class, 'index'])->name('index');//Assign a material to a User Page Request
 Route::post('/check-duplicate2', [MaterialController::class, 'checkDuplicate']);
 Route::post('/matt', [MaterialController::class, 'updateValues2']);//Same After Update
 Route::post('/Sortie', [MaterialController::class, 'MiseEnSortie']);//Same After Update
 Route::post('/fix', [MaterialController::class, 'addDesc']);//Same After Update
 Route::post('/addmaterial', [MaterialController::class, 'addMaterial']);//Displaying all the Materials After inserting
-Route::get('materials', [MaterialController::class, 'RetrieveMaterials']);//Displaying all materials with a get request
+Route::get('materials', [MaterialController::class, 'index']);//Displaying all materials with a get request
 Route::post('/materials', [MaterialController::class, 'updateValues']);//Same After Update
 Route::get('DeleteMaterial/{id}', [MaterialController::class, 'DeleteMaterial2'])->name('DeleteMaterial');//After Deleting
 Route::post('repareMaterial', [MaterialController::class, 'repareMaterial'])->name('repareMaterial');//After Deleting
@@ -83,7 +86,7 @@ Route::get('deleteMaterial/{id}', [MaterialController::class, 'deleteMaterial'])
 Route::get('/searchMaterial', [MaterialController::class, 'rechercherMaterial'])->name('searchMaterial');//Search in the Materials web page using Ajax
 Route::get('assignMaterial/{materialId}/{userId}', [MaterialController::class, 'assignerMaterielToUser'])->name('assignMaterial');//assignig the material with materialID to the user with userID
 Route::get('/searchDeletedMaterial', [MaterialController::class, 'searchDeletedMaterial'])->name('searchDeletedMaterial');//search in the deleted materials
-Route::get('deletedmaterials', [MaterialController::class, 'deletedvalues']);//deleted materials webpage
+Route::get('deletedmaterials', [MaterialController::class, 'MeterielsEnRebut']);//deleted materials webpage
 Route::get('maintainMaterials', [MaterialController::class, 'maintainvalues']);//deleted materials webpage
 Route::get('affectmaterial/{id}', function ($id) {
     return view('Material/affecting', ['id' => $id]);

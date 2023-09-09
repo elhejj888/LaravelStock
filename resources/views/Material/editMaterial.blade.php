@@ -60,14 +60,14 @@
                           Marque
                           </label>
                           <select id="marque" class="formbold-form-input" height="80px" name="marque" >
-                            <option value="Dell">Dell</option>
+                            <option value="{{ $material->Marque }}">{{ $material->Marque }}</option>
                             
                         </select>
                         </div>
                         <div>
                           <label for="choix" class="formbold-form-label"> Type </label>
                           <select id="choix" class="formbold-form-input" height="80px" name="choix" >
-                              <option value=""></option>
+                              <option value="{{ $material->choix }}">{{ $material->choix }}</option>
                       </select>
                         </div>
                         <div class="formbold-mb-3">

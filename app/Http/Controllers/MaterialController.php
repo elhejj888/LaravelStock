@@ -51,7 +51,7 @@ class MaterialController extends Controller
     function RetrieveMaterials()
     {
         if (auth()->check()) {
-            $materials = material::orderBy('TypeProduit')->orderBy('etat')->simplePaginate(8);
+            $materials = material::all();
             $sites= DB::table('admins')
                 ->select('Site') // Specify the column you want distinct values from
                 ->whereNotNull('Site')
@@ -234,7 +234,7 @@ class MaterialController extends Controller
                 ->distinct()
                 ->get();
 
-            return view('Material/maintain', ['materials' => $materials , 'sites'=>$sites]);
+            return view('Material/maintain', ['materials' => $materials , 'sites'=>$sites , 'message'=>'']);
         } else {
             return redirect('login')->with('error', 'Authentication failed.');
         }
@@ -297,39 +297,55 @@ class MaterialController extends Controller
     }
 
     public function home(Request $request)
-    {
-        if (auth()->check()) {
-            $materialCounts = [];
-            $types = ['Ordinateur', 'Casque', 'Materiel reseau', 'Telephone', 'Ecran'];
+{
+    if (auth()->check()) {
+        $materialCounts = [];
+        $statuses = ['Disponible', 'Assigne', 'maintenance', 'rupture'];
 
-            foreach ($types as $type) {
-                $typeCounts = [];
+        // Get distinct types from the database
+        $types = DB::table('admins')
+            ->select('TypeProduit')
+            ->whereNotNull('TypeProduit')
+            ->where('Qui', 'materiel')
+            ->distinct()
+            ->pluck('TypeProduit');
 
-                $statuses = ['Disponible', 'Assigne', 'maintenance', 'rupture'];
+        foreach ($types as $type) {
+            $typeCounts = [];
 
-                foreach ($statuses as $status) {
-                    $count = material::where('TypeProduit', $type)
-                        ->where('etat', $status)
-                        ->count();
+            foreach ($statuses as $status) {
+                // Count materials for each type and status
+                $count = material::where('TypeProduit', $type)
+                    ->where('etat', $status)
+                    ->count();
 
-                    $typeCounts[$status] = $count;
-                }
-
-                $materialCounts[$type] = $typeCounts;
+                $typeCounts[$status] = $count;
             }
-            $ruptureCount = material::where('etat', 'rupture')->count();
-            $maintenanceCount = material::where('etat', 'maintenance')->count();
 
-            $userCounts = [
-                'autorisé' => User::where('Role', 'Autorisé')->count(),
-                'Restreint' => User::where('Role', 'Restreint')->count(),
-                'Départ' => User::where('Role', 'Départ')->count(),
-            ];
-            return view('home', ['materialCounts' => $materialCounts, 'userCounts' => $userCounts, 'maintenanceCount' => $maintenanceCount, 'ruptureCount' => $ruptureCount]);
-        } else {
-            return redirect('login')->with('error', 'Authentication failed.');
+            $materialCounts[$type] = $typeCounts;
         }
+
+        // Count materials in rupture and maintenance
+        $ruptureCount = material::whereIn('etat', ['rupture', 'maintenance'])->count();
+        
+        // Count users by role
+        $userCounts = User::whereIn('Role', ['Autorisé', 'Restreint', 'Départ'])
+            ->groupBy('Role')
+            ->selectRaw('count(*) as count, Role')
+            ->pluck('count', 'Role');
+        
+        return view('home', [
+            'types'=>$types,
+            'materialCounts' => $materialCounts,
+            'userCounts' => $userCounts,
+            'maintenanceCount' => $ruptureCount,
+            'ruptureCount' => $ruptureCount,
+        ]);
+    } else {
+        return redirect('login')->with('error', 'Authentication failed.');
     }
+}
+
 
     public function rechercherMaterial(Request $request)
     {
@@ -536,5 +552,17 @@ class MaterialController extends Controller
         }
 
         return response($output);
+    }
+
+    public function index()
+    {
+    $materials = material::all();
+    return view('Material.dataTable', ['materials'=>$materials , 'message' => '']);
+    }
+    public function MeterielsEnRebut(){
+        $materials = material::where('etat', 'rupture')
+        ->orWhere('etat', 'Sortie')->get();
+    return view('Material.Corbeille', ['materials'=>$materials , 'message' => '']);
+    
     }
 }

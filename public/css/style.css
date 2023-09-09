@@ -410,3 +410,198 @@ margin: auto;
 
 } */
 
+
+        .add-mat{
+            background-color: #019455;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius:7px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+            padding: 5px;
+             margin-bottom:8px;
+
+        }
+
+        .add-mat:hover{
+            background-color: #016a3d;
+            color: rgb(226, 226, 226);
+            font-weight: bold;
+            font-size: 20px;
+            border-radius:7px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+
+        }
+        .add-mat:hover svg{
+            fill: rgb(226, 226, 226);
+        }
+
+
+        .modal h1 {
+            background-color: #019455;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 40px;
+            padding-top: 10px;
+            height: 50px;
+            text-align: center;
+        }
+
+        .modal::backdrop {
+            background-color: #1c5d4161;
+        }
+
+        .modal {
+            background-color: rgb(243, 245, 241);
+            text-align: center;
+            align-items: center;
+            margin: auto;
+            height: 300px;
+            width: 500px;
+            border-radius: 10px;
+            border: 2px solid black;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0px;
+
+        }
+
+        #Operation {
+            background-color: #019455;
+            color: #fff;
+            font-size: 20px;
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            width: 50%;
+        }
+
+        #submit {
+            background-color: #019455;
+            color: #fff;
+            font-size: 20px;
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            width: 50%;
+        }
+
+        .modal table {
+            margin: auto;
+        }
+
+
+        .modal select {
+            font-size: 17px;
+
+        }
+
+        .modal label {
+            font-size: 17px;
+        }
+
+        .inputs {
+            margin: auto;
+            border-radius: 10px;
+            margin-top: 25px;
+
+        }
+
+        .area {
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Horizontally center-align items */
+        }
+
+        #example {
+            background-color: whitesmoke;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            font-size: 15px;
+            display: block;
+            margin: auto;
+
+        }
+        #container input {
+            background-color: whitesmoke;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            font-size: 14px;
+            margin-top: 0px;
+
+        }
+
+        #example td{
+            padding: 5px; 
+            margin: 5px;  
+        }
+        #example th{
+            padding: 5px; 
+            margin: 5px; 
+            position: sticky;
+            top: 0;
+            background-color: #019455;
+            color: #fff;
+            font-weight: 500;   
+        }
+
+
+        .add-button {
+            height: 10%;
+        }
+
+
+        .operation {
+            color: white;
+            background-color: #019455;
+            font-weight: bold;
+            padding: 3px;
+            border-radius: 3px;
+
+        }
+
+
+
+        .operation:hover {
+            text-decoration: none;
+            color: #fff;
+            background-color: #037d48;
+        }
+
+        .dataTables_paginate{
+            margin: 10px;
+            background-color: #fff;
+            color: #019455;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+        }
+        .paginate_button:hover{
+            background-color: #019455;
+        }
+
+        .add-user{
+            background-color: #019455;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius:7px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+            padding: 5px;
+             margin-bottom:8px;
+
+        }
+
+        .add-user:hover{
+            background-color: #016a3d;
+            color: rgb(226, 226, 226);
+            font-weight: bold;
+            border-radius:7px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+
+        }
+        .add-user:hover svg{
+            fill: rgb(226, 226, 226);
+        }
+
+        
+

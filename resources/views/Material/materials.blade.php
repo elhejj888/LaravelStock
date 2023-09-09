@@ -65,7 +65,7 @@
                         <td>{{ $material->Emplacement }}</td>
                         <td>{{ $material->Site }}</td>
                         <td class="op">
-                            <button class="operation"
+                            <button class="operation small-button"
                                 onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#fff"
                                     class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -103,7 +103,7 @@
 
                                         </select>
                                     </td>
-
+                                    
                                 </table>
                                 <div>
                                     <div class="additional-content" data-material-id="{{ $material->id }}">
@@ -118,7 +118,7 @@
 
 
                         <td class="op">
-                            <button class="operation"
+                            <button class="operation small-button"
                                 onclick="{{ $material->etat === 'Disponible' ? "window.location.href = '" . route('affectMaterial', ['id' => $material->id]) . "';" : 'return false;' }}"
                                 {{ $material->etat !== 'Disponible' ? 'disabled style=background-color:grey; color:white;' : '' }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#fff"
@@ -132,7 +132,7 @@
                             </button>
                         </td>
                         <td class="op">
-                            <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
+                            <button id="open-button" class="operation small-button" data-modal="modal-{{ $material->id }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
                                     fill="#fff" class="bi bi-gear" viewBox="0 0 16 16">
                                     <path
@@ -145,7 +145,7 @@
                         </td>
                         @if (Auth::user()->Role === 'Admin')
                             <td class="op">
-                                <button class="operation"
+                                <button class="operation small-button"
                                     onclick="window.location.href = '{{ route('updateMaterial', ['id' => $material->id]) }}';"
                                     style="text-decoration: none;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
@@ -159,7 +159,7 @@
                                 </button>
                             </td>
                             <td class="op">
-                                <button class="operation"
+                                <button class="operation small-button"
                                     onclick="if (confirm('Êtes-vous sûr de supprimer ..?')) window.location.href = this.getAttribute('data-href');"
                                     data-href="{{ route('deleteMaterial', ['id' => $material->id]) }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
@@ -401,6 +401,11 @@
     });
 </script>
     <style>
+        
+        .small-button {
+    padding: 5px 10px; /* Ajustez les valeurs de marge intérieure pour réduire la taille */
+    font-size: 12px;  /* Ajustez la taille de la police */
+}
         .add-mat{
             background-color: #019455;
             color: #fff;
@@ -506,14 +511,7 @@
             /* Horizontally center-align items */
         }
 
-        .table-auto {
-            background-color: whitesmoke;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
-            display: block;
-            text-align: center;
-            cursor: pointer;
-
-        }
+   
 
 
         th {

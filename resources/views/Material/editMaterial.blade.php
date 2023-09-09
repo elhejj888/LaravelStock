@@ -159,12 +159,24 @@
                               
                             </div>
                           </label>
-                          <button type="submit" class="formbold-btn">Modifier Produit</button>
+                          <button type="submit" id="submitButton" class="formbold-btn">Modifier Produit</button>
                         </div>
                   
                       </form>
                     </div>
                   </div>
+                  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                  <script>
+                    // Attacher un gestionnaire d'événements au bouton
+                    document.getElementById('submitButton').addEventListener('click', function () {
+                        // Afficher la fenêtre SweetAlert
+                        Swal.fire(
+                            'Good job!',
+                            'Element bien Modifier!',
+                            'success'
+                        );
+                    });
+                </script>
                   <script>
                     $(document).ready(function() {
                         const siteSelect = $('#site');

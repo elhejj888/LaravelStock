@@ -31,7 +31,18 @@
         </div>
     </section>
 </section>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    // Attacher un gestionnaire d'événements au bouton
+    document.getElementById('submitButton').addEventListener('click', function () {
+        // Afficher la fenêtre SweetAlert
+        Swal.fire(
+            'Good job!',
+            'Element bien Ajouté!',
+            'success'
+        );
+    });
+</script>
 <!-- JavaScript to handle dynamic fields -->
 <script>
     $(document).ready(function () {

@@ -248,13 +248,21 @@ class MaterialController extends Controller
                 $material->etat = "rupture";
                 $material->save();
                 return redirect('/materials')->with('message', 'Materiel Mit en rebus avec succes !!');
-            } else {
+            } 
+            if ($material->etat == "Disponible") {
+                $material->etat = "rupture";
+                $material->save();
+                return redirect('/materials')->with('message', 'Materiel Mit en rebus avec succes !!');
+            } 
+            else{
                 return redirect('/materials')->with('message', 'Materiel Deja affecté !!');
             }
+            //rupture
         } else {
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
+
 
     public function DeleteMaterial2($id)
     {

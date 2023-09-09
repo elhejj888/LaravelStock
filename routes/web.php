@@ -23,6 +23,7 @@ use App\Mail\Login;
 
 
 //Home routes :
+Route::group(['middleware' => ['web', 'check.session']], function () {
 Route::get('/', [MaterialController::class, 'home'])->name('home');
 Route::get('/home', [MaterialController::class, 'home'])->name('home');
 Route::get('/trashCan', function () {
@@ -125,3 +126,4 @@ Route::get('/session', function () {
     $user = auth()->user();
     dd($user);
 });//testing on the connected user
+});

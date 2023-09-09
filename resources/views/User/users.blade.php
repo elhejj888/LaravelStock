@@ -1,7 +1,10 @@
 @extends('sidebar')
 @section('content')
 <section class="home">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.10/css/jquery.dataTables.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.10/js/jquery.dataTables.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <div class="container">
         <div>
            <div class="add-button">
@@ -16,16 +19,7 @@
 
             </div>
         </div>
-        <div class="search">
-          <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
-            @if (session('message'))
-                {{ session('message') }}
-            @else
-                {{ $message }}
-            @endif
-
-        </p>
-        </div>
+      
         <div class="container" id="container">
         <table id="example" class="display" >
             <thead>
@@ -89,7 +83,6 @@
               @endif
               @endforeach
             </tbody>
-            
           </table>
 </div>
 </section>

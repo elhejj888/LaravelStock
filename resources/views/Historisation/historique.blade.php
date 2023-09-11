@@ -216,12 +216,30 @@
     </section>
     <script>
         $(document).ready(function() {
-        $('#example').DataTable();
-    });
-    </script>
+            $('#example').DataTable({
+                paging: true,
+                pageLength: 10, // 10 éléments par page par défaut
+                searching: true // Afficher la barre de recherche
+            });
+        });
+        </script>
     <style>
-
-        
+        .dataTables_filter {
+            text-align: center; /* Aligner la barre de recherche à droite */
+    }
+        .dataTables_filter input[type="search"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+    /* Masquer le texte "Show X entries" */
+    .dataTables_length {
+        display: none;
+    }
+    .dataTables_info {
+            display: none;
+        }
         #modif{
             width: 450px;
         }

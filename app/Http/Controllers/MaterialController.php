@@ -355,7 +355,7 @@ class MaterialController extends Controller
 }
 
 
-    public function rechercherMaterial(Request $request)
+   /* public function rechercherMaterial(Request $request)
     {
         $materials = material::where('Marque', 'Like', '%' . $request->search . '%')
         ->orWhere('TypeProduit', 'Like', '%' . $request->search . '%')
@@ -475,7 +475,7 @@ class MaterialController extends Controller
         }
 
         return response($output);
-    }
+    }*/
 
     /**
      * Affecte un matériel à un utilisateur spécifique.

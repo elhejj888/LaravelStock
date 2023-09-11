@@ -74,8 +74,8 @@
                                 <label for="mac" class="formbold-form-label">
                                     Adresse Mac
                                 </label>
-                                <input type="text" name="mac" id="mac" class="formbold-form-input" required
-                                    autocomplete="off" />
+                                <input type="text" name="mac" id="mac" class="formbold-form-input"  autocomplete="off" required
+                                    />
                                 <span id="MacValidation" style="color: red;"></span>
                             </div>
 

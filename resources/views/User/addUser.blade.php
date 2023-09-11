@@ -11,7 +11,7 @@
                 <!-- Learn More: https://formbold.com -->
                 <div class="formbold-form-wrapper">                  
                   <form action="/adduser" method="POST">
-                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <input type="hidden" name="_token" value="{{csrf_token()}}" autocomplete="off">
                     <div class="formbold-form-title">
                       <p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="100" height="auto" fill="#019455" id="icon" class="bi bi-people" viewBox="0 0 16 16">
@@ -32,6 +32,7 @@
                           id="Nom"
                           class="formbold-form-input"
                           required
+                          autocomplete="off"
                         />
                       </div>
                       <div>
@@ -42,6 +43,7 @@
                           id="Prenom"
                           class="formbold-form-input"
                           required
+                          autocomplete="off"
                         />
                       </div>
                     </div>

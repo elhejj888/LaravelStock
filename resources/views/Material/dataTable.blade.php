@@ -1,5 +1,5 @@
     <!-- Coding by CodingLab | www.codinglabweb.com -->
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,6 +20,48 @@
     
     <title>Stock Manager</title> 
 </head>
+<style>
+    .dataTables_filter {
+            text-align: center; /* Aligner la barre de recherche à droite */
+    }
+        .dataTables_filter input[type="search"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+    /* Masquer le texte "Show X entries" */
+    .dataTables_length {
+        display: none;
+    }
+    .dataTables_info {
+            display: none;
+     }
+     .dataTables_paginate {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .dataTables_paginate a {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 1px solid blue;
+            border-radius: 5px;
+            text-decoration: none;
+            color: blue;
+            background-color: blue;
+        }
+
+        .dataTables_paginate a:hover {
+            background-color: blue;
+        }
+
+        .dataTables_paginate .active a {
+            background-color: #007bff;
+            color: blue;
+            border: 1px solid #007bff;
+        }
+</style>
 <body>
     <nav class="sidebar close">
         <header>
@@ -158,8 +200,8 @@
         </div>
 
     </nav>
-<body>
-    <div class="home">
+<body >
+    <div class="home" style="margin-top:40px">
             <div>
                 <div class="add-button">
                     <button class="add-mat" onclick="window.location.href = 'addmaterial';">
@@ -180,7 +222,7 @@
 
                 </p>
             </div>
-        <div class="container" id="container">
+        <div class="container" id="container" >
     <table id="example" class="display" >
         <thead>
             <tr>
@@ -220,7 +262,7 @@
                         <td class="op">
                             <button class="operation"
                                 onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#fff"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="auto" fill="#fff"
                                     class="bi bi-plus-circle" viewBox="0 0 16 16">
                                     <path
                                         d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -274,7 +316,7 @@
                             <button class="operation"
                                 onclick="{{ $material->etat === 'Disponible' ? "window.location.href = '" . route('affectMaterial', ['id' => $material->id]) . "';" : 'return false;' }}"
                                 {{ $material->etat !== 'Disponible' ? 'disabled style=background-color:grey; color:white;' : '' }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#fff"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="auto" fill="#fff"
                                     class="bi bi-send-plus" viewBox="0 0 16 16">
                                     <path
                                         d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178 1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494-1.895 4.738a.5.5 0 1 0 .928.372l2.8-7Zm-2.54 1.183L5.93 9.363 1.591 6.602l11.833-4.733Z" />
@@ -286,7 +328,7 @@
                         </td>
                         <td class="op">
                             <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="auto"
                                     fill="#fff" class="bi bi-gear" viewBox="0 0 16 16">
                                     <path
                                         d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
@@ -301,7 +343,7 @@
                                 <button class="operation"
                                     onclick="window.location.href = '{{ route('updateMaterial', ['id' => $material->id]) }}';"
                                     style="text-decoration: none;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto"
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="auto"
                                         fill="#fff" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path
                                             d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -336,9 +378,13 @@
 </body>
 <script>
     $(document).ready(function() {
-    $('#example').DataTable();
-});
-</script>
+        $('#example').DataTable({
+            paging: true,
+            pageLength: 10, // 10 éléments par page par défaut
+            searching: true // Afficher la barre de recherche
+        });
+    });
+    </script>
 <script>
 // When hovering over .box, also apply the hover effect to .box and .lab in the same table cell
     $(".box").hover(function () {
@@ -522,6 +568,9 @@
 
 <style>
 /* Apply a transition to the scale and opacity properties of .box and .lab when hovered */
+
+
+
 .hovered {
 transform: scale(1.2);
 opacity: 0.9;

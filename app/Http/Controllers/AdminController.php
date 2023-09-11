@@ -146,5 +146,4 @@ public function getSitesAndEmplacements()
     return redirect('login')->with('error', 'Authentication failed.');
 }
 }
-
 }

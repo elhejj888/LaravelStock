@@ -246,11 +246,13 @@
                                             <th style="padding:4px; border-right:1px solid black">Utilisateurs</th>
                                             <th style="padding:4px; ">Materiels</th>
                                         </tr>
+                                        @if(isset($userCounts["Départ"]))
                                         <tr>
-                                            <td style="font-size: 12px ; ">{{$userCounts["Départ"]}}</td>
-                                            <td style="font-size: 12px ; ">{{$maintenanceCount}}</td>
-                                        
+                                            <td style="font-size: 12px;">{{$userCounts["Départ"]}}</td>
+                                            <td style="font-size: 12px;">{{$maintenanceCount}}</td>
                                         </tr>
+                                        @endif
+                                        
                                     </table>
                                     
                             </div>

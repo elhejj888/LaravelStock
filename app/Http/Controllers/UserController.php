@@ -309,7 +309,7 @@ class UserController extends Controller
          * @param \Illuminate\Http\Request $request La requête HTTP contenant les critères de recherche.
          * @return \Illuminate\Http\Response Une réponse HTTP contenant les résultats de la recherche au format JSON.
          */
-        public function searchUsers(Request $request){
+     /*   public function searchUsers(Request $request){
             
             $users = User::where('Nom','Like','%'.$request->search.'%')->
             orWhere('Prenom','Like','%'.$request->search.'%')->
@@ -369,7 +369,7 @@ class UserController extends Controller
             return response($output);
         }
         
-
+*/
         /**
          * Recherche des utilisateurs supprimés en fonction des critères de recherche.
          *

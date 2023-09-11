@@ -6,8 +6,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/dataTables.searchBuilder.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.5.0/css/searchBuilder.dataTables.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="{{asset('../css/style.css')}}">
+<link rel="stylesheet" href="{{asset('../css/style.css')}}">
     
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
@@ -193,7 +192,7 @@
                     @endif
                   </tr>
                 </thead>
-                <tbody class="mainData">
+                <tbody>
                   @foreach ($users as $user)
                   @if ($user->Role != 'Départ')
                   <tr>
@@ -243,34 +242,33 @@
               </table>
 </div>
 </div>
-</body>
+<style>
+       .dataTables_filter {
+            text-align: center; /* Aligner la barre de recherche à droite */
+    }
+        .dataTables_filter input[type="search"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+    /* Masquer le texte "Show X entries" */
+    .dataTables_length {
+        display: none;
+    }
+    .dataTables_info {
+            display: none;
+        }
+</style>
 <script>
     $(document).ready(function() {
-    $('#example').DataTable();
-});
-</script>
+        $('#example').DataTable({
+            paging: true,
+            pageLength: 10, // 10 éléments par page par défaut
+            searching: true // Afficher la barre de recherche
+        });
+    });
+    </script>
+</body>
 
-
-<style>
-/* Apply a transition to the scale and opacity properties of .box and .lab when hovered */
-
-
-.home{
-    width: 80%;
-    height: 300px;
-    overflow-y: auto;
-}
-.home input{
-    background-color: #fff;
-    margin-bottom: 10px;
-}
-</style>
 </html>
-
-    
-        
-    
-
-    
-
-

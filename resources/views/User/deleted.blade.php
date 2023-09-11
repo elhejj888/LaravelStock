@@ -233,16 +233,57 @@
 </body>
 
 <script>
-  $(document).ready(function() {
-  $('#example').DataTable();
-});
+ $(document).ready(function() {
+        $('#example').DataTable({
+            paging: true,
+            pageLength: 10, // 10 éléments par page par défaut
+            searching: true // Afficher la barre de recherche
+        });
+    });
 </script>
 
 
 <style>
+.dataTables_filter {
+            text-align: center; /* Aligner la barre de recherche à droite */
+    }
+        .dataTables_filter input[type="search"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
 
+.dataTables_length {
+        display: none;
+    }
+    .dataTables_info {
+            display: none;
+     }
+     .dataTables_paginate {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .dataTables_paginate a {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 1px solid blue;
+            border-radius: 5px;
+            text-decoration: none;
+            color: blue;
+            background-color: blue;
+        }
 
+        .dataTables_paginate a:hover {
+            background-color: blue;
+        }
 
+        .dataTables_paginate .active a {
+            background-color: #007bff;
+            color: blue;
+            border: 1px solid #007bff;
+        }
         .operation {
             color: white;
             background-color: #019455;

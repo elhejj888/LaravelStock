@@ -1,7 +1,6 @@
 @extends('sidebar')
 @section('content')
 <section class="home">
-
     <div class="container">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <div class="search">

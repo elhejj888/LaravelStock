@@ -24,7 +24,7 @@
 </p>
   <form class="login" action="/sendpassword" method="POST">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
-  <input name="Email" type="email" placeholder="Adresse electronique" id="email" required>
+  <input name="Email" type="email" placeholder="Adresse electronique" autocomplete="off" id="email" required>
   
   <button type="submit" id="login-button">Envoyer Code</button>
 </form>

@@ -165,16 +165,7 @@
               
               
                 </div>
-            <div class="search">
-              <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
-                @if (session('message'))
-                    {{ session('message') }}
-                @else
-                    {{ $message }}
-                @endif
-    
-            </p>
-            </div>
+          
             <div class="container" id="container">
             <table id="example" class="display" >
                 <thead>
@@ -268,6 +259,9 @@
             searching: true // Afficher la barre de recherche
         });
     });
+    if (table.data().count() === 0) {
+        $('#example').parent().append('<div id="no-data-msg">Pas d\'élément pour l\'instant</div>');
+    }
     </script>
 </body>
 

@@ -220,7 +220,9 @@
                 paging: true,
                 pageLength: 10, // 10 éléments par page par défaut
                 searching: true // Afficher la barre de recherche
+                
             });
+
         });
         </script>
     <style>

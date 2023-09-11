@@ -14,16 +14,7 @@
             </div>
           </a>
         </div>
-        <div class="search">
-            <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
-                @if (session('message'))
-                    {{ session('message') }}
-                @else
-                    {{ $message }}
-                @endif
-
-            </p>
-        </div>
+       
     <div class="container" id="container">
         <table id="example" class="display" >
             <thead>

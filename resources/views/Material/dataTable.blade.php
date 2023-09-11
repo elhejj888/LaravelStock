@@ -384,6 +384,9 @@
             searching: true // Afficher la barre de recherche
         });
     });
+    if (table.data().count() === 0) {
+        $('#example').parent().append('<div id="no-data-msg">Pas d\'élément pour l\'instant</div>');
+    }
     </script>
 <script>
 // When hovering over .box, also apply the hover effect to .box and .lab in the same table cell

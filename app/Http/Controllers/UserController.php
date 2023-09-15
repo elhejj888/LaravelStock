@@ -283,6 +283,7 @@ class UserController extends Controller
         public function showDeletedUsers()
         {
             if (auth()->check()) {
+                
                 // Récupérer les utilisateurs ayant le rôle "Départ" et les paginer.
                 $users = User::where('Role', 'Départ')->get();
 

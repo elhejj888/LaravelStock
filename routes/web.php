@@ -51,9 +51,12 @@ Route::post('/saveRoute',[AdminController::class , 'saveValues'])->name('saveRou
 Route::get('/ManageDrops', function () {
     return view('Administration/drops', ['message' => 'Bonjour..']);
 });
-
-
-
+Route::get('/Administration', function () {
+    return view('Administration/main', ['message' => 'Bonjour..']);
+});
+Route::get('/DeleteDrops', function () {
+    return view('Administration/DeleteDrops', ['message' => 'Bonjour..']);
+});
 Route::get('users', [UserController::class, 'index']);//Displaying All the users in the database except the deleted ones
 Route::post('/users', [UserController::class, 'setUpdatedUserValues']);//Same but after updating a value
 Route::get('deletedusers', [UserController::class, 'showDeletedUsers']);//After Deleting
@@ -89,12 +92,8 @@ Route::get('assignMaterial/{materialId}/{userId}', [MaterialController::class, '
 Route::get('/searchDeletedMaterial', [MaterialController::class, 'searchDeletedMaterial'])->name('searchDeletedMaterial');//search in the deleted materials
 Route::get('deletedmaterials', [MaterialController::class, 'MeterielsEnRebut']);//deleted materials webpage
 Route::get('maintainMaterials', [MaterialController::class, 'maintainvalues']);//deleted materials webpage
-Route::get('affectmaterial/{id}', function ($id) {
-    return view('Material/affecting', ['id' => $id]);
-})->name('affectMaterial');//the page to assign material
 Route::get('/addmaterial', [MaterialController::class , 'fetchMaterialFormValues']);//the page to add material
-
-
+Route::get('affectmaterial/{id}', [MaterialController::class, 'RetrieveUsers'])->name('affectMaterial');//the page to assign material
 
 
 Route::get('historisation', [HistoriqueController::class, 'retrieveMaterialHistorisation']);//retrieve materials historisation
@@ -106,6 +105,11 @@ Route::get('/searchHistoriqueMaterial', [HistoriqueController::class, 'find'])->
 Route::get('/layout', function () {
     return view('sidebar');
 });//just a test ...
+
+
+Route::get('/yahya',function () {
+    return view('test');
+});
 
 
 Route::post('store-matricule', [UserController::class, 'storeMatricule'])->name('storeMatricule');//just for testing... 

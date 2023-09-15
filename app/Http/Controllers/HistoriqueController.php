@@ -45,7 +45,8 @@ class HistoriqueController extends Controller
              ->where('historisations.type', '=', 'user');
     })
     ->select('historisations.*', 'materials.TypeProduit as MaterialType','users.Nom as Nom')
-    ->orderByDesc('historisations.created_at');
+    ->orderByDesc('historisations.created_at')
+    ->simplePaginate(15);
 
     
     return view('Historisation/historique', ['historisations'=>$historisations , 'message'=>''] );

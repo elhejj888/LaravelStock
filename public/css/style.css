@@ -603,5 +603,45 @@ margin: auto;
             fill: rgb(226, 226, 226);
         }
 
+        .dataTables_filter {
+            text-align: center; /* Aligner la barre de recherche à droite */
+    }
+        .dataTables_filter input[type="search"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+    /* Masquer le texte "Show X entries" */
+    .dataTables_length {
+        display: none;
+    }
+    .dataTables_info {
+            display: none;
+        }
+        #modif{
+            width: 450px;
+        }
+        a{
+            text-decoration: none;
+            color: black;            
+        }
+        /*
+        a:hover{
+            color: white;
+            background-color: #019455;
+        }*/
+
+        
+
+        .add-button {
+            height: 10%;
+        }
+
+        .operation:hover {
+            text-decoration: none;
+            color: #fff;
+            background-color: #037d48;
+        }
         
 

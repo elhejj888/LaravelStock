@@ -39,14 +39,14 @@
                   @if ($material->etat == 'rupture')
               <tr>
                 
-                <td>{{$material->TypeProduit}}</td>
-                <td>{{$material->Marque}}</td>
-                <td>{{$material->Tag}}</td>
-                <td>{{$material->etat}}</td>
-                <td>{{$material->N_Facture}}</td>
-                <td>{{$material->DateAchat}}</td>
-                <td>{{$material->Emplacement}}</td>
-                <td>{{$material->Site}}</td>
+                <td><center>{{$material->TypeProduit}}</center> </td>
+                <td><center>{{$material->Marque}}</center> </td>
+                <td><center>{{$material->Tag}}</center></td>
+                <td><center>{{$material->etat}}</center></td>
+                <td><center>{{$material->N_Facture}}</center> </td>
+                <td><center>{{$material->DateAchat}}</center> </td>
+                <td><center>{{$material->Emplacement}}</center> </td>
+                <td><center>{{$material->Site}}</center></td>
 
 
                     </a></td>
@@ -106,6 +106,33 @@
             </tbody>
           </table>
 </div>
+<script>
+    $(document).ready(function() {
+        // Initialise la table DataTable
+        var table = $('#example').DataTable({
+            paging: true,
+            pageLength: 16, // 10 éléments par page par défaut
+            searching: true // Afficher la barre de recherche
+        });
+        // Fonction pour afficher un message lorsque la table est vide
+        function showNoDataMessage() {
+            $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
+        }
+    
+        // Vérifie si la table est vide après chaque dessin
+        table.on('draw', function() {
+            if (table.rows().count() === 0) {
+                showNoDataMessage();
+            }
+        });
+    
+        // Vérifie également si la table est vide lors de l'initialisation
+        if (table.rows().count() === 0) {
+            showNoDataMessage();
+        }
+    });
+    </script>
+
     <script>
         const openButtons = document.querySelectorAll('#open-button');
         const closeButtons = document.querySelectorAll('.close-button');
@@ -266,6 +293,5 @@
             background-color: #037d48;
         }
     </style>
-   
-
+    
 @endsection

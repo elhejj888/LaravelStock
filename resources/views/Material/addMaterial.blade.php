@@ -42,7 +42,7 @@
                                 </div>
 
                             </div>
-                            <div class="formbold-input-flex">
+                            <div id="divC" class="formbold-input-flex">
                               <div>
                                 <label for="marque" class="formbold-form-label">
                                   Marque
@@ -52,7 +52,7 @@
                                 </select>
                                   
                               </div>
-                              <div>
+                              <div id="choix2" style="display: none;">
                                 <label for="choix" class="formbold-form-label"> Type </label>
                                 <select id="choix" class="formbold-form-input" height="80px" name="choix" >
                                     <option value=""></option>
@@ -64,135 +64,109 @@
 
                             </div>
                             <div>
-                                <label for="tag" class="formbold-form-label"> Tag de Produit </label>
-                                <input type="text" name="tag" id="tag" class="formbold-form-input" required
+                                <label for="tag" class="formbold-form-label"> Tag de Produit <span style="color: red">*</span></label>
+                                <input type="text" name="tag" id="tag" class="formbold-form-input"  required
                                     autocomplete="off" />
                                 <span id="TagValidation" style="color: red;"></span>
                             </div>
 
                             <div class="formbold-mb-3">
                                 <label for="mac" class="formbold-form-label">
-                                    Adresse Mac
+                                    Adresse Mac :<span style="color: red"> *</span>
                                 </label>
-                                <input type="text" name="mac" id="mac" class="formbold-form-input"  autocomplete="off" required
-                                    />
+                                <input type="text" name="mac" id="mac" class="formbold-form-input" required
+                                    autocomplete="off" />
                                 <span id="MacValidation" style="color: red;"></span>
                             </div>
+<div>
+    <div class="formbold-mb-3">
+        <label for="address2" class="formbold-form-label">
+            Numéro de facture :<span style="color: red">*</span>
+        </label>
+        <input type="text" name="facture" id="facture" class="formbold-form-input" required
+            autocomplete="off" />
+        <span id="InvoiceValidation" style="color: red;"></span>
+    </div>
 
-                            <div class="formbold-mb-3">
-                                <label for="address2" class="formbold-form-label">
-                                    Numéro de facture
-                                </label>
-                                <input type="text" name="facture" id="facture" class="formbold-form-input" required
-                                    autocomplete="off" />
-                                <span id="InvoiceValidation" style="color: red;"></span>
-                            </div>
-
-                            <div class="formbold-input-flex">
-                                <div>
-                                    <label for="state" class="formbold-form-label"> Date d'achat </label>
-                                    <input style="color: #019455;" type="date" name="achat" id="achat"
-                                        class="formbold-form-input" required />
-                                </div>
-                                <div>
-                                    <label for="fournisseur" class="formbold-form-label"> fournisseur </label>
-                                    <select id="Produit" class="formbold-form-input" height="80px" name="fournisseur">
-                                        @foreach ($values as $value)
-                                            @if ($value->Foutnisseur != '')
-                                                <option value="{{ $value->Foutnisseur }}">{{ $value->Foutnisseur }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="formbold-input-flex">
-                                <div>
-                                    <label for="area" class="formbold-form-label"> Site</label>
-                                    <select id="site" class="formbold-form-input" name="site" height="80px">
-                                        <option value="" style="display: none;"></option>
-                                        @foreach ($sites as $site)
-                                            <option value="{{ $site->Site }}">{{ $site->Site }}</option>
-                                        @endforeach
+    <div class="formbold-input-flex">
+        <div>
+            <label for="state" class="formbold-form-label">Date d'achat :</label>
+            <input style="color: #019455;" type="date" name="achat" id="achat"
+                class="formbold-form-input" required />
+        </div>
+        <div>
+            <label for="fournisseur" class="formbold-form-label">fournisseur :</label>
+            <select id="Produit" class="formbold-form-input" height="80px" name="fournisseur">
+                @foreach ($values as $value)
+                    @if ($value->Foutnisseur != '')
+                        <option value="{{ $value->Foutnisseur }}">{{ $value->Foutnisseur }}</option>
+                    @endif
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="formbold-input-flex">
+        <div>
+            <label for="area" class="formbold-form-label">Site :</label>
+            <select id="site" class="formbold-form-input" name="site" height="80px">
+                <option value="" style="display: none;"></option>
+                @foreach ($sites as $site)
+                    <option value="{{ $site->Site }}">{{ $site->Site }}</option>
+                @endforeach
 
 
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="post" class="formbold-form-label"> Emplacement </label>
-                                    <select id="emplacement" class="formbold-form-input" height="80px" name="emplacement">
-                                    </select>
-                                </div>
+            </select>
+        </div>
+        <div>
+            <label for="post" class="formbold-form-label">Emplacement :</label>
+            <select id="emplacement" class="formbold-form-input" height="80px" name="emplacement">
+            </select>
+        </div>
 
-                            </div>
+    </div>
 
-                            <div class="formbold-checkbox-wrapper">
-                                <label for="supportCheckbox" class="formbold-checkbox-label">
-                                    <div class="formbold-relative">
-                                        <input type="checkbox" id="supportCheckbox" class="formbold-input-checkbox" />
+    <div class="formbold-checkbox-wrapper">
+        <label for="supportCheckbox" class="formbold-checkbox-label">
+            <div class="formbold-relative">
+                <input type="checkbox" id="supportCheckbox" class="formbold-input-checkbox" />
 
-                                    </div>
-                                </label>
-                                <button type="submit" id="submitButton" class="formbold-btn" disabled>Ajouter
-                                    Produit</button>
-                            </div>
+            </div>
+        </label>
+        <button type="submit" id="submitButton" class="formbold-btn" >Ajouter
+            Produit</button>
+    </div>
 
+</div>
+                          
                         </form>
                     </div>
                 </div>
                 <script>
-                    $(document).ready(function() {
-                        var submitButton = $('#submitButton');
-                        $('#tag, #mac,#facture').on('keyup', function() {
-                            var tagValue = $('#tag').val();
-                            var macValue = $('#mac').val();
-                            var invoiceValue = $('#facture').val();
-
-                            $.ajax({
-                                url: '/check-duplicate2',
-                                method: 'POST',
-                                data: {
-                                    tag: tagValue,
-                                    mac: macValue,
-                                    facture: invoiceValue,
-                                    _token: '{{ csrf_token() }}'
-                                },
-                                success: function(response) {
-                                    if (response.macExists || response.tagExists || response
-                                        .invoiceExists) {
-                                        submitButton.prop('disabled', true);
-                                    } else {
-                                        submitButton.prop('disabled', false);
-                                    }
-
-                                    if (response.tagExists) {
-                                        $('#TagValidation').text('Tag Existe Deja.');
-                                    } else {
-                                        $('#TagValidation').text('');
-                                    }
-
-                                    if (response.macExists) {
-                                        $('#MacValidation').text('Adresse Mac Existe Deja.');
-                                    } else {
-                                        $('#MacValidation').text('');
-                                    }
-
-                                    if (response.invoiceExists) {
-                                        $('#InvoiceValidation').text('Code Facture Existe Deja.');
-                                    } else {
-                                        $('#InvoiceValidation').text('');
-                                    }
-
-                                }
-                            });
-                        });
+                    document.getElementById('type').addEventListener('change', function() {
+                        var selectedValue = this.value;
+                        var macLabel = document.querySelector('label[for="mac"]');
+                        var macInput = document.getElementById('mac');
+                        
+                        if (selectedValue.toLowerCase() === 'casque' || selectedValue.toLowerCase() === 'ecran') {
+                        macLabel.innerHTML = 'SIN<span style="color: red">*</span>';
+                        macInput.placeholder = 'SIN';
+                        }
+                        else {
+                            macLabel.textContent = 'Adresse Mac';
+                            macInput.placeholder = 'Adresse Mac';
+                        }
                     });
                 </script>
-                <script>
+
+
+
+                              <script>
                     $(document).ready(function() {
                         const siteSelect = $('#site');
                         const typeSelect = $('#type');
                         const marqueSelect = $('#marque');
                         const choixSelect = $('#choix');
+                        const choixDiv = $('#choix2');
                         const emplacementSelect = $('#emplacement');
 
                         // Add an event listener for the site select box change
@@ -239,8 +213,7 @@
                                     choixSelect.empty();
                                     let resp = response.marques;
                                     let resp2 = response.choix;
-                                    console.log(resp);
-                                    console.log(resp2);
+                                    console.log(resp2.length);
                                     var marques = resp.marques;
                                     var choix = resp.choix;
                                     // Populate emplacement select box with fetched options
@@ -251,13 +224,22 @@
                                             text: value
                                         }));
                                     });
-                                    $.each(resp2, function(key, value) {
-                                      choixSelect.append($('<option>', {
-                                            value: key,
-                                            text: value
-                                        }));
-                                    });
-                                    
+                                    if(resp2.length != 0)
+                                    {
+                                        document.getElementById("choix2").style.display = "block";
+                                        document.getElementById("divC").className = "formbold-input-flex";
+                                        $.each(resp2, function(key, value) {
+                                        choixSelect.append($('<option>', {
+                                                value: key,
+                                                text: value
+                                            }));
+                                        });
+                                    }
+                                    else {
+                                        document.getElementById("choix2").style.display = "none";
+                                        document.getElementById("divC").className = "formbold-mb-3";
+                                    }
+
                                 },
                                 error: function() {
                                     // Handle error if necessary

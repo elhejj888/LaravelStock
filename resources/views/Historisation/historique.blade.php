@@ -101,7 +101,7 @@
                         </a>
                     </li>
                     <li class="nav-link">
-                        <a href="/ManageDrops">
+                        <a href="/Administration">
                             <div>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" id="icon2" class="bi bi-tools" viewBox="0 0 16 16">
                                     <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0Zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708ZM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11Z"/>
@@ -169,8 +169,8 @@
                         <th>Utilisateur</th>
                         <th>Sur qui</th>
                         <th>Operation</th>
-                        <th id="modif">modifications</th>
-                        <th>date des modifications</th>
+                        <th id="modif"><center>Operation Effectuer</center> </th>
+                        <th><center>date d'operation</center> </th>
                     </tr>
                 </thead>
                 <tbody class="mainData">
@@ -203,7 +203,7 @@
                             </td>
                           
                             <td>{{ $historisation->operation }}</td>
-                            <td>{{ $historisation->changes }}</td>
+                            <td><center>{{ $historisation->changes }}</center> </td>
                             <td>{{ $historisation->created_at }}</td>
                         </tr>
                     @endforeach
@@ -216,32 +216,14 @@
     </section>
     <script>
         $(document).ready(function() {
-            $('#example').DataTable({
-                paging: true,
-                pageLength: 10, // 10 éléments par page par défaut
-                searching: true // Afficher la barre de recherche
-                
-            });
-
-        });
-        </script>
+            if ($.fn.DataTable.isDataTable('#example')) {
+    $('#example').DataTable().destroy();}
+        $('#example').DataTable();
+    });
+    </script>
     <style>
-        .dataTables_filter {
-            text-align: center; /* Aligner la barre de recherche à droite */
-    }
-        .dataTables_filter input[type="search"] {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 300px;
-        }
-    /* Masquer le texte "Show X entries" */
-    .dataTables_length {
-        display: none;
-    }
-    .dataTables_info {
-            display: none;
-        }
+
+        
         #modif{
             width: 450px;
         }
@@ -266,5 +248,56 @@
             background-color: #037d48;
         }
     </style>
-      
-         
+    <script>
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable('#example')) {
+    $('#example').DataTable().destroy();}
+            // Initialise la table DataTable
+            var table = $('#example').DataTable({
+                paging: true,
+                pageLength: 13, // 10 éléments par page par défaut
+                searching: true // Afficher la barre de recherche
+            });
+        
+            // Fonction pour afficher un message lorsque la table est vide
+            function showNoDataMessage() {
+                $('#example tbody').html('<tr><td colspan="5"><center> Pas d\'élément pour l\'instant</center></td></tr>');
+            }
+        
+            // Vérifie si la table est vide après chaque dessin
+            table.on('draw', function() {
+                if (table.rows().count() === 0) {
+                    showNoDataMessage();
+                }
+            });
+        
+            // Vérifie également si la table est vide lors de l'initialisation
+            if (table.rows().count() === 0) {
+                showNoDataMessage();
+            }
+        });
+                
+        </script>
+        
+<style>
+    .green-text {
+    color: green !important; /* Change la couleur du texte en vert */
+}
+
+/* Style pour centrer le texte dans la barre de recherche */
+.dataTables_filter input[type="search"] {
+    text-align: center;
+}
+.dataTables_filter {
+    margin-bottom: 10px; /* Espacement en bas de la barre de recherche */
+}
+
+.dataTables_filter input[type="search"] {
+    width: 300px; /* Largeur de la zone de recherche */
+    padding: 5px; /* Espacement à l'intérieur de la zone de recherche */
+    border: 1px solid #ccc; /* Bordure de la zone de recherche */
+    border-radius: 4px; /* Coins arrondis de la zone de recherche */
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Ombre de la zone de recherche */
+}
+
+</style>

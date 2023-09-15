@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('TypeProduit');
             $table->string('Marque');
-            $table->string('Tag')->unique();
-            $table->string('AdresseMac')->unique();
-            $table->string('N_Facture')->unique();
+            $table->string('Tag')->nullable(); // 'Tag' peut être NULL
+            $table->string('AdresseMac')->nullable(); // 'AdresseMac' peut être NULL
+            $table->string('N_Facture')->nullable(); // 'N_Facture' peut être NULL
             $table->dateTime('DateAchat');
             $table->dateTime('DateSortie')->nullable();
             $table->string('Fournisseur');
@@ -27,11 +27,11 @@ return new class extends Migration
             $table->string('choix');
             $table->string('userId')->nullable();            
             $table->string('description')->nullable();
-
+    
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      */

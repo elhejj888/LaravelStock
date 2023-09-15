@@ -22,7 +22,7 @@
                     <dd>{{ $material->Tag }}</dd>
                 </div>
                 <div class="description-pair">
-                    <dt class="t1">Adresse Mac :</dt>
+                    <dt class="t1">Adresse Mac / SIN :</dt>
                     <dd>{{ $material->AdresseMac }}</dd>
                 </div>
                 <div class="description-pair">
@@ -86,7 +86,7 @@
         <div class="table-container2">
             <div>
               @if ($historiques->isEmpty())
-        <p style="color: red; backgound-color:white; text-align:center; font-weight:300;font-size:25px" >Il n'y a aucune historisation pour ce matériel !!</p>
+        <p style="color: red; text-align:center; font-weight:300;font-size:25px" >Il n'y a aucune historisation pour ce matériel !!</p>
               @else
                 <table class="table-auto2" >
                     <thead>
@@ -151,7 +151,7 @@
         padding-left: 10px;
     }
     .table-auto2 {
-            background-color: whitesmoke;
+            
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
             display: block;
             text-align: center;
@@ -183,7 +183,7 @@
     
  
     .table-container2 {
-        background-color: whitesmoke;
+        
         width: 72%;
         margin: auto;
         margin-top: 40px;

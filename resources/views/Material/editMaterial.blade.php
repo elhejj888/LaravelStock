@@ -1,8 +1,6 @@
 @extends('sidebar')
 @section('content')
-<section>
-    
-    
+<section>    
         <section>
             <div>
                 <div class="formbold-main-wrapper">
@@ -60,19 +58,26 @@
                           Marque
                           </label>
                           <select id="marque" class="formbold-form-input" height="80px" name="marque" >
-                            <option value="{{ $material->Marque }}">{{ $material->Marque }}</option>
-                            
+                            <option value="{{ $material->Marque }}" style="display: none">{{ $material->Marque }}</option>
+                            @foreach ($marques as $marque)
+                              <option value="{{ $marque->Marque }}">{{ $marque->Marque }}</option>
+                              @endforeach
                         </select>
                         </div>
-                        <div>
+                        @if ($material->choix)
+                        <div id="choix2" >
                           <label for="choix" class="formbold-form-label"> Type </label>
                           <select id="choix" class="formbold-form-input" height="80px" name="choix" >
-                              <option value="{{ $material->choix }}">{{ $material->choix }}</option>
-                      </select>
+                              <option value="{{ $material->choix }}" style="display: none">{{ $material->choix }}</option>
+                              @foreach ($choix as $choi)
+                              <option value="{{ $choi->Choix }}">{{ $choi->Choix }}</option>
+                              @endforeach
+                        </select>
                         </div>
+                        @endif
                         <div class="formbold-mb-3">
-                          <label for="address" class="formbold-form-label">
-                          Adresse Mac
+                          <label for="mac" class="formbold-form-label">
+                              Adresse Mac
                           </label>
                           <input
                             type="text"
@@ -81,6 +86,7 @@
                             class="formbold-form-input"
                             value="{{$material->AdresseMac}}" 
                           />
+                          <span id="MacValidation" style="color: red;"></span>
                         </div>
                         <div class="formbold-input-flex">
                           <div>
@@ -94,6 +100,7 @@
                             class="formbold-form-input"
                             value="{{$material->Tag}}" 
                           />
+                          <span id="TagValidation" style="color: red;"></span>
                         </div>
                         <div>
                           <label for="address" class="formbold-form-label">
@@ -142,7 +149,9 @@
                             <label for="post" class="formbold-form-label"> Emplacement </label>
                             <select id="emplacement" class="formbold-form-input" height="80px" name="emplacement">
                               <option value="{{ $material->Emplacement }}" style="display:none;">{{ $material->Emplacement }}</option>
-                              
+                              @foreach ($Emplacement as $Emplacement)
+                              <option value="{{$Emplacement->Emplacement}}">{{$Emplacement->Emplacement}}</option>
+                              @endforeach
                       </select>
                           </div>
                           
@@ -165,6 +174,25 @@
                       </form>
                     </div>
                   </div>
+
+                  <script>
+                    document.getElementById('type').addEventListener('change', function() {
+                        var selectedValue = this.value;
+                        var macLabel = document.querySelector('label[for="mac"]');
+                        var macInput = document.getElementById('mac');
+                        
+                        if (selectedValue === 'Casque' || selectedValue === 'Ecran') {
+                            macLabel.textContent = 'SIN';
+                            macInput.placeholder = 'SIN';
+                        } else {
+                            macLabel.textContent = 'Adresse Mac';
+                            macInput.placeholder = 'Adresse Mac';
+                        }
+                    });
+                </script>
+
+
+
                   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
                   <script>
                     // Attacher un gestionnaire d'événements au bouton
@@ -229,8 +257,7 @@
                                     choixSelect.empty();
                                     let resp = response.marques;
                                     let resp2 = response.choix;
-                                    console.log(resp);
-                                    console.log(resp2);
+                                    console.log(resp2.length);
                                     var marques = resp.marques;
                                     var choix = resp.choix;
                                     // Populate emplacement select box with fetched options
@@ -241,13 +268,22 @@
                                             text: value
                                         }));
                                     });
-                                    $.each(resp2, function(key, value) {
-                                      choixSelect.append($('<option>', {
-                                            value: key,
-                                            text: value
-                                        }));
-                                    });
-                                    
+                                    if(resp2.length != 0)
+                                    {
+                                        document.getElementById("choix2").style.display = "block";
+                                        document.getElementById("divC").className = "formbold-input-flex";
+                                        $.each(resp2, function(key, value) {
+                                        choixSelect.append($('<option>', {
+                                                value: key,
+                                                text: value
+                                            }));
+                                        });
+                                    }
+                                    else {
+                                        document.getElementById("choix2").style.display = "none";
+                                        document.getElementById("divC").className = "formbold-mb-3";
+                                    }
+
                                 },
                                 error: function() {
                                     // Handle error if necessary
@@ -404,9 +440,15 @@
             </div>
         </section>
         @endsection
+        @push('scripts')
+    <!-- D'autres scripts peuvent être déjà présents ici -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Autres scripts si nécessaire -->
+@endpush
         
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
+      
+
+   <script>
       // When hovering over .box, also apply the hover effect to .box and .lab in the same table cell
       $(".box").hover(function () {
         $(this).parent().find(".box, .lab").addClass("hovered");
@@ -421,6 +463,132 @@
         $(this).parent().find(".box, .lab").removeClass("hovered");
       });
     </script>
+    <script>
+      $(document).ready(function() {
+          const siteSelect = $('#site');
+          const typeSelect = $('#type');
+          const marqueSelect = $('#marque');
+          const choixSelect = $('#choix');
+          const emplacementSelect = $('#emplacement');
+
+          // Add an event listener for the site select box change
+          siteSelect.on('change', function() {
+              const selectedSite = $(this).val();
+
+              // Make an AJAX request to fetch emplacement options based on the selected site
+              $.ajax({
+                  url: '{{ route('getEmplacements') }}',
+                  method: 'GET',
+                  data: {
+                      site: selectedSite
+                  },
+                  success: function(response) {
+                      // Clear existing options in the emplacement select box
+                      emplacementSelect.empty();
+
+                      // Populate emplacement select box with fetched options
+                      $.each(response, function(key, value) {
+                          emplacementSelect.append($('<option>', {
+                              value: key,
+                              text: value
+                          }));
+                      });
+                  },
+                  error: function() {
+                      // Handle error if necessary
+                  }
+              });
+          });
+          typeSelect.on('change', function() {
+              const selectedtype = $(this).val();
+
+              // Make an AJAX request to fetch emplacement options based on the selected site
+              $.ajax({
+                  url: '{{ route('getMarque') }}',
+                  method: 'GET',
+                  data: {
+                      type: selectedtype
+                  },
+                  success: function(response) {
+                      // Clear existing options in the emplacement select box
+                      marqueSelect.empty();
+                      choixSelect.empty();
+                      let resp = response.marques;
+                      let resp2 = response.choix;
+                      console.log(resp2);
+                      var marques = resp.marques;
+                      var choix = resp.choix;
+                      // Populate emplacement select box with fetched options
+                      $.each(resp, function(key, value) {
+                        if(key)
+                        marqueSelect.append($('<option>', {
+                              value: key,
+                              text: value
+                          }));
+                      });
+                      if(resp2.length != 0)
+                      {
+                          document.getElementById("choix2").style.display = "block";
+                          $.each(resp2, function(key, value) {
+                          choixSelect.append($('<option>', {
+                                  value: key,
+                                  text: value
+                              }));
+                          });
+                      }
+                      else {
+                          document.getElementById("choix2").style.display = "none";
+                      }
+                      
+                  },
+                  error: function() {
+                      // Handle error if necessary
+                  }
+              });
+          });
+      });
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  $(document).ready(function() {
+          var submitButton = $('#submitButton');
+          $('#tag, #mac').on('keyup', function() {
+              var tagValue = $('#tag').val();
+              var macValue = $('#mac').val();
+              $.ajax({
+                  url: '/check-duplicate2',
+                  method: 'POST',
+                  data: {
+                      tag: tagValue,
+                      mac: macValue,
+                      initialTagValue : "{{$material->Tag}}",
+                      initialMacValue : "{{$material->AdresseMac}}",
+                      _token: '{{ csrf_token() }}'
+                  },
+                  success: function(response) {
+                      if (response.macExists || response.tagExists) {
+                          submitButton.prop('disabled', true);
+                      } else {
+                          submitButton.prop('disabled', false);
+                      }
+
+                      if (response.tagExists) {
+                          $('#TagValidation').text('Tag Existe Deja.');
+                      } else {
+                          $('#TagValidation').text('');
+                      }
+
+                      if (response.macExists) {
+                          $('#MacValidation').text('Adresse Mac Existe Deja.');
+                      } else {
+                          $('#MacValidation').text('');
+                      }
+
+                  }
+              });
+          });
+      });
+</script>
     
     <style>
       /* Apply a transition to the scale and opacity properties of .box and .lab when hovered */

@@ -172,10 +172,10 @@
                   <tr>
                     <th>Nom</th>
                     <th>Prenom</th>
-                    <th>Email</th>
+                    <th><center>Email</center></th>
                     <th>Service</th>
                     <th>Role</th>
-                    <th>Site</th>
+                    <th><center>Site</center></th>
                     <th>Detailles</th>
                     <th>Modifier</th>
                     @if(Auth::user()->Role === 'Admin')
@@ -187,12 +187,12 @@
                   @foreach ($users as $user)
                   @if ($user->Role != 'Départ')
                   <tr>
-                    <td>{{$user->Nom}}</td>
-                    <td>{{$user->Prenom}}</td>
-                    <td>{{$user->email}}</td>
-                    <td>{{$user->Service}}</td>
-                    <td>{{$user->Role}}</td>
-                    <td>{{$user->Site}}</td>
+                    <td><center>{{$user->Nom}}</center></td>
+                    <td><center>{{$user->Prenom}}</center></td>
+                    <td><center>{{$user->email}}</center></td>
+                    <td><center> {{$user->Service}}</center></td>
+                    <td><center>{{$user->Role}}</center></td>
+                    <td><center>{{$user->Site}}</center></td>
                     <td class="op">
                       <button class="operation"  onclick="window.location.href = '{{ route('showUser', ['id' => $user->id]) }}';">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -233,36 +233,218 @@
               </table>
 </div>
 </div>
-<style>
-       .dataTables_filter {
-            text-align: center; /* Aligner la barre de recherche à droite */
-    }
-        .dataTables_filter input[type="search"] {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 300px;
-        }
-    /* Masquer le texte "Show X entries" */
-    .dataTables_length {
-        display: none;
-    }
-    .dataTables_info {
-            display: none;
-        }
-</style>
 <script>
     $(document).ready(function() {
-        $('#example').DataTable({
+        // Initialise la table DataTable
+        var table = $('#example').DataTable({
             paging: true,
-            pageLength: 10, // 10 éléments par page par défaut
+            pageLength: 16, // 10 éléments par page par défaut
             searching: true // Afficher la barre de recherche
         });
+        // Fonction pour afficher un message lorsque la table est vide
+        function showNoDataMessage() {
+            $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
+        }
+    
+        // Vérifie si la table est vide après chaque dessin
+        table.on('draw', function() {
+            if (table.rows().count() === 0) {
+                showNoDataMessage();
+            }
+        });
+    
+        // Vérifie également si la table est vide lors de l'initialisation
+        if (table.rows().count() === 0) {
+            showNoDataMessage();
+        }
     });
-    if (table.data().count() === 0) {
-        $('#example').parent().append('<div id="no-data-msg">Pas d\'élément pour l\'instant</div>');
-    }
     </script>
+<script>
+                $(document).ready(function() {
+                    const siteSelect = $('#site');
+                    const emplacementSelect = $('#emplacement');
+
+                    // Add an event listener for the site select box change
+                    siteSelect.on('change', function() {
+                        const selectedSite = $(this).val();
+
+                        // Make an AJAX request to fetch emplacement options based on the selected site
+                        $.ajax({
+                            url: '{{ route('getEmplacements') }}',
+                            method: 'GET',
+                            data: {
+                                site: selectedSite
+                            },
+                            success: function(response) {
+                                // Clear existing options in the emplacement select box
+                                emplacementSelect.empty();
+                                // Populate emplacement select box with fetched options
+                                $.each(response, function(key, value) {
+                                    emplacementSelect.append($('<option>', {
+                                        value: key,
+                                        text: value
+                                    }));
+                                });
+                            },
+                            error: function() {
+                                // Handle error if necessary
+                            }
+                        });
+                    });
+                });
+    const openButtons = document.querySelectorAll('#open-button');
+    const closeButtons = document.querySelectorAll('.close-button');
+    const dialogs = document.querySelectorAll('.modal');
+
+    openButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modalId = button.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+            modal.showModal();
+        });
+    });
+
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('dialog');
+            modal.close();
+        });
+    });        
+
+    function customizeSearchBar() {
+    // Ajoute une classe CSS pour changer la couleur du texte
+    $('.dataTables_filter input[type="search"]').addClass('green-text');
+
+    // Place le curseur au milieu de la barre de recherche
+    var input = $('.dataTables_filter input[type="search"]');
+    var textLength = input.val().length;
+    input[0].setSelectionRange(textLength, textLength);
+}
+
+// Appel de la fonction de personnalisation lorsque la table est dessinée
+table.on('draw', function() {
+    customizeSearchBar();
+});
+
+// Appel également la fonction de personnalisation lors de l'initialisation
+customizeSearchBar();
+
+</script>
+
+<style>
+
+/* Style pour le texte saisi par l'utilisateur */
+.green-text {
+color: green !important; /* Change la couleur du texte en vert */
+}
+
+/* Style pour centrer le texte dans la barre de recherche */
+.dataTables_filter input[type="search"] {
+text-align: center;
+}
+
+
+.modal h1{
+    background-color: #019455;
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 40px;
+    padding-top: 10px;
+    height: 50px;
+    text-align: center;
+}
+.modal::backdrop{
+    background-color: #1c5d4161;
+}
+.modal {
+    background-color: rgb(243, 245, 241);
+    text-align: center;
+    align-items: center;
+    margin: auto;
+    height: 300px;
+    width: 500px;
+    border-radius: 10px;
+    border: 2px solid black;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 0px;
+
+}
+#Operation{
+    background-color: #019455;
+    color: #fff;   
+    font-size: 20px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 50%;
+}
+#submit{
+    background-color: #019455;
+    color: #fff;   
+    font-size: 20px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 50%;
+}
+.modal table{
+    margin: auto;  
+}    
+
+
+.modal select{
+    font-size: 17px;
+
+}
+.modal label{
+    font-size: 17px;
+}
+.inputs{
+    margin: auto;
+    border-radius:10px;
+    margin-top: 25px;
+
+}
+.area{
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Horizontally center-align items */
+}
+    
+
+    .operation {
+        color: white;
+        background-color: #019455;
+        font-weight: bold;
+        padding: 2px;
+        margin: 2px;
+        border-radius: 3px;
+
+    }
+    .operation:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #037d48;
+    }
+    /* Style personnalisé pour la barre de recherche */
+.dataTables_filter {
+margin-bottom: 10px; /* Espacement en bas de la barre de recherche */
+}
+
+.dataTables_filter input[type="search"] {
+width: 300px; /* Largeur de la zone de recherche */
+padding: 5px; /* Espacement à l'intérieur de la zone de recherche */
+border: 1px solid #ccc; /* Bordure de la zone de recherche */
+border-radius: 4px; /* Coins arrondis de la zone de recherche */
+box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Ombre de la zone de recherche */
+}
+</style>
+
+
+
 </body>
 
 </html>

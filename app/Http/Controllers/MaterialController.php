@@ -47,7 +47,6 @@ class MaterialController extends Controller
     // Retourner la vue du formulaire d'ajout de matériel avec les données récupérées.
         return view('Material/addMaterial', ['TypeProduits' => $TypeProduit, 'sites' => $sites, 'values' => $values]);
     }
-
     function RetrieveMaterials()
     {
         if (auth()->check()) {
@@ -74,7 +73,7 @@ class MaterialController extends Controller
             $material = material::findOrFail($id);
             $user = "";
             if ($material->etat == "Assigne")
-                $user = User::where('id', $material->userId)->first();
+            $user = User::where('id', $material->userId)->first();
             $currentDateTime = Carbon::now();
             $buyingTime = Carbon::parse($material->DateAchat);
             $garantie = $currentDateTime->diff($buyingTime);
@@ -121,6 +120,18 @@ class MaterialController extends Controller
                 ->where('Qui','materiel')
                 ->distinct()
                 ->get();
+            $choix= DB::table('admins')
+                ->select('Choix') // Specify the column you want distinct values from
+                ->whereNotNull('Choix')
+                ->where('TypeProduit','=',$material->TypeProduit)
+                ->distinct()
+                ->get();
+            $marques= DB::table('admins')
+                ->select('Marque') // Specify the column you want distinct values from
+                ->whereNotNull('Marque')
+                ->where('TypeProduit','=',$material->TypeProduit)
+                ->distinct()
+                ->get();
             $sites= DB::table('admins')
                 ->select('Site') // Specify the column you want distinct values from
                 ->whereNotNull('Site')
@@ -132,12 +143,17 @@ class MaterialController extends Controller
                 ->whereNotNull('Foutnisseur')
                 ->distinct()
                 ->get();
-            return view('Material/editMaterial', ['material' => $material , 'types'=>$types , 'sites'=>$sites , 'fournisseurs' =>$fournisseur]);
+                $emplacement=DB::table('admins')
+                ->select('Emplacement') // Specify the column you want distinct values from
+                ->whereNotNull('Emplacement')
+                ->distinct()
+                ->get();
+            return view('Material/editMaterial', ['material' => $material , 'types'=>$types , 'sites'=>$sites ,
+             'fournisseurs' =>$fournisseur , 'choix'=>$choix , 'marques'=>$marques,'Emplacement'=>$emplacement]);
         } else {
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
-
     public function updateValues(Request $request)
     {
         if (auth()->check()) {
@@ -185,15 +201,28 @@ class MaterialController extends Controller
 
     public function checkDuplicate(Request $request)
     {
-        $tagExists = material::where('Tag', $request->tag)->exists();
-        $macExists = material::where('AdresseMac', $request->mac)->exists();
-        $invoiceExists = material::where('N_Facture', $request->facture)->exists();
+        if($request->initialMacValue || $request->initialTagValue){
+        $initialMacValue = $request->initialMacValue;
+        $initialTagValue = $request->initialTagValue;
+        $tagExists = Material::where('Tag', $request->tag)
+            ->where('Tag', '!=', $initialTagValue)
+            ->exists();
 
+        $macExists = Material::where('AdresseMac', '!=', $initialMacValue)
+        ->where('AdresseMac', $request->mac)
+        ->exists();
+        }
+        else{
+        $tagExists = Material::where('Tag', $request->tag)
+        ->exists();
+        $macExists = material::where('AdresseMac', $request->mac)
+        ->exists();
+        }
+        
 
         return response()->json([
             'macExists' => $macExists,
             'tagExists' => $tagExists,
-            'invoiceExists' => $invoiceExists,
         ]);
     }
     public function addDesc(Request $request)
@@ -226,7 +255,7 @@ class MaterialController extends Controller
     public function maintainvalues()
     {
         if (auth()->check()) {
-            $materials = material::where('etat', 'maintenance');
+            $materials = material::where('etat', 'maintenance')->simplePaginate(20);
             $sites= DB::table('admins')
                 ->select('Site') // Specify the column you want distinct values from
                 ->whereNotNull('Site')
@@ -236,7 +265,7 @@ class MaterialController extends Controller
 
             return view('Material/maintain', ['materials' => $materials , 'sites'=>$sites , 'message'=>'']);
         } else {
-            return redirect('login')->with('error', 'Authentication failed.');
+            return redirect('login')->with('message', 'Authentication failed.');
         }
     }
     public function deleteMaterial($id)
@@ -303,14 +332,37 @@ class MaterialController extends Controller
             return redirect('login')->with('message', 'Veuillez vous Connecter...');
         }
     }
+/*
+// Count users by role
+$rolesToSearch = ['Autorisé', 'Restreint', 'Départ'];
+$userCounts = User::whereIn('Role', $rolesToSearch)
+    ->where(function ($query) use ($rolesToSearch) {
+        foreach ($rolesToSearch as $role) {
+            $query->orWhere('Role', 'LIKE', '%' . $role . '%');
+        }
+    })
+    ->groupBy('Role')
+    ->selectRaw('count(*) as count, Role')
+    ->pluck('count', 'Role');
 
-    public function home(Request $request)
+// Remplacez les valeurs NULL par 0 pour chaque rôle
+foreach ($rolesToSearch as $role) {
+    $userCounts[$role] = $userCounts[$role] ?? 0;
+}
+
+return view('home', [
+    'types' => $types,
+    'materialCounts' => $materialCounts,
+    'userCounts' => $userCounts,
+    'maintenanceCount' => $ruptureCount,
+    'ruptureCount' => $ruptureCount,
+]);
+
+*/
+public function home(Request $request)
 {
     if (auth()->check()) {
-        $materialCounts = [];
-        $statuses = ['Disponible', 'Assigne', 'maintenance', 'rupture'];
-
-        // Get distinct types from the database
+        // Get distinct types from the database in a single query
         $types = DB::table('admins')
             ->select('TypeProduit')
             ->whereNotNull('TypeProduit')
@@ -318,39 +370,35 @@ class MaterialController extends Controller
             ->distinct()
             ->pluck('TypeProduit');
 
-        foreach ($types as $type) {
-            $typeCounts = [];
+        // Count materials for each type and status using a single query
+        $materialCounts = material::whereIn('TypeProduit', $types)
+            ->whereIn('etat', ['Disponible', 'Assigne', 'maintenance', 'rupture'])
+            ->selectRaw('TypeProduit, etat, count(*) as count')
+            ->groupBy('TypeProduit', 'etat')
+            ->get()
+            ->groupBy('TypeProduit')
+            ->map(function ($group) {
+                return $group->pluck('count', 'etat');
+            });
 
-            foreach ($statuses as $status) {
-                // Count materials for each type and status
-                $count = material::where('TypeProduit', $type)
-                    ->where('etat', $status)
-                    ->count();
-
-                $typeCounts[$status] = $count;
-            }
-
-            $materialCounts[$type] = $typeCounts;
-        }
-
-        // Count materials in rupture and maintenance
+        // Count materials in rupture and maintenance using a single query
         $ruptureCount = material::whereIn('etat', ['rupture', 'maintenance'])->count();
-        
-        // Count users by role
+
+        // Count users by role using a single query
         $rolesToSearch = ['Autorisé', 'Restreint', 'Départ'];
         $userCounts = User::whereIn('Role', $rolesToSearch)
-            ->where(function ($query) use ($rolesToSearch) {
-                foreach ($rolesToSearch as $role) {
-                    $query->orWhere('Role', 'LIKE', '%' . $role . '%');
-                }
-            })
-            ->groupBy('Role')
             ->selectRaw('count(*) as count, Role')
+            ->groupBy('Role')
+            ->get()
             ->pluck('count', 'Role');
-        
-        
+
+        // Replace null values with 0 for each role
+        foreach ($rolesToSearch as $role) {
+            $userCounts[$role] = $userCounts[$role] ?? 0;
+        }
+
         return view('home', [
-            'types'=>$types,
+            'types' => $types,
             'materialCounts' => $materialCounts,
             'userCounts' => $userCounts,
             'maintenanceCount' => $ruptureCount,
@@ -360,9 +408,6 @@ class MaterialController extends Controller
         return redirect('login')->with('error', 'Authentication failed.');
     }
 }
-
-
-  
 
     /**
      * Affecte un matériel à un utilisateur spécifique.
@@ -401,5 +446,16 @@ class MaterialController extends Controller
         ->orWhere('etat', 'Sortie')->get();
     return view('Material.Corbeille', ['materials'=>$materials , 'message' => '']);
     
+    }
+
+    public function RetrieveUsers($id){
+        if (auth()->check()) {
+            $material = material::findOrFail($id);
+            $users = User::all();
+            return view('Material.affecting', ['users'=>$users , 'material'=>$material , 'message' => '']);
+        } else {
+            return redirect('login')->with('error', 'Authentication failed.');
+        }    
+
     }
 }

@@ -275,11 +275,29 @@
 </body>
 <script>
     $(document).ready(function() {
-        $('#example').DataTable({
+        // Initialise la table DataTable
+        var table = $('#example').DataTable({
             paging: true,
-            pageLength: 10, // 10 éléments par page par défaut
+            pageLength: 16, // 10 éléments par page par défaut
             searching: true // Afficher la barre de recherche
         });
+    
+        // Fonction pour afficher un message lorsque la table est vide
+        function showNoDataMessage() {
+            $('#example tbody').html('<tr><td colspan="10"><center> Pas d\'élément pour l\'instant</center></td></tr>');
+        }
+    
+        // Vérifie si la table est vide après chaque dessin
+        table.on('draw', function() {
+            if (table.rows().count() === 0) {
+                showNoDataMessage();
+            }
+        });
+    
+        // Vérifie également si la table est vide lors de l'initialisation
+        if (table.rows().count() === 0) {
+            showNoDataMessage();
+        }
     });
     </script>
 <script>
@@ -329,6 +347,19 @@
 
 <style>
 /* Apply a transition to the scale and opacity properties of .box and .lab when hovered */
+
+
+.green-text {
+    color: green !important; /* Change la couleur du texte en vert */
+}
+
+/* Style pour centrer le texte dans la barre de recherche */
+.dataTables_filter input[type="search"] {
+    text-align: center;
+}
+
+
+
 .hovered {
 transform: scale(1.2);
 opacity: 0.9;

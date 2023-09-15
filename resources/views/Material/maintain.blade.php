@@ -192,14 +192,12 @@
               @foreach ($materials as $material)
               <tr>
                 
-                <td>{{$material->TypeProduit}}</td>
-                <td>{{$material->Marque}}</td>
-                <td>{{$material->description}}</td>
-                <td>{{$material->DateAchat}}</td>
-                <td>{{$material->Emplacement}}</td>
-                <td>{{$material->Site}}</td>
-
-
+                <td><center>{{$material->TypeProduit}}</center></td>
+                <td><center>{{$material->Marque}}</center></td>
+                <td><center>{{$material->description}}</center></td>
+                <td><center>{{$material->DateAchat}}</center></td>
+                <td><center>{{$material->Emplacement}}</center> </td>
+                <td><center>{{$material->Site}}</center></td>
                     </a></td>
                     <td class="op">
                       <button class="operation"
@@ -279,14 +277,31 @@
       
     </div>
     <script>
-       $(document).ready(function() {
-        $('#example').DataTable({
-            paging: true,
-            pageLength: 10, // 10 éléments par page par défaut
-            searching: true // Afficher la barre de recherche
+        $(document).ready(function() {
+            // Initialise la table DataTable
+            var table = $('#example').DataTable({
+                paging: true,
+                pageLength: 16, // 10 éléments par page par défaut
+                searching: true // Afficher la barre de recherche
+            });
+            // Fonction pour afficher un message lorsque la table est vide
+            function showNoDataMessage() {
+                $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
+            }
+        
+            // Vérifie si la table est vide après chaque dessin
+            table.on('draw', function() {
+                if (table.rows().count() === 0) {
+                    showNoDataMessage();
+                }
+            });
+        
+            // Vérifie également si la table est vide lors de l'initialisation
+            if (table.rows().count() === 0) {
+                showNoDataMessage();
+            }
         });
-    });
-    </script>
+        </script>
     <script>
                     $(document).ready(function() {
                         const siteSelect = $('#site');
@@ -337,10 +352,41 @@
                 const modal = button.closest('dialog');
                 modal.close();
             });
-        });
+        });        
+
+        function customizeSearchBar() {
+        // Ajoute une classe CSS pour changer la couleur du texte
+        $('.dataTables_filter input[type="search"]').addClass('green-text');
+
+        // Place le curseur au milieu de la barre de recherche
+        var input = $('.dataTables_filter input[type="search"]');
+        var textLength = input.val().length;
+        input[0].setSelectionRange(textLength, textLength);
+    }
+
+    // Appel de la fonction de personnalisation lorsque la table est dessinée
+    table.on('draw', function() {
+        customizeSearchBar();
+    });
+
+    // Appel également la fonction de personnalisation lors de l'initialisation
+    customizeSearchBar();
+
     </script>
     
 <style>
+
+    /* Style pour le texte saisi par l'utilisateur */
+.green-text {
+    color: green !important; /* Change la couleur du texte en vert */
+}
+
+/* Style pour centrer le texte dans la barre de recherche */
+.dataTables_filter input[type="search"] {
+    text-align: center;
+}
+
+
     .modal h1{
         background-color: #019455;
         color: #fff;
@@ -426,36 +472,18 @@
             color: #fff;
             background-color: #037d48;
         }
-        .dataTables_length {
-        display: none;
-    }
-    .dataTables_info {
-            display: none;
-     }
-     .dataTables_paginate {
-            text-align: center;
-            padding: 10px;
-        }
-        
-        .dataTables_paginate a {
-            padding: 5px 10px;
-            margin: 0 5px;
-            border: 1px solid blue;
-            border-radius: 5px;
-            text-decoration: none;
-            color: blue;
-            background-color: blue;
-        }
+        /* Style personnalisé pour la barre de recherche */
+.dataTables_filter {
+    margin-bottom: 10px; /* Espacement en bas de la barre de recherche */
+}
 
-        .dataTables_paginate a:hover {
-            background-color: blue;
-        }
-
-        .dataTables_paginate .active a {
-            background-color: #007bff;
-            color: blue;
-            border: 1px solid #007bff;
-        }
-    </style>
+.dataTables_filter input[type="search"] {
+    width: 300px; /* Largeur de la zone de recherche */
+    padding: 5px; /* Espacement à l'intérieur de la zone de recherche */
+    border: 1px solid #ccc; /* Bordure de la zone de recherche */
+    border-radius: 4px; /* Coins arrondis de la zone de recherche */
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Ombre de la zone de recherche */
+}
+</style>
    
 

@@ -192,11 +192,11 @@
             <tbody>
               @foreach ($users as $user)
               <tr>
-                <td>{{$user->Nom}}</td>
-                <td>{{$user->Prenom}}</td>
-                <td>{{$user->email}}</td>
-                <td>{{$user->Service}}</td>
-                <td>{{$user->Site}}</td>
+                <td><center>{{$user->Nom}}</center></td>
+                <td><center>{{$user->Prenom}}</center> </td>
+                <td><center>{{$user->email}}</center></td>
+                <td><center>{{$user->Service}}</center> </td>
+                <td><center>{{$user->Site}}</center></td>
                   <td class="op">
                     <button class="operation"
                         onclick="window.location.href = '{{ route('showUser', ['id' => $user->id]) }}';">
@@ -233,57 +233,54 @@
 </body>
 
 <script>
- $(document).ready(function() {
-        $('#example').DataTable({
+    $(document).ready(function() {
+        // Initialise la table DataTable
+        var table = $('#example').DataTable({
             paging: true,
-            pageLength: 10, // 10 éléments par page par défaut
+            pageLength: 16, // 10 éléments par page par défaut
             searching: true // Afficher la barre de recherche
         });
+        // Fonction pour afficher un message lorsque la table est vide
+        function showNoDataMessage() {
+            $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
+        }
+    
+        // Vérifie si la table est vide après chaque dessin
+        table.on('draw', function() {
+            if (table.rows().count() === 0) {
+                showNoDataMessage();
+            }
+        });
+    
+        // Vérifie également si la table est vide lors de l'initialisation
+        if (table.rows().count() === 0) {
+            showNoDataMessage();
+        }
     });
-</script>
-
-
+    </script>
+    
 <style>
+    .green-text {
+    color: green !important; /* Change la couleur du texte en vert */
+}
+
+/* Style pour centrer le texte dans la barre de recherche */
+.dataTables_filter input[type="search"] {
+    text-align: center;
+}
+
 .dataTables_filter {
-            text-align: center; /* Aligner la barre de recherche à droite */
-    }
-        .dataTables_filter input[type="search"] {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 300px;
-        }
+    margin-bottom: 10px; /* Espacement en bas de la barre de recherche */
+}
 
-.dataTables_length {
-        display: none;
-    }
-    .dataTables_info {
-            display: none;
-     }
-     .dataTables_paginate {
-            text-align: center;
-            padding: 10px;
-        }
-        
-        .dataTables_paginate a {
-            padding: 5px 10px;
-            margin: 0 5px;
-            border: 1px solid blue;
-            border-radius: 5px;
-            text-decoration: none;
-            color: blue;
-            background-color: blue;
-        }
+.dataTables_filter input[type="search"] {
+    width: 300px; /* Largeur de la zone de recherche */
+    padding: 5px; /* Espacement à l'intérieur de la zone de recherche */
+    border: 1px solid #ccc; /* Bordure de la zone de recherche */
+    border-radius: 4px; /* Coins arrondis de la zone de recherche */
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Ombre de la zone de recherche */
+}
 
-        .dataTables_paginate a:hover {
-            background-color: blue;
-        }
-
-        .dataTables_paginate .active a {
-            background-color: #007bff;
-            color: blue;
-            border: 1px solid #007bff;
-        }
         .operation {
             color: white;
             background-color: #019455;

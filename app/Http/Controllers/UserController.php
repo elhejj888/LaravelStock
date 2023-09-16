@@ -317,6 +317,7 @@ class UserController extends Controller
          */
         public function fetchUserFormValues(){
 
+            if (auth()->check()) {
             $sites= DB::table('admins')
                 ->select('Site') // Specify the column you want distinct values from
                 ->whereNotNull('Site')
@@ -327,13 +328,21 @@ class UserController extends Controller
             $values=Admin::where('Qui','materiel')->get();
 
             return view('User/addUser',['sites'=>$sites , 'values'=>$values]);
-    
+        }
+        else 
+            return redirect('login')->with('error', 'Authentication failed.');
+        
         }
 
     public function index()
     {
-    $users = User::all();
+        if (auth()->check()) {
+            $users = User::all();
     return view('User.userDataTable', ['users'=>$users , 'message' => '']);
     }
+    else 
+        return redirect('login')->with('error', 'Authentication failed.');
+
+}
 
 }

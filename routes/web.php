@@ -27,7 +27,11 @@ Route::group(['middleware' => ['web', 'check.session']], function () {
 Route::get('/', [MaterialController::class, 'home'])->name('home');
 Route::get('/home', [MaterialController::class, 'home'])->name('home');
 Route::get('/trashCan', function () {
-    return view('TrashCan');
+    if (auth()->check()) 
+        return view('TrashCan');
+    else 
+        return redirect('login')->with('error', 'Authentication failed.');
+
 }); //route to the Deleted Materials and Users
 
 
@@ -49,13 +53,28 @@ Route::get('/getMarque', [AdminController::class, 'getMarque'])->name('getMarque
 Route::get('/getEmplacements', [AdminController::class, 'getEmplacements'])->name('getEmplacements');
 Route::post('/saveRoute',[AdminController::class , 'saveValues'])->name('saveRoute');
 Route::get('/ManageDrops', function () {
-    return view('Administration/drops', ['message' => 'Bonjour..']);
+    if (auth()->check()) 
+        return view('Administration/drops', ['message' => 'Bonjour..']);
+    
+    else {
+        return redirect('login')->with('error', 'Authentication failed.');
+    }
 });
 Route::get('/Administration', function () {
-    return view('Administration/main', ['message' => 'Bonjour..']);
+    if (auth()->check()) 
+        return view('Administration/main', ['message' => 'Bonjour..']);
+    
+    else {
+        return redirect('login')->with('error', 'Authentication failed.');
+    }
 });
 Route::get('/DeleteDrops', function () {
-    return view('Administration/DeleteDrops', ['message' => 'Bonjour..']);
+    if (auth()->check()) 
+        return view('Administration/DeleteDrops', ['message' => 'Bonjour..']);
+
+    else {
+        return redirect('login')->with('error', 'Authentication failed.');
+    }
 });
 Route::get('users', [UserController::class, 'index']);//Displaying All the users in the database except the deleted ones
 Route::post('/users', [UserController::class, 'setUpdatedUserValues']);//Same but after updating a value

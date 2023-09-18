@@ -249,7 +249,6 @@
             @foreach ($materials as $material)
                 @if ($material->etat != 'rupture')
                 @if ($material->etat != 'Sortie')
-
                     <tr>
 
                         <td><center>{{ $material->TypeProduit }}</center> </td>
@@ -654,6 +653,20 @@ customizeSearchBar();
 </script>
 
 <style>
+
+/* Styles pour les champs "Site" et "Emplacement" lorsque "Disponible" est sélectionné */
+.disponible-site {
+    /* Styles CSS personnalisés pour le champ "Site" en mode "Disponible" */
+    border: 2px solid green;
+    /* Ajoutez d'autres styles selon vos besoins */
+}
+
+.disponible-emplacement {
+    /* Styles CSS personnalisés pour le champ "Emplacement" en mode "Disponible" */
+    background-color: lightgreen;
+    /* Ajoutez d'autres styles selon vos besoins */
+}
+
 
 /* Style pour le texte saisi par l'utilisateur */
 .green-text {

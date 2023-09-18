@@ -159,8 +159,7 @@
                 </script>
 
 
-
-                              <script>
+                <script>
                     $(document).ready(function() {
                         const siteSelect = $('#site');
                         const typeSelect = $('#type');

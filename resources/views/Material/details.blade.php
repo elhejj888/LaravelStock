@@ -22,7 +22,7 @@
                     <dd>{{ $material->Tag }}</dd>
                 </div>
                 <div class="description-pair">
-                    <dt class="t1">Adresse Mac / SIN :</dt>
+                    <dt class="t1">Adresse Mac --- S/N:</dt>
                     <dd>{{ $material->AdresseMac }}</dd>
                 </div>
                 <div class="description-pair">

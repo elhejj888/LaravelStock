@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('../img/logo1.png')}}" />
     
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="{{asset('../css/style.css')}}">
@@ -215,7 +216,7 @@
                                         @endphp
                                     
                                         <td style="font-size: 12px;">{{ $values['Disponible'] ?? 0 }}</td>
-                                        <td style="font-size: 12px;">{{ $values['Assigné'] ?? 0 }}</td>
+                                        <td style="font-size: 12px;">{{ $values['Assigne'] ?? 0 }}</td>
                                         <td style="font-size: 12px;">{{ $values['maintenance'] ?? 0 }}</td>
                                         <td style="font-size: 12px;">{{ $values['rupture'] ?? 0 }}</td>
                                     </tr>

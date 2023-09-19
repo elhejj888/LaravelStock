@@ -198,7 +198,6 @@
                         });
                         typeSelect.on('change', function() {
                             const selectedtype = $(this).val();
-
                             // Make an AJAX request to fetch emplacement options based on the selected site
                             $.ajax({
                                 url: '{{ route('getMarque') }}',

@@ -176,10 +176,8 @@
                 <tbody class="mainData">
                     @foreach ($historisations as $historisation)
                         <tr>
-                            @if($historisation->FullName != "Systeme de Connexion" || $historisation->FullName != "Inconnu")
-                            <td><a
-                                    href="{{ route('showUser', ['id' => $historisation->user_id]) }}">{{ $historisation->FullName }}</a>
-                            </td>
+                            @if($historisation->FullName != "Systeme de Connexion" && $historisation->FullName != "Inconnu")
+                            <td><a href="{{ route('showUser', ['id' => $historisation->user_id]) }}">{{ $historisation->FullName }}</a></td>
                             @else
                             <td>Connexion</td>
                             @endif

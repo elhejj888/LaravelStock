@@ -162,6 +162,7 @@
         });
     });
                     $(document).ready(function() {
+                      
                         const siteSelect = $('#site');
                         
                         const serviceSelect = $('#service');

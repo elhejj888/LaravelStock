@@ -11,6 +11,7 @@ class AdminController extends Controller
 {
     public function saveValues(Request $request)
 {       
+    if (auth()->check()) {
         $admin = Admin::create([
         'Qui' => $request->input('selected'),
         'TypeProduit'=> $request->input('type'),
@@ -24,11 +25,15 @@ class AdminController extends Controller
         $response = "succes";
 
     return response($response);
+    }else {
+        return redirect('login')->with('error', 'Authentication failed.');
+    }
 }
 
 
 public function getSites()
 {
+    if (auth()->check()) {
     $sites= DB::table('admins')
                 ->select('Site') // Specify the column you want distinct values from
                 ->whereNotNull('Site')
@@ -37,10 +42,15 @@ public function getSites()
                 ->get();
 
     return response()->json($sites);
+    }else {
+        return redirect('login')->with('error', 'Authentication failed.');
+    }
 }
 
 public function getUserSites()
 {
+    if (auth()->check()) {
+
     $sites= DB::table('admins')
                 ->select('Site') // Specify the column you want distinct values from
                 ->whereNotNull('Site')
@@ -49,6 +59,10 @@ public function getUserSites()
                 ->get();
 
     return response()->json($sites);
+}
+else {
+    return redirect('login')->with('error', 'Authentication failed.');
+}
 }
 
 public function getTypes()

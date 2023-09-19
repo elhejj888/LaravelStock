@@ -27,6 +27,7 @@ class MaterialController extends Controller
 
     public function fetchMaterialFormValues()
     {
+        if (auth()->check()) {
         // Récupérer les types de produits disponibles depuis la table 'admins'.
         $TypeProduit = DB::table('admins')
             ->select('TypeProduit') // Spécifiez la colonne dont vous voulez des valeurs distinctes
@@ -46,7 +47,12 @@ class MaterialController extends Controller
 
     // Retourner la vue du formulaire d'ajout de matériel avec les données récupérées.
         return view('Material/addMaterial', ['TypeProduits' => $TypeProduit, 'sites' => $sites, 'values' => $values]);
+    }else {
+        return redirect('login')->with('error', 'Authentication failed.');
     }
+    }
+
+
     function RetrieveMaterials()
     {
         if (auth()->check()) {
@@ -178,6 +184,8 @@ class MaterialController extends Controller
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
+
+
     public function updateValues2(Request $request)
     {
         if (auth()->check()) {
@@ -225,6 +233,8 @@ class MaterialController extends Controller
             'tagExists' => $tagExists,
         ]);
     }
+
+
     public function addDesc(Request $request)
     {
         if (auth()->check()) {
@@ -243,6 +253,8 @@ class MaterialController extends Controller
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
+
+
     public function deletedvalues()
     {
         if (auth()->check()) {
@@ -252,6 +264,8 @@ class MaterialController extends Controller
             return redirect('login')->with('error', 'Authentication failed.');
         }
     }
+
+
     public function maintainvalues()
     {
         if (auth()->check()) {
@@ -268,6 +282,8 @@ class MaterialController extends Controller
             return redirect('login')->with('message', 'Authentication failed.');
         }
     }
+
+
     public function deleteMaterial($id)
     {
         if (auth()->check()) {
@@ -359,6 +375,8 @@ return view('home', [
 ]);
 
 */
+
+
 public function home(Request $request)
 {
     if (auth()->check()) {
@@ -405,7 +423,7 @@ public function home(Request $request)
             'ruptureCount' => $ruptureCount,
         ]);
     } else {
-        return redirect('login')->with('error', 'Authentication failed.');
+        return redirect('login')->with('message', 'Authentication failed.');
     }
 }
 
@@ -438,14 +456,29 @@ public function home(Request $request)
 
     public function index()
     {
+        if (auth()->check()) {
     $materials = material::all();
+
     return view('Material.dataTable', ['materials'=>$materials , 'message' => '']);
-    }
+    
+    }else {
+        return redirect('login')->with('error', 'Authentication failed.');
+    }    
+}
+
+
     public function MeterielsEnRebut(){
+
+        if (auth()->check()) {
         $materials = material::where('etat', 'rupture')
         ->orWhere('etat', 'Sortie')->get();
+
     return view('Material.Corbeille', ['materials'=>$materials , 'message' => '']);
     
+    }else {
+        return redirect('login')->with('error', 'Authentication failed.');
+    }
+
     }
 
     public function RetrieveUsers($id){

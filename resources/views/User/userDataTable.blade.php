@@ -162,9 +162,18 @@
                       <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
                   </svg>
               </button>
-              
-              
+              <div class="search">
+                <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
+                    @if (session('message'))
+                        {{ session('message') }}
+                    @else
+                        {{ $message }}
+                    @endif
+        
+                </p>
                 </div>
+                </div>
+                
           
             <div class="container" id="container">
             <table id="example" class="display" >

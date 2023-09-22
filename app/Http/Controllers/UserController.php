@@ -53,7 +53,9 @@ class UserController extends Controller
     public function showUserDetails($id)
     {
         if (auth()->check()) {
+            
             if($id == 0){
+
                 $historiques = Historisation::where('FullName', 'Systeme')->where('type','user')->get();
                 $user = array(
                     "Details" => "Ceci est le système responsable de la gestion des connexions. Vous pouvez vérifier toutes les connexions passées par les utilisateurs ici."

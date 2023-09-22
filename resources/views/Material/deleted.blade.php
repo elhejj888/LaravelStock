@@ -2,7 +2,17 @@
 @section('content')
 <section class="home">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    
     <div class="container">
         <div>
           <a href="addmaterial" class="add-user">
@@ -13,9 +23,9 @@
               </svg>
             </div>
           </a>
-        </div>
+    </div>
        
-    <div class="container" id="container">
+    <div  id="example_wrapper" class="dataTables_wrapper dt-bootstrap4" >
         <table id="example" class="display" >
             <thead>
               <tr>
@@ -27,11 +37,10 @@
                 <th>Date d'achat</th>
                 <th>Emplacement</th>
                 <th>Site</th>
-                <th>Detailles</th>
+                <th class="no-export">Detailles</th>
                 @if(Auth::user()->Role === 'Admin')
-                <th>Mise en Sortie</th>
+                <th class="no-export">Mise en Sortie</th>
                 @endif
-                
               </tr>
             </thead>
             <tbody class="mainData">
@@ -50,7 +59,7 @@
 
 
                     </a></td>
-                    <td class="op">
+                    <td class="no-export">
                       <button class="operation"
                           onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#101357"
@@ -64,7 +73,7 @@
                       </button>
                   </td>
                   @if(Auth::user()->Role === 'Admin')
-              <td class="op">
+              <td class="no-export">
                   <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}" >
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-folder-x" viewBox="0 0 16 16">
                         <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zm6.339-1.577A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
@@ -106,14 +115,53 @@
             </tbody>
           </table>
 </div>
+
 <script>
     $(document).ready(function() {
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+        }
+    
         // Initialise la table DataTable
         var table = $('#example').DataTable({
             paging: true,
-            pageLength: 16, // 10 éléments par page par défaut
-            searching: true // Afficher la barre de recherche
+            pageLength: 15, // 10 éléments par page par défaut
+            searching: true, // Afficher la barre de recherche
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                }
+            ]
         });
+    
         // Fonction pour afficher un message lorsque la table est vide
         function showNoDataMessage() {
             $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
@@ -131,7 +179,7 @@
             showNoDataMessage();
         }
     });
-    </script>
+</script>
 
     <script>
         const openButtons = document.querySelectorAll('#open-button');

@@ -8,17 +8,22 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('../img/logo1.png')}}" />
     <!----======== CSS ======== -->
     <script src="{{asset('../js/script.js')}}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/dataTables.searchBuilder.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.5.0/css/searchBuilder.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <link rel="stylesheet" href="{{asset('../css/style.css')}}">
     
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     
-    <title>Stock Manager</title> 
+    <title>Liste Des Materiels  Eca-Assurance </title> 
 </head>
 <style>
     .dataTables_filter {
@@ -222,7 +227,7 @@
 
                 </p>
             </div>
-        <div class="container" id="container" >
+        <div  id="example_wrapper" class="dataTables_wrapper dt-bootstrap4" >
     <table id="example" class="display" >
         <thead>
             <tr>
@@ -233,12 +238,12 @@
                 <th>Date d'achat</th>
                 <th>Emplacement</th>
                 <th><center>Site</center></th>
-                <th>Detailles</th>
-                <th>Affecter</th>
-                <th>Gerer</th>
+                <th  class="no-export">Detailles</th>
+                <th  class="no-export">Affecter</th>
+                <th  class="no-export">Gerer</th>
                 @if (Auth::user()->Role === 'Admin')
-                    <th>Modifier</th>
-                    <th>Mise en rebut
+                    <th  class="no-export">Modifier</th>
+                    <th  class="no-export">Mise en rebut
                     </th>
                 @endif
 
@@ -258,8 +263,8 @@
                         <td><center>{{ \Carbon\Carbon::parse($material->DateAchat)->format('Y-m-d') }}</center> </td>
                         <td><center>{{ $material->Emplacement }}</center> </td>
                         <td><center>{{ $material->Site }}</center> </td>
-                        <td class="op">
-                            <button class="operation"
+                        <td  class="no-export">
+                            <button class="operation" 
                                 onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="auto" fill="#fff"
                                     class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -308,7 +313,7 @@
                         </td>
 
 
-                        <td class="op">
+                        <td  class="no-export">
                             <button class="operation"
                                 onclick="{{ $material->etat === 'Disponible' ? "window.location.href = '" . route('affectMaterial', ['id' => $material->id]) . "';" : 'return false;' }}"
                                 {{ $material->etat !== 'Disponible' ? 'disabled style=background-color:grey; color:white;' : '' }}>
@@ -322,7 +327,7 @@
                                 Affecter
                             </button>
                         </td>
-                        <td class="op">
+                        <td  class="no-export">
                             <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="auto"
                                     fill="#fff" class="bi bi-gear" viewBox="0 0 16 16">
@@ -335,7 +340,7 @@
                             </button>
                         </td>
                         @if (Auth::user()->Role === 'Admin')
-                            <td class="op">
+                            <td  class="no-export">
                                 <button class="operation"
                                     onclick="window.location.href = '{{ route('updateMaterial', ['id' => $material->id]) }}';"
                                     style="text-decoration: none;">
@@ -349,7 +354,7 @@
                                     Modifier
                                 </button>
                             </td>
-                            <td class="op">
+                            <td  class="no-export">
                                 <button class="operation"
                                     onclick="if (confirm('Êtes-vous sûr de supprimer ..?')) window.location.href = this.getAttribute('data-href');"
                                     data-href="{{ route('deleteMaterial', ['id' => $material->id]) }}">
@@ -372,9 +377,77 @@
 </div>
 </div>
 </body>
+
+<script>
+    $(document).ready(function() {
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+        }
+    
+        // Initialise la table DataTable
+        var table = $('#example').DataTable({
+            paging: true,
+            pageLength: 15, // 10 éléments par page par défaut
+            searching: true, // Afficher la barre de recherche
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                }
+            ]
+        });
+    
+        // Fonction pour afficher un message lorsque la table est vide
+        function showNoDataMessage() {
+            $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
+        }
+    
+        // Vérifie si la table est vide après chaque dessin
+        table.on('draw', function() {
+            if (table.rows().count() === 0) {
+                showNoDataMessage();
+            }
+        });
+    
+        // Vérifie également si la table est vide lors de l'initialisation
+        if (table.rows().count() === 0) {
+            showNoDataMessage();
+        }
+    });
+</script>
+    
+
 <script>
 // When hovering over .box, also apply the hover effect to .box and .lab in the same table cell
     $(".box").hover(function () {
+        
     $(this).parent().find(".box, .lab").addClass("hovered");
     }, function () {
     $(this).parent().find(".box, .lab").removeClass("hovered");
@@ -552,34 +625,6 @@
     });
 })
 </script>
-
-
-<script>
-    $(document).ready(function() {
-        // Initialise la table DataTable
-        var table = $('#example').DataTable({
-            paging: true,
-            pageLength: 15, // 10 éléments par page par défaut
-            searching: true // Afficher la barre de recherche
-        });
-        // Fonction pour afficher un message lorsque la table est vide
-        function showNoDataMessage() {
-            $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
-        }
-    
-        // Vérifie si la table est vide après chaque dessin
-        table.on('draw', function() {
-            if (table.rows().count() === 0) {
-                showNoDataMessage();
-            }
-        });
-    
-        // Vérifie également si la table est vide lors de l'initialisation
-        if (table.rows().count() === 0) {
-            showNoDataMessage();
-        }
-    });
-    </script>
 <script>
                 $(document).ready(function() {
                     const siteSelect = $('#site');
@@ -643,6 +688,7 @@
 }
 
 // Appel de la fonction de personnalisation lorsque la table est dessinée
+
 table.on('draw', function() {
     customizeSearchBar();
 });

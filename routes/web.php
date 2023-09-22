@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HistoriqueController;
+use App\Http\Controllers\materielExportController;
 use App\Models\User;
 use App\Mail\Login;
 
@@ -23,6 +24,8 @@ use App\Mail\Login;
 
 
 //Home routes :
+
+Route::get('/material/export',[materielExportController::class,'export']);
 Route::group(['middleware' => ['web', 'check.session']], function () {
 Route::get('/', [MaterialController::class, 'home'])->name('home');
 Route::get('/home', [MaterialController::class, 'home'])->name('home');
@@ -32,10 +35,7 @@ Route::get('/trashCan', function () {
     else 
         return redirect('login')->with('error', 'Authentication failed.');
 
-}); //route to the Deleted Materials and Users
-
-
-//Routes to the Login Control Pages
+}); 
 Route::get('/login', function () {
     return view('Login/index', ['message' => 'Bonjour..']);
 });
@@ -77,45 +77,79 @@ Route::get('/DeleteDrops', function () {
     }
 });
 Route::get('users', [UserController::class, 'index']);//Displaying All the users in the database except the deleted ones
+
 Route::post('/users', [UserController::class, 'setUpdatedUserValues']);//Same but after updating a value
+
 Route::get('deletedusers', [UserController::class, 'showDeletedUsers']);//After Deleting
+
 Route::get('DeleteUser/{id}', [UserController::class, 'permanentlyDeleteUser'])->name('DeleteUser');//After Deleting
+
 Route::get('user/{id}', [UserController::class, 'showUserDetails'])->name('showUser');//Showing a user details
+
 Route::get('updateuser/{id}', [UserController::class, 'updatedUserInfo'])->name('updateUser');//updating a specefic user
+
 Route::get('deleteUser/{id}', [UserController::class, 'markUserAsDeparted'])->name('deleteUser');//deleting a user 
+
 Route::get('/searchUser', [UserController::class, 'searchUsers'])->name('searchUser');//Search a user
+
 Route::get('/searchDeletedUser', [UserController::class, 'searchDeletedUsers'])->name('searchDeletedUser');//search in the deleted materials
+
 Route::post('/adduser', [UserController::class, 'saveUser']);//Add a New User
+
 Route::post('/check-duplicate', [UserController::class, 'checkDuplicate']);
+
 Route::get('/adduser', [UserController::class ,'fetchUserFormValues']);
+
 Route::get('/usersDataTable', [UserController::class, 'index'])->name('usersDataTable');//Assign a material to a User Page Request
 
 
 Route::get('/Corbeille', [MaterialController::class, 'MeterielsEnRebut'])->name('MeterielsEnRebut');//Assign a material to a User Page Request
+
 Route::get('/dataTable', [MaterialController::class, 'index'])->name('index');//Assign a material to a User Page Request
+
 Route::post('/check-duplicate2', [MaterialController::class, 'checkDuplicate']);
+
 Route::post('/matt', [MaterialController::class, 'updateValues2']);//Same After Update
+
 Route::post('/Sortie', [MaterialController::class, 'MiseEnSortie']);//Same After Update
+
 Route::post('/fix', [MaterialController::class, 'addDesc']);//Same After Update
+
 Route::post('/addmaterial', [MaterialController::class, 'addMaterial']);//Displaying all the Materials After inserting
+
 Route::get('materials', [MaterialController::class, 'index']);//Displaying all materials with a get request
+
 Route::post('/materials', [MaterialController::class, 'updateValues']);//Same After Update
+
 Route::get('DeleteMaterial/{id}', [MaterialController::class, 'DeleteMaterial2'])->name('DeleteMaterial');//After Deleting
+
 Route::post('repareMaterial', [MaterialController::class, 'repareMaterial'])->name('repareMaterial');//After Deleting
+
 Route::get('/assign', [MaterialController::class, 'searchMaterialToAssign'])->name('assign');//Assign a material to a User Page Request
+
 Route::get('material/{id}', [MaterialController::class, 'showMaterial'])->name('showMaterial');//Displaying a Material Details
+
 Route::get('updatematerial/{id}', [MaterialController::class, 'updateMaterial'])->name('updateMaterial');//Update a Meterial
+
 Route::get('deleteMaterial/{id}', [MaterialController::class, 'deleteMaterial'])->name('deleteMaterial');//Delete a Material
+
 Route::get('/searchMaterial', [MaterialController::class, 'rechercherMaterial'])->name('searchMaterial');//Search in the Materials web page using Ajax
+
 Route::get('assignMaterial/{materialId}/{userId}', [MaterialController::class, 'assignerMaterielToUser'])->name('assignMaterial');//assignig the material with materialID to the user with userID
+
 Route::get('/searchDeletedMaterial', [MaterialController::class, 'searchDeletedMaterial'])->name('searchDeletedMaterial');//search in the deleted materials
+
 Route::get('deletedmaterials', [MaterialController::class, 'MeterielsEnRebut']);//deleted materials webpage
+
 Route::get('maintainMaterials', [MaterialController::class, 'maintainvalues']);//deleted materials webpage
+
 Route::get('/addmaterial', [MaterialController::class , 'fetchMaterialFormValues']);//the page to add material
+
 Route::get('affectmaterial/{id}', [MaterialController::class, 'RetrieveUsers'])->name('affectMaterial');//the page to assign material
 
 
 Route::get('historisation', [HistoriqueController::class, 'retrieveMaterialHistorisation']);//retrieve materials historisation
+
 Route::get('historisation', [HistoriqueController::class, 'retrieveUserHistorisation']);//retrieve users materials
 //both routes takes to the same view with the same variable name , the test are made on the view to separate between the two types
 Route::get('/searchHistoriqueMaterial', [HistoriqueController::class, 'find'])->name('findHistorique');//Ajax request to search on historique webpage

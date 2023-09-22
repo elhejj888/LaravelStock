@@ -1,13 +1,17 @@
-!----======== CSS ======== -->
+
     <script src="{{asset('../js/script.js')}}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/dataTables.searchBuilder.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.5.0/css/searchBuilder.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <link rel="stylesheet" href="{{asset('../css/style.css')}}">
     
-    <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     
     <title>Stock Manager</title> 
@@ -111,6 +115,7 @@
                             <span class="text nav-text">&nbsp; Administration</span>
                         </a>
                     </li>
+                  
                     @endif
                 </ul>
             </div>
@@ -174,7 +179,7 @@
     
             </p>
             </div>
-      <div class="container" id="container">
+            <div  id="example_wrapper" class="dataTables_wrapper dt-bootstrap4" >
         <table id="example" class="display" >
             <thead>
               <tr>
@@ -183,9 +188,9 @@
                 <th>Email</th>
                 <th>Service</th>
                 <th>Site</th>
-                <th>Detailles</th>
+                <th class="no-export">Detailles</th>
                 @if(Auth::user()->Role === 'Admin')
-                <th>Mise en Rebut</th>
+                <th class="no-export">Mise en Rebut</th>
                 @endif
               </tr>
             </thead>
@@ -197,7 +202,7 @@
                 <td><center>{{$user->email}}</center></td>
                 <td><center>{{$user->Service}}</center> </td>
                 <td><center>{{$user->Site}}</center></td>
-                  <td class="op">
+                  <td class="no-export">
                     <button class="operation"
                         onclick="window.location.href = '{{ route('showUser', ['id' => $user->id]) }}';">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#101357"
@@ -211,7 +216,7 @@
                     </button>
                 </td>
               @if(Auth::user()->Role === 'Admin')
-              <td class="op">
+              <td class="no-export">
                   <button class="operation"  onclick="if (confirm('Êtes-vous sûr de supprimer ..?')) window.location.href = this.getAttribute('data-href');"
                       data-href="{{ route('DeleteUser', ['id' => $user->id]) }}">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
@@ -234,12 +239,50 @@
 
 <script>
     $(document).ready(function() {
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+        }
+    
         // Initialise la table DataTable
         var table = $('#example').DataTable({
             paging: true,
-            pageLength: 16, // 10 éléments par page par défaut
-            searching: true // Afficher la barre de recherche
+            pageLength: 15, // 10 éléments par page par défaut
+            searching: true, // Afficher la barre de recherche
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                }
+            ]
         });
+    
         // Fonction pour afficher un message lorsque la table est vide
         function showNoDataMessage() {
             $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
@@ -257,8 +300,52 @@
             showNoDataMessage();
         }
     });
-    </script>
+</script>
+
     
+    <style>
+        .dataTables_filter {
+                text-align: center; /* Aligner la barre de recherche à droite */
+        }
+            .dataTables_filter input[type="search"] {
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                width: 300px;
+            }
+        /* Masquer le texte "Show X entries" */
+        .dataTables_length {
+            display: none;
+        }
+        .dataTables_info {
+                display: none;
+         }
+         .dataTables_paginate {
+                text-align: center;
+                padding: 10px;
+            }
+            
+            .dataTables_paginate a {
+                padding: 5px 10px;
+                margin: 0 5px;
+                border: 1px solid blue;
+                border-radius: 5px;
+                text-decoration: none;
+                color: blue;
+                background-color: blue;
+            }
+    
+            .dataTables_paginate a:hover {
+                background-color: blue;
+            }
+    
+            .dataTables_paginate .active a {
+                background-color: #007bff;
+                color: blue;
+                border: 1px solid #007bff;
+            }
+    </style>
+
 <style>
     .green-text {
     color: green !important; /* Change la couleur du texte en vert */

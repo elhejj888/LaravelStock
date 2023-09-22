@@ -72,9 +72,6 @@
                             </a>
                             
                         </li>
-
-                        
-
                         <li class="nav-link">
                             <a href="/historisation">
                                 <div>

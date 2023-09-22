@@ -1,11 +1,14 @@
-<!-- Coding by CodingLab | www.codinglabweb.com -->
-!----======== CSS ======== -->
-    <script src="{{asset('../js/script.js')}}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="{{asset('../js/script.js')}}"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/dataTables.searchBuilder.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.5.0/css/searchBuilder.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 <link rel="stylesheet" href="{{asset('../css/style.css')}}">
     
     <!----===== Boxicons CSS ===== -->
@@ -112,6 +115,7 @@
                             <span class="text nav-text">&nbsp; Administration</span>
                         </a>
                     </li>
+                    
                     @endif
                 </ul>
             </div>
@@ -175,7 +179,7 @@
                 </div>
                 
           
-            <div class="container" id="container">
+            <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <table id="example" class="display" >
                 <thead>
                   <tr>
@@ -185,10 +189,10 @@
                     <th>Service</th>
                     <th>Role</th>
                     <th><center>Site</center></th>
-                    <th>Detailles</th>
-                    <th>Modifier</th>
+                    <th class="no-export">Detailles</th>
+                    <th class="no-export">Modifier</th>
                     @if(Auth::user()->Role === 'Admin')
-                    <th>Supprimer</th>
+                    <th class="no-export">Supprimer</th>
                     @endif
                   </tr>
                 </thead>
@@ -242,14 +246,53 @@
               </table>
 </div>
 </div>
+
 <script>
     $(document).ready(function() {
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+        }
+    
         // Initialise la table DataTable
         var table = $('#example').DataTable({
             paging: true,
-            pageLength: 16, // 10 éléments par page par défaut
-            searching: true // Afficher la barre de recherche
+            pageLength: 15, // 10 éléments par page par défaut
+            searching: true, // Afficher la barre de recherche
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':not(.no-export)'
+                    }
+                }
+            ]
         });
+    
         // Fonction pour afficher un message lorsque la table est vide
         function showNoDataMessage() {
             $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
@@ -268,6 +311,8 @@
         }
     });
     </script>
+    
+
 <script>
                 $(document).ready(function() {
                     const siteSelect = $('#site');

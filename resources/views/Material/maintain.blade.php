@@ -1,10 +1,15 @@
 <script src="{{asset('../js/script.js')}}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/dataTables.searchBuilder.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.5.0/css/searchBuilder.dataTables.min.css">
-    <link rel="stylesheet" href="{{asset('../css/style.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+<link rel="stylesheet" href="{{asset('../css/style.css')}}">
     
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
@@ -110,6 +115,7 @@
                             <span class="text nav-text">&nbsp; Administration</span>
                         </a>
                     </li>
+                    
                     @endif
                 </ul>
             </div>
@@ -149,159 +155,200 @@
         </div>
 
     </nav>
-<body>
-    <div class="home">
-        <div>
-               <div class="add-button">
-                <button class="add-user" onclick="window.location.href = 'adduser';">
-                  Ajouter Employé(e)
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="auto" fill="#fff" class="bi bi-person-add" viewBox="0 0 16 16">
-                      <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
-                      <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
-                  </svg>
-              </button>
-              
-              
-                </div>
-            <div class="search">
-              <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
-                @if (session('message'))
-                    {{ session('message') }}
-                @else
-                    {{ $message }}
-                @endif
-    
-            </p>
-            </div>
-            <div class="container" id="container">
-            <table id="example" class="display">
-            <thead>
-              <tr>
-                <th>Type</th>
-                <th>Marque</th>
-                <th>Probleme</th>
-                <th>Date d'achat</th>
-                <th>Emplacement</th>
-                <th>Site</th>
-                <th>Detailles</th>
-                <th>Réparé</th>
-                
-              </tr>
-            </thead>
-            <tbody class="mainData">
-              @foreach ($materials as $material)
-              <tr>
-                
-                <td><center>{{$material->TypeProduit}}</center></td>
-                <td><center>{{$material->Marque}}</center></td>
-                <td><center>{{$material->description}}</center></td>
-                <td><center>{{$material->DateAchat}}</center></td>
-                <td><center>{{$material->Emplacement}}</center> </td>
-                <td><center>{{$material->Site}}</center></td>
-                    </a></td>
-                    <td class="op">
-                      <button class="operation"
-                          onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#fff"
-                              class="bi bi-plus-circle" viewBox="0 0 16 16">
-                              <path
-                                  d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                              <path
-                                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                          </svg>
-                          Detailles
-                      </button>
-                  </td>
-                  <td class="op">
-                    <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
-                            <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
-                            <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
-                          </svg>
-                        Réparé
-                    </button>
-                    <dialog class="modal" id="modal-{{ $material->id }}" style="margin:auto; align-content:center; width:32%;">
-                        <div>
-                        <h1>Etat de Stock</h1>
-                        <form action="/repareMaterial" method="POST" >
-                            @csrf
-                            <input type="text" name="id" value="{{ $material->id }}" style="display: none">
-                            <div class="inputs">
-                                <label for="etat" >Nouveau Stock : </label>
-                        
-                                <table>
-                                    <tr>
-                                        <td><label>Site :</label>
-                                            </td>
-                                            <td>
-                                    <select name="site" id="site">
-                                        <option value=""></option>
-                                        @foreach ($sites as $site)
-                                        <option value="{{ $site->Site }}">{{ $site->Site }}</option>
-                                        @endforeach
-                                        
-                                        
-                                    </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>&nbsp</td>
-                                    <td>&nbsp</td>
-                                    </tr>
-                                <tr>
-                                    <td><label>Emplacement : </label></td>
-                                    <td>
-                                    <select name="emplacement" id="emplacement" >
-                                        <option value="">&nbsp;&nbsp;&nbsp;</option>
-                                    </select>
-                                    </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        <button id="submit" type="submit">Valider</button>
-                    </form>  
-    
-    
-                        <div>
-                        <div class="additional-content" data-material-id="{{ $material->id }}">
-                        </div>
-                        <button class="button close-button" id="Operation" >
-                            Close
-                        </button>
-                </td>
-                
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
-      
-    </div>
-    <script>
-        $(document).ready(function() {
-            // Initialise la table DataTable
-            var table = $('#example').DataTable({
-                paging: true,
-                pageLength: 16, // 10 éléments par page par défaut
-                searching: true // Afficher la barre de recherche
-            });
-            // Fonction pour afficher un message lorsque la table est vide
-            function showNoDataMessage() {
-                $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
-            }
+    <body>
+        <div class="home">
+            <div>
+                   <div class="add-button">
+                    <button class="add-user" onclick="window.location.href = 'adduser';">
+                      Ajouter Employé(e)
+                      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="auto" fill="#fff" class="bi bi-person-add" viewBox="0 0 16 16">
+                          <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+                          <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                      </svg>
+                  </button>
+                  
+                  
+                    </div>
+                <div class="search">
+                  <p style="text-align: center;color:red;font-size:20px;font-weight:bold;">
+                    @if (session('message'))
+                        {{ session('message') }}
+                    @else
+                        {{ $message }}
+                    @endif
         
-            // Vérifie si la table est vide après chaque dessin
-            table.on('draw', function() {
+                </p>
+                </div>
+                <div class="container" id="container">
+                <table id="example" class="display">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Marque</th>
+                    <th>Probleme</th>
+                    <th>Date d'achat</th>
+                    <th>Emplacement</th>
+                    <th>Site</th>
+                    <th  class="no-export">Detailles</th>
+                    <th  class="no-export">Réparé</th>
+                    
+                  </tr>
+                </thead>
+                <tbody class="mainData">
+                  @foreach ($materials as $material)
+                  <tr>
+                    
+                    <td><center>{{$material->TypeProduit}}</center></td>
+                    <td><center>{{$material->Marque}}</center></td>
+                    <td><center>{{$material->description}}</center></td>
+                    <td><center>{{$material->DateAchat}}</center></td>
+                    <td><center>{{$material->Emplacement}}</center> </td>
+                    <td><center>{{$material->Site}}</center></td>
+                        </a></td>
+                        <td  class="no-export">
+                          <button class="operation"
+                              onclick="window.location.href = '{{ route('showMaterial', ['id' => $material->id]) }}';">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="#fff"
+                                  class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                  <path
+                                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                  <path
+                                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                              </svg>
+                              Detailles
+                          </button>
+                      </td>
+                      <td  class="no-export">
+                        <button id="open-button" class="operation" data-modal="modal-{{ $material->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="auto" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                                <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                              </svg>
+                            Réparé
+                        </button>
+                        <dialog class="modal" id="modal-{{ $material->id }}" style="margin:auto; align-content:center; width:32%;">
+                            <div>
+                            <h1>Etat de Stock</h1>
+                            <form action="/repareMaterial" method="POST" >
+                                @csrf
+                                <input type="text" name="id" value="{{ $material->id }}" style="display: none">
+                                <div class="inputs">
+                                    <label for="etat" >Nouveau Stock : </label>
+                            
+                                    <table>
+                                        <tr>
+                                            <td><label>Site :</label>
+                                                </td>
+                                                <td>
+                                        <select name="site" id="site">
+                                            <option value=""></option>
+                                            @foreach ($sites as $site)
+                                            <option value="{{ $site->Site }}">{{ $site->Site }}</option>
+                                            @endforeach
+                                            
+                                            
+                                        </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp</td>
+                                        <td>&nbsp</td>
+                                        </tr>
+                                    <tr>
+                                        <td><label>Emplacement : </label></td>
+                                        <td>
+                                        <select name="emplacement" id="emplacement" >
+                                            <option value="">&nbsp;&nbsp;&nbsp;</option>
+                                        </select>
+                                        </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            <button id="submit" type="submit">Valider</button>
+                        </form>  
+        
+        
+                            <div>
+                            <div class="additional-content" data-material-id="{{ $material->id }}">
+                            </div>
+                            <button class="button close-button" id="Operation" >
+                                Close
+                            </button>
+                    </td>
+                    
+                  </tr>
+                  @endforeach
+                </tbody>
+              </table>
+          
+        </div>
+    
+        <script>
+            $(document).ready(function() {
+                if ($.fn.DataTable.isDataTable('#example')) {
+                    $('#example').DataTable().destroy();
+                }
+            
+                // Initialise la table DataTable
+                var table = $('#example').DataTable({
+                    paging: true,
+                    pageLength: 15, // 10 éléments par page par défaut
+                    searching: true, // Afficher la barre de recherche
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'copy',
+                            exportOptions: {
+                                columns: ':not(.no-export)'
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            exportOptions: {
+                                columns: ':not(.no-export)'
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            exportOptions: {
+                                columns: ':not(.no-export)'
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            exportOptions: {
+                                columns: ':not(.no-export)'
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            exportOptions: {
+                                columns: ':not(.no-export)'
+                            }
+                        }
+                    ]
+                });
+            
+                // Fonction pour afficher un message lorsque la table est vide
+                function showNoDataMessage() {
+                    $('#example tbody').html('<tr><td colspan="8"><center> Pas d\'élément pour l\'instant</center></td></tr>');
+                }
+            
+                // Vérifie si la table est vide après chaque dessin
+                table.on('draw', function() {
+                    if (table.rows().count() === 0) {
+                        showNoDataMessage();
+                    }
+                });
+            
+                // Vérifie également si la table est vide lors de l'initialisation
                 if (table.rows().count() === 0) {
                     showNoDataMessage();
                 }
             });
+            </script>
         
-            // Vérifie également si la table est vide lors de l'initialisation
-            if (table.rows().count() === 0) {
-                showNoDataMessage();
-            }
-        });
-        </script>
+
     <script>
                     $(document).ready(function() {
                         const siteSelect = $('#site');
